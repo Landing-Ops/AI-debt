@@ -1,0 +1,17 @@
+/* =====================================================================
+   typography.css  —  강조 유틸(하이라이트)만 유지.
+   ※ 폰트 종류·크기·굵기·색·행간·자간 등 모든 타이포 규칙은
+     common.css의 각 컴포넌트 블록으로 통합 이관됨.
+     이 파일에는 재사용 강조 유틸리티(highlight-*)만 남긴다.
+===================================================================== */
+
+/* ---------- 강조 유틸 ---------- */
+.highlight-text        { color:var(--color-highlight-text); font-weight:500; }
+.highlight-strong-text { color:var(--color-highlight-strong-text); font-weight:500; }
+
+/* 형광펜 강조 (블록5 후기 — 옅은 블루 배경 + 진한 블루 텍스트) */
+.highlight-bg{
+  color:var(--color-highlight-text); font-weight:500;
+  background:var(--color-highlight-bg);
+  border-radius:4px; padding:1px 3px; display:inline; line-height:normal;
+}

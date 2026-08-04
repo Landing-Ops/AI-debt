@@ -1,0 +1,59 @@
+/* =====================================================================
+   premium.css  —  효과 · 모션 · 질감(fx-*)만. 끄면 심플 ↔ 켜면 프리미엄.
+   ※ 이 파일 전체를 <link> 제거해도 레이아웃·색은 그대로 유지되고
+     hover 전환과 회전 애니메이션만 사라진다.
+===================================================================== */
+:root{
+  --fx-duration-fast:140ms;
+  --fx-ease-soft:cubic-bezier(.25,.1,.25,1);
+}
+
+/* ---------- 버튼 hover ---------- */
+.btn-cta-main{ transition:background var(--fx-duration-fast) var(--fx-ease-soft),
+                          transform var(--fx-duration-fast) var(--fx-ease-soft); }
+.btn-cta-main:hover{ transform:translateY(-1px); background:#0a4ec0; }
+
+/* ---------- 카드 hover 들림 (블록2·3 그라데이션 카드, 블록4 베네핏) ---------- */
+.gcard, .badge, .bcard{ transition:transform .18s ease, box-shadow .18s ease; }
+.gcard:hover{ transform:translateY(-2px); box-shadow:0 14px 30px rgba(12,68,124,.16); }
+.badge:hover{ transform:translateY(-2px); }
+.bcard:hover{ transform:translateY(-2px); box-shadow:0 16px 34px rgba(4,44,83,.30); }
+
+/* ---------- 후기 카드 hover ---------- */
+.rcard{ transition:box-shadow .18s ease; }
+.rcard:hover{ box-shadow:0 12px 26px rgba(12,68,124,.14); }
+
+/* =====================================================================
+   블록6 오버레이 카드 — 회전하는 그라데이션 테두리
+   (디자인 기획: "테두리에 회전 애니메이션 적용 예정")
+   conic-gradient를 회전시키고, 안쪽을 흰 카드로 덮어 테두리만 흐르게 함
+===================================================================== */
+.cta__overlay{
+  position:relative;
+  background:
+    linear-gradient(#fff,#fff) padding-box,
+    conic-gradient(from var(--angle, 0deg),
+      var(--green), var(--green-teal), var(--sky),
+      var(--primary-bright), var(--green)) border-box;
+  border:4px solid transparent;
+  padding:0;                        /* 테두리를 border로 그리므로 padding 리셋 */
+  animation:cta-spin 4s linear infinite;
+}
+.cta__overlay .cta__overlay-inner{ border-radius:19px; }
+
+@property --angle{
+  syntax:'<angle>'; initial-value:0deg; inherits:false;
+}
+@keyframes cta-spin{ to{ --angle:360deg; } }
+
+/* @property 미지원 브라우저 폴백 — 정적 그라데이션 테두리 유지 */
+@supports not (background: conic-gradient(from 0deg, red, blue)){
+  .cta__overlay{
+    background:var(--grad-border-full); border:none; padding:4px;
+    animation:none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .cta__overlay{ animation:none; }
+}

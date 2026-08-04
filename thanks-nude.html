@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="ko" data-color-pattern="1">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI 자가진단 - 신청페이지 | 개인회생 탕감액 계산</title>
+
+  <!-- ============================
+      파비콘 & 터치 아이콘
+  ============================ -->
+  <link rel="icon" href="./img/favicon_32x32.png" />
+  <link rel="apple-touch-icon" href="./img/favicon_32x32.png" />
+
+  <!-- 폰트: Noto Sans KR (기존 유지) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- Tailwind: 레이아웃 전용 (초기 제작용 CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- 역할별 CSS: 토큰 → 컴포넌트 스킨 → 타이포 → 효과 -->
+  <link rel="stylesheet" href="./css/brand-nude.css">
+  <link rel="stylesheet" href="./css/thanks-brand-nude.css">
+  <link rel="stylesheet" href="./css/thanks-common-nude.css">
+  <link rel="stylesheet" href="./css/thanks-typography-nude.css">
+  <link rel="stylesheet" href="./css/thanks-premium-nude.css">
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!--  광고 전환 픽셀 모음 (땡큐페이지 </head> 앞에 삽입)                    -->
+<!--                                                                   -->
+<!--  ▣ 이 파일이 하는 일                                                -->
+<!--    유저가 폼 제출 후 이 땡큐페이지에 도착하면,                        -->
+<!--    메타·당근·구글 3개 매체에 "전환(잠재고객 유입)"을 신호로 쏨.       -->
+<!--                                                                   -->
+<!--  ▣ 공통 원칙                                                       -->
+<!--    · 매체별 <script> 블록을 완전히 분리 → 한 곳 터져도 딴 데 영향 X  -->
+<!--    · uid 처리 로직은 함수로 감싸 스코프 격리 (블록끼리 변수 안 섞임) -->
+<!--    · PageView/ViewPage/config = 페이지 도착 추적 → 매번 실행(중복OK)-->
+<!--    · Lead/conversion = 전환 → uid 1개당 딱 1번만 발사              -->
+<!--    · 뒤로가기 반복 방지: 발사하면 localStorage에 "찍었음" 기록,      -->
+<!--      같은 uid로 재진입 시 스킵                                      -->
+<!--    · 저장 키를 매체별로 다르게(접두어) → 서로 간섭 X                 -->
+<!--        메타 : lead_fired_◯◯◯                                      -->
+<!--        당근 : karrot_lead_fired_◯◯◯                               -->
+<!--        구글 : google_lead_◯◯◯                                     -->
+<!--      (키가 같으면 먼저 발사된 매체가 키를 만들어버려                  -->
+<!--       나머지가 "이미 찍힘"으로 오인하고 스킵하는 사고 발생)           -->
+<!--                                                                   -->
+<!--  ▣ ★중요★ 메타·당근 vs 구글의 발사 방식 차이 (삽질로 알아낸 것)      -->
+<!--    · 메타·당근 = "큐(queue)에 쌓았다가 스크립트 로드 후 처리"        -->
+<!--      → 페이지가 uid검증/리디렉션으로 흔들려도 큐가 붙잡아서 안 날아감 -->
+<!--      → 그래서 즉시실행(IIFE)으로 둬도 잘 됨. 절대 건드리지 말 것.     -->
+<!--    · 구글 gtag = "호출 즉시 발사 시도"                             -->
+<!--      → 이 페이지는 uid를 서버 검증(리디렉션)하는 구조라, 즉시 쏘면    -->
+<!--         발사 직전에 페이지가 리셋되며 신호가 휩쓸려 사라졌음         -->
+<!--      → 해결: 구글 conversion만 window 'load'(페이지 완전 로드 후)   -->
+<!--         로 미뤄 발사 → uid검증·리디렉션 다 끝난 뒤 쏘니 안 날아감    -->
+<!--                                                                   -->
+<!--  ▣ 참고 (검증 시 헷갈렸던 것들)                                     -->
+<!--    · Tag Assistant "URL 입력" 디버거는 이 페이지에선 원래 안 됨      -->
+<!--      (봇 접속 차단 + gtag 즉시발사 전제 검수 → 우리 load 방식과 불일치)-->
+<!--      → 실제 전환과 무관하니 판단 근거로 쓰지 말 것                   -->
+<!--    · 애드블록/프라이버시 확장이 doubleclick 요청을 간헐 차단함        -->
+<!--      → 테스트는 애드블록 끄고(또는 시크릿 창) 할 것                  -->
+<!--    · 발사 확인법: F12 → 네트워크 탭 → 필터 "en=conversion"          -->
+<!--      → 830866619 요청이 200/302로 뜨면 정상 발사                   -->
+<!--    · 구글애즈 리포트 "전환 1"은 실제 광고클릭(gclid)+집계시간 필요    -->
+<!--      → 직접 URL 방문 테스트로는 리포트에 안 잡힐 수 있음(정상)       -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<!-- ▼▼▼ [1] 메타(페이스북/인스타) 픽셀 ▼▼▼ -->
+<!-- ※ 발사 방식: 큐 기반 → 타이밍에 강함. IIFE 즉시실행 그대로 둘 것. -->
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+
+fbq('init', '2253155728441697');  // 메타 픽셀 ID
+fbq('track', 'PageView');         // 페이지 도착 → 매번 찍힘 (중복 OK)
+
+// ── 전환(Lead): uid 1개당 딱 1번만 ──
+(function () {
+  var uid = new URLSearchParams(window.location.search).get('uid');  // URL에서 uid 꺼냄
+  if (!uid) return;                                                  // uid 없으면 아무것도 안 함
+  var firedKey = 'lead_fired_' + uid;                                // 이 uid 전용 저장 키
+  if (!localStorage.getItem(firedKey)) {                             // 아직 안 찍혔으면
+    fbq('track', 'Lead');                                            //   → 전환 1번 발사 ★
+    localStorage.setItem(firedKey, '1');                             //   → "찍었음" 기록 (다음엔 스킵)
+  }
+})();
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2253155728441697&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+<!-- ▲▲▲ [1] 메타 끝 ▲▲▲ -->
+
+
+<!-- ▼▼▼ [2] 당근마켓 픽셀 ▼▼▼ -->
+<!-- ※ 발사 방식: 큐 기반 → 타이밍에 강함. IIFE 즉시실행 그대로 둘 것. -->
+<!-- Danggeun Market Code -->
+<script>
+  (function (w, d) {
+    if (w.karrotPixel) return;
+    var k = { stub: true, queue: [] };
+    k.init = function () { k.queue.push(['init', arguments, Date.now()]); };
+    k.track = function () { k.queue.push(['track', arguments, Date.now()]); };
+    w.karrotPixel = k;
+    var s = d.createElement('script');
+    s.async = true;
+    s.src = 'https://karrot-pixel.business.daangn.com/karrot-pixel.js';
+    var f = d.getElementsByTagName('script')[0];
+    f && f.parentNode ? f.parentNode.insertBefore(s, f) : d.head.appendChild(s);
+  })(window, document);
+
+  window.karrotPixel.init('1785159334599355001');  // 당근 픽셀 ID
+  window.karrotPixel.track('ViewPage');            // 페이지 도착 → 매번 찍힘 (중복 OK)
+
+  // ── 전환(Lead): uid 1개당 딱 1번만 ──
+  (function () {
+    var uid = new URLSearchParams(window.location.search).get('uid');   // URL에서 uid 꺼냄
+    if (!uid) return;                                                   // uid 없으면 아무것도 안 함
+    var karrotFiredKey = 'karrot_lead_fired_' + uid;                    // 이 uid 전용 저장 키 (당근 전용 접두어)
+    if (!localStorage.getItem(karrotFiredKey)) {                        // 아직 안 찍혔으면
+      window.karrotPixel.track('Lead');                                 //   → 전환 1번 발사 ★
+      localStorage.setItem(karrotFiredKey, '1');                        //   → "찍었음" 기록 (다음엔 스킵)
+    }
+  })();
+</script>
+<!-- End Danggeun Market Code -->
+<!-- ▲▲▲ [2] 당근 끝 ▲▲▲ -->
+
+
+<!-- ▼▼▼ [3] 구글애즈(유튜브 포함) 전환 태그 ▼▼▼ -->
+<!-- ※ 발사 방식: 즉시발사 → 타이밍에 약함.                              -->
+<!--   이 페이지의 uid검증/리디렉션에 신호가 휩쓸리는 걸 막으려고         -->
+<!--   conversion만 'load'(페이지 완전 로드 후)로 미뤄서 발사함.         -->
+<!--   ★이 load 감싸기를 IIFE로 되돌리면 자동 전환이 다시 안 잡힘★       -->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-830866619"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-830866619');  // 페이지 로드 추적, 매번 실행 (중복 OK)
+
+  // ── 전환(conversion): 페이지 완전히 로드된 후 발사 → uid당 1번만 ──
+  window.addEventListener('load', function () {
+    var uid = new URLSearchParams(window.location.search).get('uid');  // URL에서 uid 꺼냄
+    if (!uid) return;                                                  // uid 없으면 발사 안 함
+    var googleFiredKey = 'google_lead_' + uid;                         // 이 uid 전용 저장 키
+    if (!localStorage.getItem(googleFiredKey)) {                       // 아직 안 찍혔으면
+      gtag('event', 'conversion', {'send_to': 'AW-830866619/uKWbCN397tccELuJmIwD'});  // → 전환 발사 ★
+      localStorage.setItem(googleFiredKey, '1');                       //   → "찍었음" 기록
+    }
+  });
+</script>
+<!-- End Google tag (gtag.js) -->
+<!-- ▲▲▲ [3] 구글 끝 ▲▲▲ -->
+
+<!-- ▼▼▼ [1] 메타(페이스북/인스타) 픽셀 ▼▼▼ -->
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+
+fbq('init', '2253155728441697');  // 메타 픽셀 ID
+fbq('track', 'PageView');         // 페이지 도착 → 매번 찍힘 (중복 OK)
+
+// ── 전환(Lead): uid 1개당 딱 1번만 ──
+(function () {
+  var uid = new URLSearchParams(window.location.search).get('uid');  // URL에서 uid 꺼냄
+  if (!uid) return;                                                  // uid 없으면 아무것도 안 함
+  var firedKey = 'lead_fired_' + uid;                                // 이 uid 전용 저장 키
+  if (!localStorage.getItem(firedKey)) {                             // 아직 안 찍혔으면
+    fbq('track', 'Lead');                                            //   → 전환 1번 발사 ★
+    localStorage.setItem(firedKey, '1');                             //   → "찍었음" 기록 (다음엔 스킵)
+  }
+})();
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2253155728441697&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+<!-- ▲▲▲ [1] 메타 끝 ▲▲▲ -->
+
+
+<!-- ▼▼▼ [2] 당근마켓 픽셀 ▼▼▼ -->
+<!-- Danggeun Market Code -->
+<script>
+  (function (w, d) {
+    if (w.karrotPixel) return;
+    var k = { stub: true, queue: [] };
+    k.init = function () { k.queue.push(['init', arguments, Date.now()]); };
+    k.track = function () { k.queue.push(['track', arguments, Date.now()]); };
+    w.karrotPixel = k;
+    var s = d.createElement('script');
+    s.async = true;
+    s.src = 'https://karrot-pixel.business.daangn.com/karrot-pixel.js';
+    var f = d.getElementsByTagName('script')[0];
+    f && f.parentNode ? f.parentNode.insertBefore(s, f) : d.head.appendChild(s);
+  })(window, document);
+
+  window.karrotPixel.init('1785159334599355001');  // 당근 픽셀 ID
+  window.karrotPixel.track('ViewPage');            // 페이지 도착 → 매번 찍힘 (중복 OK)
+
+  // ── 전환(Lead): uid 1개당 딱 1번만 ──
+  (function () {
+    var uid = new URLSearchParams(window.location.search).get('uid');   // URL에서 uid 꺼냄
+    if (!uid) return;                                                   // uid 없으면 아무것도 안 함
+    var karrotFiredKey = 'karrot_lead_fired_' + uid;                    // 이 uid 전용 저장 키 (당근 전용 접두어)
+    if (!localStorage.getItem(karrotFiredKey)) {                        // 아직 안 찍혔으면
+      window.karrotPixel.track('Lead');                                 //   → 전환 1번 발사 ★
+      localStorage.setItem(karrotFiredKey, '1');                        //   → "찍었음" 기록 (다음엔 스킵)
+    }
+  })();
+</script>
+<!-- End Danggeun Market Code -->
+<!-- ▲▲▲ [2] 당근 끝 ▲▲▲ -->
+
+
+<!-- ▼▼▼ [3] 구글애즈(유튜브 포함) 전환 태그 ▼▼▼ -->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-830866619"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-830866619');  // 페이지 로드 추적, 매번 실행 (중복 OK)
+
+  // ── 전환(conversion): 페이지 완전히 로드된 후 발사 → uid당 1번만 ──
+  window.addEventListener('load', function () {
+    var uid = new URLSearchParams(window.location.search).get('uid');  // URL에서 uid 꺼냄
+    if (!uid) return;                                                  // uid 없으면 발사 안 함
+    var googleFiredKey = 'google_lead_' + uid;                         // 이 uid 전용 저장 키
+    if (!localStorage.getItem(googleFiredKey)) {                       // 아직 안 찍혔으면
+      gtag('event', 'conversion', {'send_to': 'AW-830866619/uKWbCN397tccELuJmIwD'});  // → 전환 발사 ★
+      localStorage.setItem(googleFiredKey, '1');                       //   → "찍었음" 기록
+    }
+  });
+</script>
+<!-- End Google tag (gtag.js) -->
+<!-- ▲▲▲ [3] 구글 끝 ▲▲▲ -->
+
+</head>
+
+<body data-industry="legal" data-source="인덱스">
+
+  <!-- ============ uid 조회 중 로딩 오버레이 (흰 화면으로 가림) ============ -->
+  <div id="uid-loading-overlay" style="position:fixed;inset:0;background:#fff;z-index:9999;display:flex;align-items:center;justify-content:center;">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:18px;padding:0 24px;text-align:center;">
+      <!-- 자물쇠 아이콘 (비공개 자료 뉘앙스) -->
+      <div style="width:80px;height:80px;border-radius:50%;background:var(--primary-bg,#eaf2ff);display:flex;align-items:center;justify-content:center;">
+        <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="var(--primary-bright,#0b5bd3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="5" y="11" width="14" height="10" rx="2"/>
+          <path d="M8 11V8a4 4 0 018 0v3"/>
+          <circle cx="12" cy="16" r="1.2"/>
+        </svg>
+      </div>
+      <!-- 카피 -->
+      <p style="margin:0;font-size:18px;font-weight:500;color:#555;line-height:1.5;">
+        고객님을 위해<br>
+        <span style="font-weight:800;color:#222;">개인회생·파산 비공개 자료를</span>
+          <br>불러오고 있습니다.
+      </p>
+      <!-- 점 3개 순차 로딩 애니메이션 -->
+      <div style="display:flex;gap:8px;">
+        <span class="uid-loading-dot" style="width:10px;height:10px;border-radius:50%;background:var(--primary-bright,#0b5bd3);animation:uid-dot-bounce 1.2s ease-in-out infinite;"></span>
+        <span class="uid-loading-dot" style="width:10px;height:10px;border-radius:50%;background:var(--primary-bright,#0b5bd3);animation:uid-dot-bounce 1.2s ease-in-out .2s infinite;"></span>
+        <span class="uid-loading-dot" style="width:10px;height:10px;border-radius:50%;background:var(--primary-bright,#0b5bd3);animation:uid-dot-bounce 1.2s ease-in-out .4s infinite;"></span>
+      </div>
+    </div>
+  </div>
+  <style>
+    @keyframes uid-dot-bounce {
+      0%, 80%, 100% { opacity: .25; transform: translateY(0); }
+      40%           { opacity: 1;   transform: translateY(-4px); }
+    }
+  </style>
+
+  <main id="page" data-content-full>
+
+
+<!-- ============ 섹션 1 · Hero ============ -->
+<section class="ty-hero" id="hero">
+      <div class="mx-auto w-[min(1200px,92vw)] grid items-center justify-items-center grid-cols-1 gap-[18px] min-[981px]:gap-8 pt-7 pb-14">
+       <!-- 비주얼 (그라데이션 완료 박스) -->
+        <div class="thanks-hero-box" aria-label="신청 완료 안내">
+          <div class="thanks-hero-box__icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h2 class="thanks-hero-box__title"><span data-name-slot>고객명</span>님!</h2>
+          <h2 class="thanks-hero-box__desc--highlight">방금 확인하신 탕감율</h2>
+
+          <p class="thanks-hero-box__desc"><b class="thanks-hero-box__desc--highlight2">여기서 더 나아간 분들의 이야기가 있습니다</b>
+          <br>같은 고민에서 시작해 <br class="hidden min-[981px]:block">무거운 채무의 늪을 속 시원하게 벗어난 <br class="hidden min-[981px]:block">8명의 실제 후기를 지금 바로 확인해보세요!</p>
+
+        </div>
+        <!-- 카피 -->
+        <div class="ty-hero-copy px-1 py-2 flex flex-col items-center text-center">
+          <span class="ty-kicker inline-flex items-center gap-2.5 px-3 py-1.5">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12 2v20M2 12h20M5.5 5.5l13 13M18.5 5.5l-13 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            생생한 리얼스토리
+          </span>
+          <h1 class="title mt-3.5 mb-2.5 !text-4xl">
+              딱 15분만 공개합니다.
+            </h1>
+          <div class="thanks-lead mt-8 mb-4.5">
+            <span class="thanks-box__desc">
+               채무탕감 길라잡이와 협약한 <strong class="highlight-strong-text">변호사 이정용 법률사무소</strong>에
+              회생·파산 사건을 의뢰한 <strong class="highlight-strong-text">고객분들이 직접 써주신 실제 후기</strong>를 날것 그대로 공개합니다.<br><br>
+
+              어려움을 겪고 계신 분들 외에는
+              <strong style="color:red">비공개 약속을 받았기에,
+              제한시간 15분 동안만 공개</strong>되며 이후 본 페이지는 자동 종료됩니다.<br><br>
+              
+              아래 후기를 읽어보시면 개인회생·파산 진행 과정의 핵심을 알 수 있으며,<br class="block min-[981px]:hidden"><br class="block min-[981px]:hidden">
+              <span class="highlight-strong-text"><span data-name-slot>고객명</span>님</span> 또한 같은 고민을 안고 있던 이분들의 이야기 속에서 <span class="highlight-strong-text">"나도 새출발 할 수 있겠다"</span>는 확신을 얻으실 수 있을 겁니다.
+            </span>
+            </div>
+        </div>
+      </div>
+</section>
+
+<!-- ============ 섹션 2 - 실제 고객 소감 (카드 슬라이드 + 팝업) ============ -->
+<section class="ty-section rv" id="testimonial" aria-label="실제 고객 소감">
+  <div class="rv__head">
+    <span class="ty-kicker--solid inline-flex items-center gap-2.5 px-3 py-1.5">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 2v20M2 12h20M5.5 5.5l13 13M18.5 5.5l-13 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+          변호사 이정용 법률사무소
+    </span>
+    <h2 class="rv__title">
+      개인회생·파산 <br>실제 고객 후기
+    </h2>
+    <p class="rv__desc">*실제 인가 사건을 바탕으로 고객님께서 직접 작성해 주신 후기입니다.
+      <br class="hidden min-[981px]:block">사건 결과는 개별 사정에 따라 다를 수 있습니다.
+   </p>
+  </div>
+
+  <div class="rv__body">
+    <div class="rv" role="region" aria-roledescription="carousel" aria-label="고객 후기 슬라이드">
+      <button class="rv__arrow rv__arrow--prev" type="button" data-rv-prev aria-label="이전 후기">
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="rv__arrow rv__arrow--next" type="button" data-rv-next aria-label="다음 후기">
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="rv__viewport">
+        <ul class="rv__track">
+
+          <!-- ========== Card 1 ========== -->
+          <li class="rv__slide" data-review-trigger id="review-1">
+            <div class="rv__card">
+              <div class="rv__tags" data-card-tags></div> <!--JS의 Review카드의 tag글을 HTML으로 불러와 삽입-->
+              <div class="rv__profile">
+                <img class="rv__avatar" src="./img/avatar001.png" alt="" />
+                <div class="rv__who">
+                  <strong class="rv__name">김XX님</strong>
+                  <span class="rv__meta">서울특별시</span>
+                </div>
+              </div>
+
+              <div class="rv__photos">
+                <div class="rv__photoWrap">
+                  <img src="./img/tx_decision_LJY1.png" class="rv__photo" alt="">
+                </div>
+                <div class="rv__photoWrap">
+                  <img src="./img/tx-LJY-review1.png" class="rv__photo" alt="">
+                </div>
+              </div>
+
+              <div class="rv__tags" data-card-tags></div> <!--JS의 Review카드의 tag글을 HTML으로 불러와 삽입-->
+
+              <h3 class="rv__headline">병원비로 빚 4천3백만 원, 일자리 잃을까봐 걱정했는데, 90% 탕감받고 새 출발했습니다.</h3>
+              <p class="rv__excerpt" data-excerpt></p> <!--JS의 Review카드의 글을 HTML으로 불러와 삽입-->
+              <button class="rv__more" type="button">자세히 읽기</button>
+            </div>
+          </li>
+
+          <!-- ========== Card 2 ========== -->
+          <li class="rv__slide" data-review-trigger id="review-2">
+            <div class="rv__card">
+             <div class="rv__tags" data-card-tags></div> <!--JS의 Review카드의 tag글을 HTML으로 불러와 삽입-->
+              <div class="rv__profile">
+                <img class="rv__avatar" src="./img/avatar002.png" alt="" />
+                <div class="rv__who">
+                  <strong class="rv__name">박XX님</strong>
+                  <span class="rv__meta">부산광역시</span>
+                </div>
+              </div>
+
+              <div class="rv__photos">
+                <div class="rv__photoWrap">
+                  <img src="./img/tx_decision_LJY2.png" class="rv__photo" alt="">
+                </div>
+                <div class="rv__photoWrap">
+                  <img src="./img/tx-LJY-review2.png" class="rv__photo" alt="">
+                </div>
+              </div>
+
+              <h3 class="rv__headline">혼자 애들 키우며 빚 2억 1천, 수임료 부담에 시작도 못할까 걱정했는데 95% 탕감받고 감사하게 재기했습니다.</h3>
+
+              <p class="rv__excerpt" data-excerpt></p> <!--JS의 Review카드의 글을 HTML으로 불러와 삽입-->
+
+              <button class="rv__more" type="button">자세히 읽기</button>
+            </div>
+          </li>
+
+          <!-- ========== Card 3 ========== -->
+          <li class="rv__slide" data-review-trigger id="review-3">
+            <div class="rv__card">
+              <div class="rv__tags" data-card-tags></div> <!--JS의 Review카드의 tag글을 HTML으로 불러와 삽입-->
+              <div class="rv__profile">
+                <img class="rv__avatar" src="./img/avatar003.png" alt="" />
+                <div class="rv__who">
+                  <strong class="rv__name">이XX님</strong>
+                  <span class="rv__meta">대구광역시</span>
+                </div>
+              </div>
+
+              <div class="rv__photos">
+                <div class="rv__photoWrap">
+                  <img src="./img/tx_decision_LJY3.png" class="rv__photo" alt="">
+                </div>
+                <div class="rv__photoWrap">
+                  <img src="./img/tx-LJY-review3.png" class="rv__photo" alt="">
+                </div>
+              </div>
+              <h3 class="rv__headline">남편 사고로 빚 5천8백만 원, 평생 신용불량자 될까 겁났는데 87% 탕감받고 다시 일어섰습니다.</h3>
+              <p class="rv__excerpt" data-excerpt></p> <!--JS의 Review카드의 글을 HTML으로 불러와 삽입-->
+              <button class="rv__more" type="button">자세히 읽기</button>
+            </div>
+          </li>
+
+          <!-- ========== Card 4 ========== -->
+          <li class="rv__slide" data-review-trigger id="review-4">
+            <div class="rv__card">
+              <div class="rv__tags" data-card-tags></div> <!--JS의 Review카드의 tag글을 HTML으로 불러와 삽입-->
+              <div class="rv__profile">
+                <img class="rv__avatar" src="./img/avatar004.png" alt="" />
+                <div class="rv__who">
+                  <strong class="rv__name">정XX님</strong>
+                  <span class="rv__meta">경기도 수원시</span>
+                </div>
+              </div>
+
+              <div class="rv__photos">
+                <div class="rv__photoWrap">
+                  <img src="./img/tx_decision_LJY4.png" class="rv__photo" alt="">
+                </div>
+                <div class="rv__photoWrap">
+                  <img src="./img/tx-LJY-review4.png" class="rv__photo" alt="">
+                </div>
+              </div>
+
+              <h3 class="rv__headline">김밥집 폐업으로 빚 1억 7천, 전세보증금까지 뺏길까 겁났는데 92% 탕감받고 살던 집 그대로 지켰습니다</h3>
+              <p class="rv__excerpt" data-excerpt></p> <!--JS의 Review카드의 글을 HTML으로 불러와 삽입-->
+              <button class="rv__more" type="button">자세히 읽기</button>
+            </div>
+          </li>
+
+          <!-- ========== Card 5 ========== -->
+          <li class="rv__slide" data-review-trigger id="review-5">
+            <div class="rv__card">
+              <div class="rv__tags" data-card-tags></div> <!--JS의 Review카드의 tag글을 HTML으로 불러와 삽입-->
+              <div class="rv__profile">
+                <img class="rv__avatar" src="./img/avatar005.png" alt="" />
+                <div class="rv__who">
+                  <strong class="rv__name">최XX님</strong>
+                  <span class="rv__meta">인천광역시</span>
+                </div>
+              </div>
+
+              <div class="rv__photos">
+                <div class="rv__photoWrap">
+                  <img src="./img/tx_decision_LJY5.png" class="rv__photo" alt="">
+                </div>
+                <div class="rv__photoWrap">
+                  <img src="./img/tx-LJY-review5.png" class="rv__photo" alt="">
+                </div>
+              </div>
+
+              <h3 class="rv__headline">공장 부도로 빚 4억 2천, 혼자 해보려다 복잡하고 막막했는데 전문가 한테 맡기고 95% 탕감받았습니다. </h3>
+              <p class="rv__excerpt" data-excerpt></p> <!--JS의 Review카드의 글을 HTML으로 불러와 삽입-->
+
+              <button class="rv__more" type="button">자세히 읽기</button>
+            </div>
+          </li>
+
+          <!-- ========== Card 6 ========== -->
+          <li class="rv__slide" data-review-trigger id="review-6">
+            <div class="rv__card">
+              <div class="rv__tags" data-card-tags></div> <!--JS의 Review카드의 tag글을 HTML으로 불러와 삽입-->
+              <div class="rv__profile">
+                <img class="rv__avatar" src="./img/avatar006.png" alt="" />
+                <div class="rv__who">
+                  <strong class="rv__name">한XX님</strong>
+                  <span class="rv__meta">광주광역시</span>
+                </div>
+              </div>
+
+              <div class="rv__photos">
+                <div class="rv__photoWrap">
+                  <img src="./img/tx_decision_LJY6.png" class="rv__photo" alt="">
+                </div>
+                <div class="rv__photoWrap">
+                  <img src="./img/tx-LJY-review6.png" class="rv__photo" alt="">
+                </div>
+              </div>
+
+              <h3 class="rv__headline">주식 투자 실패로 빚 4억2천, 내 욕심이 부른 결과라 신청할 자격도 없다 싶었는데 86% 탕감받았네요. 정말 감사합니다. </h3>
+              <p class="rv__excerpt" data-excerpt></p> <!--JS의 Review카드의 글을 HTML으로 불러와 삽입-->
+
+              <button class="rv__more" type="button">자세히 읽기</button>
+            </div>
+          </li>
+
+          <!-- ========== Card 7 ========== -->
+          <li class="rv__slide" data-review-trigger id="review-7">
+            <div class="rv__card">
+              <div class="rv__tags" data-card-tags></div> <!--JS의 Review카드의 tag글을 HTML으로 불러와 삽입-->
+              <div class="rv__profile">
+                <img class="rv__avatar" src="./img/avatar007.png" alt="" />
+                <div class="rv__who">
+                  <strong class="rv__name">윤XX님</strong>
+                  <span class="rv__meta">제주특별자치도</span>
+                </div>
+              </div>
+
+              <div class="rv__photos">
+                <div class="rv__photoWrap">
+                  <img src="./img/tx_decision_LJY7.png" class="rv__photo" alt="">
+                </div>
+                <div class="rv__photoWrap">
+                  <img src="./img/tx-LJY-review7.png" class="rv__photo" alt="">
+                </div>
+              </div>
+
+              <h3 class="rv__headline">도박 빚 8천만 원, 가족들이 알까 봐 조마조마했는데, 아무도 모르게 원금 81% 탕감받았습니다. </h3>
+              <p class="rv__excerpt" data-excerpt></p> <!--JS의 Review카드의 글을 HTML으로 불러와 삽입-->
+
+              <button class="rv__more" type="button">자세히 읽기</button>
+            </div>
+          </li>
+
+          <!-- ========== Card 8 ========== -->
+          <li class="rv__slide" data-review-trigger id="review-8">
+            <div class="rv__card">
+              <div class="rv__tags" data-card-tags></div> <!--JS의 Review카드의 tag글을 HTML으로 불러와 삽입-->
+              <div class="rv__profile">
+                <img class="rv__avatar" src="./img/avatar008.png" alt="" />
+                <div class="rv__who">
+                  <strong class="rv__name">장XX님</strong>
+                  <span class="rv__meta">경기도 안산시</span>
+                </div>
+              </div>
+              <div class="rv__photos">
+                <div class="rv__photoWrap">
+                  <img src="./img/tx_decision_LJY8.png" class="rv__photo" alt="">
+                </div>
+                <div class="rv__photoWrap">
+                  <img src="./img/tx-LJY-review8.png" class="rv__photo" alt="">
+                </div>
+              </div>
+
+              <h3 class="rv__headline">리딩방 사기로 빚 3억 9천만 원, 더 이상 사람도 못믿고  수임료도 걱정됬는데, 형편에 맞게 배려해주시고 원금 94% 탕감받았습니다. </h3>
+              <p class="rv__excerpt" data-excerpt></p> <!--JS의 Review카드의 글을 HTML으로 불러와 삽입-->
+
+              <button class="rv__more" type="button">자세히 읽기</button>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+
+    <div class="rv__dots" role="tablist" aria-label="후기 페이지 표시">
+      <button class="rv__dot" role="tab" aria-selected="true"  aria-controls="review-1"><span class="ty-sr-only">1번 후기</span></button>
+      <button class="rv__dot" role="tab" aria-selected="false" aria-controls="review-2"><span class="ty-sr-only">2번 후기</span></button>
+      <button class="rv__dot" role="tab" aria-selected="false" aria-controls="review-3"><span class="ty-sr-only">3번 후기</span></button>
+      <button class="rv__dot" role="tab" aria-selected="false" aria-controls="review-4"><span class="ty-sr-only">4번 후기</span></button>
+      <button class="rv__dot" role="tab" aria-selected="false" aria-controls="review-5"><span class="ty-sr-only">5번 후기</span></button>
+      <button class="rv__dot" role="tab" aria-selected="false" aria-controls="review-6"><span class="ty-sr-only">6번 후기</span></button>
+      <button class="rv__dot" role="tab" aria-selected="false" aria-controls="review-7"><span class="ty-sr-only">7번 후기</span></button>
+      <button class="rv__dot" role="tab" aria-selected="false" aria-controls="review-8"><span class="ty-sr-only">8번 후기</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 후기 상세 팝업 (공통 1개, JS가 내용 채움) ============ -->
+<div class="rv-modal" data-review-modal hidden>
+  <div class="rv-modal__dim" data-review-close></div>
+  <div class="rv-modal__box" role="dialog" aria-modal="true" aria-labelledby="rv-modal-title">
+    <div class="rv-modal__head">
+      <div class="rv-modal__tags" data-modal-tags></div>
+    </div>
+
+    <div class="rv-modal__profile">
+      <img class="rv-modal__avatar" data-modal-avatar src="" alt="" />
+      <div class="rv-modal__who">
+        <strong class="rv-modal__name" data-modal-name id="rv-modal-title"></strong>
+        <span class="rv-modal__meta" data-modal-meta></span>
+      </div>
+    </div>
+
+    
+
+    <div class="rv-modal__photosWrap">
+      <button class="rv-modal__photoNav rv-modal__photoNav--prev" type="button" data-photo-prev aria-label="이전 사진">‹</button>
+      <div class="rv-modal__photos" data-modal-photos></div>
+      <button class="rv-modal__photoNav rv-modal__photoNav--next" type="button" data-photo-next aria-label="다음 사진">›</button>
+    </div>
+    <div class="rv-modal__photoDots" data-modal-photo-dots></div>
+    <div class="rv-modal__block">
+      <p class="rv-modal__label" data-modal-good-label></p>
+      <ul class="rv-modal__list" data-modal-good></ul>
+    </div>
+
+    <div class="rv-modal__block">
+      <p class="rv-modal__label" data-modal-review-label></p>
+      <div class="rv-modal__text" data-modal-review></div>
+    </div>
+
+    <button class="rv-modal__close" type="button" data-review-close>닫기</button>
+  </div>
+</div>
+ 
+<!-- ============ 이미지 확대 라이트박스 (전역 1개) ============ -->
+<div class="rv-lightbox" data-lightbox hidden>
+  <div class="rv-lightbox__dim" data-lightbox-close></div>
+  <button class="rv-lightbox__close" type="button" data-lightbox-close aria-label="이미지 닫기">✕</button>
+  <img class="rv-lightbox__img" data-lightbox-img src="" alt="" />
+</div>
+
+<!-- ============ 섹션 3 - 광고주(사무소) 소개 ============ -->
+<section class="ty-section office" id="office" aria-label="사무소 소개"> 
+  <div class="office__wrap mx-auto w-[min(1100px,92vw)] flex flex-col gap-4 min-[981px]:gap-5 p-4 min-[981px]:p-6">
+ 
+    <!-- 박스 1 · 헤더 -->
+    <div class="office__box office__header text-center px-6 py-8 min-[981px]:py-10">
+      <span class="ty-kicker inline-flex items-center gap-2 px-3 py-1.5">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M9.5 3.5c-1.5 0-2.5 1.3-2.5 3 0 1.2.5 2 .3 3.2-.2 1.3-1.3 2-1.3 3.5 0 1.5 1.1 2.3 2.5 2.3 1.6 0 2-1.2 2-3V7c0-2-.2-3.5-1-3.5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+          <path d="M16 10c-1.5 0-2.5 1.3-2.5 3 0 1.2.5 2 .3 3.2-.2 1.3-1.3 2-1.3 3.5 0 1.5 1.1 2.3 2.5 2.3 1.6 0 2-1.2 2-3v-6c0-2-.2-3.5-1-3.5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+        </svg>
+        채무 탕감을 위한 첫걸음
+      </span>
+      <h2 class="office__title mt-3">
+        <strong style="color:#ffe600"><span data-name-slot>고객명</span>님의 일상 회복</strong>을 위해<br class="hidden min-[981px]:block">
+        개인회생·파산 20,000건 이상 노하우</strong>를 축적한<br class="hidden min-[981px]:block">
+       <strong style="color:#ffe600">변호사 이정용 법률사무소</strong>가 함께합니다.
+      </h2>
+    </div>
+ 
+    <!-- 박스 2 · 바디 (PC 좌 이미지 / 우 소개, MO 세로) -->
+    <div class="office__box office__body p-5 min-[981px]:p-8">
+      <div class="grid grid-cols-1 min-[981px]:grid-cols-[minmax(0,420px)_1fr] gap-6 min-[981px]:gap-10 items-start">
+ 
+        <!-- 이미지 영역: 큰 박스 1 + 아래 작은 박스 2 -->
+        <div class="office__media flex flex-col gap-3">
+          <div class="office__media-main">  <!--비율 가로4, 세로3-->
+            <img src="./img/ceo.png" alt="광고주" class="office__media-img" />
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <!-- <div class="office__media-sub">  비율 가로1, 세로1
+              <img src="./img/ceo.png" alt="" class="office__media-img" />
+            </div> -->
+            <!-- <div class="office__media-sub">  비율 가로1, 세로1
+              <img src="./img/paper.png" alt="" class="office__media-img" />
+            </div> -->
+          </div>
+        </div>
+ 
+        <!-- 소개 영역 -->
+        <div class="office__intro">
+          <div class="office__intro-person">
+            <strong class="office__intro-name">이정용</strong>
+            <span class="office__intro-role">대표 변호사</span>
+          </div>
+ 
+          <div class="office__intro-group">
+            <p class="office__intro-label">주요 경력</p>
+            <ul class="office__intro-list">
+              <li>제38회 사법시험 합격</li>
+              <li>공익법무관, 의정부지검 검사</li>
+              <li>서울중앙지검(특수3부), 전주지검(특수)검사</li>
+              <li>서울중앙지검 부부장검사</li>
+              <li>인천지검 부천지청 부부장검사</li>
+            </ul>
+          </div>
+ 
+          <div class="office__intro-group">
+            <p class="office__intro-label">학력</p>
+            <ul class="office__intro-list">
+              <li>서울대 법대 졸업</li>
+              <li>서울대 대학원 법학과 수료</li>
+              <li>미국 조지워싱턴대학 로스쿨 장기연수</li>
+            </ul>
+          </div>
+        </div>
+ 
+      </div>
+    </div>
+
+    <!-- 박스 3 · 광고주 어필 (공통 템플릿 · 내용만 교체) -->
+    <div class="office__box office__appeal p-5 min-[981px]:p-8">
+
+      <!-- 3-1. 핵심 한마디 (인용구) -->
+      <div class="office__appeal-quote">
+        <span class="office__appeal-mark" aria-hidden="true">“</span>
+        <p class="office__appeal-quote-text" data-quote-slot>
+          검찰의 시각으로 사건을 꿰뚫고, 20년 실무로 변제금을 깎습니다
+        </p>
+      </div>
+      <!-- 3-2. 소개 카피 본문 -->
+      <div class="office__appeal-copy" data-copy-slot> <!--공백포함 200자-->
+        <p>개인회생·파산은 서류만 내면 끝나는 절차가 아닙니다. 회생위원은 재산 은닉이나 사행성 채무를 따져 묻습니다. 
+          이정용 법률사무소는 경제 범죄를 직접 수사한 검사 출신 대표변호사가 사건을 이끌어, 법원의 소명 요구에 미리 대비합니다. 
+          20년 경력의 실무팀이 지출 내역을 재구성해 생계비를 최대한 확보하고, 실제 탕감액을 늘리는 데 집중합니다.</p>
+      </div>
+
+      <!-- 3-3. 어필 포인트 (PC 3열 / MO 1열) — li 개수는 광고주별로 조절 -->
+      <ul class="office__appeal-points grid grid-cols-1 min-[981px]:grid-cols-3 gap-4 min-[981px]:gap-5 mt-6">
+        <li class="office__appeal-point">
+          <span class="office__appeal-point-num">01</span>
+          <p class="office__appeal-point-tt" data-point-title-slot>검사 출신의 형사·재산 범죄 전문성</p>
+          <p class="office__appeal-point-desc" data-point-desc-slot>채무 독촉을 넘어선 형사 고소 리스크를 선제적으로 방어합니다. 검찰 수사 경력을 바탕으로 사기죄 등 법적 분쟁 요소를 원천 차단하여 안전한 회생을 보장합니다.</p>
+        </li>
+        <li class="office__appeal-point">
+          <span class="office__appeal-point-num">02</span>
+          <p class="office__appeal-point-tt" data-point-title-slot>20년 베테랑 실무팀의 변제금 최적화</p>
+          <p class="office__appeal-point-desc" data-point-desc-slot>20년간 축적된 수만 건의 법원 보정 사례를 분석하여, 의뢰인에게 가장 유리한 가용소득을 산출합니다. 단 1원이라도 더 줄이기 위한 정밀한 컨설팅이 진행됩니다.</p>
+        </li>
+        <li class="office__appeal-point">
+          <span class="office__appeal-point-num">03</span>
+          <p class="office__appeal-point-tt" data-point-title-slot>압도적인 탕감률과 사후 관리 시스템</p>
+          <p class="office__appeal-point-desc" data-point-desc-slot>단순 인가 결정을 넘어 면책 신청까지 책임지는 토탈 케어 서비스를 제공합니다. 풍부한 경험을 바탕으로 의뢰인의 재기 발판을 가장 확실하게 마련해 드립니다.</p>
+        </li>
+      </ul>
+
+    </div>
+ 
+    <!-- 박스 4 · 서비스 메리트 (PC 3열 / MO 2열) -->
+    <div class="office__box office__merits p-5 min-[981px]:p-8">
+      <h3 class="office__merits-title text-center"><strong style="color: var(--primary)"><span data-name-slot>고객명</span>님께 제공되는</strong><br>변호사 이정용 법률사무소의 <br class="block min-[981px]:hidden">6가지 지원사항입니다.</h3>
+
+      <ul class="grid grid-cols-2 min-[981px]:grid-cols-3 gap-3 min-[981px]:gap-4 mt-5">
+ 
+        <li class="office__merit">
+          <img class="office__merit-ic" src="./img/merit-1.png" alt="" />
+          <p class="office__merit-tt">수임료 분납</p>
+        </li>
+ 
+        <li class="office__merit">
+          <img class="office__merit-ic" src="./img/merit-2.png" alt="" />
+          <p class="office__merit-tt">대표변호사 직접 검토</p>
+        </li>
+ 
+        <li class="office__merit">
+          <img class="office__merit-ic" src="./img/merit-3.png" alt="" />
+          <p class="office__merit-tt">전국 무방문 신속접수</p>
+        </li>
+ 
+        <li class="office__merit">
+          <img class="office__merit-ic" src="./img/merit-7.png" alt="" />
+          <p class="office__merit-tt">100% 환불 보장</p>
+        </li>
+ 
+        <li class="office__merit">
+          <img class="office__merit-ic" src="./img/merit-5.png" alt="" />
+          <p class="office__merit-tt">TF팀 배정·전략수립</p>
+        </li>
+ 
+        <li class="office__merit">
+          <img class="office__merit-ic" src="./img/merit-6.png" alt="" />
+          <p class="office__merit-tt">철저한 비밀보장</p>
+        </li>
+ 
+      </ul>
+    </div>
+ 
+  </div>
+</section>
+
+<!-- ============ 섹션 4 - 결정문 롤링 (무한 자동 슬라이드) ============ -->
+<section class="ty-section vd" id="verdicts" aria-label="결정문 롤링">
+  <!-- 마퀴 뷰포트 (풀블리드: 좌우 끝까지 흐르게) -->
+  <div class="vd__viewport" aria-hidden="false">
+    <ul class="vd__track" data-vd-track>
+      <li class="vd__slide"><div class="vd__img" role="img" aria-label="결정문 1" style="background-image:url('./img/rolling-1.png')"></div></li>
+      <li class="vd__slide"><div class="vd__img" role="img" aria-label="결정문 2" style="background-image:url('./img/rolling-2.png')"></div></li>
+      <li class="vd__slide"><div class="vd__img" role="img" aria-label="결정문 3" style="background-image:url('./img/rolling-3.png')"></div></li>
+      <li class="vd__slide"><div class="vd__img" role="img" aria-label="결정문 4" style="background-image:url('./img/rolling-4.png')"></div></li>
+      <li class="vd__slide"><div class="vd__img" role="img" aria-label="결정문 5" style="background-image:url('./img/rolling-5.png')"></div></li>
+      <li class="vd__slide"><div class="vd__img" role="img" aria-label="결정문 6" style="background-image:url('./img/rolling-6.png')"></div></li>
+      <li class="vd__slide"><div class="vd__img" role="img" aria-label="결정문 7" style="background-image:url('./img/rolling-7.png')"></div></li>
+      <li class="vd__slide"><div class="vd__img" role="img" aria-label="결정문 8" style="background-image:url('./img/rolling-8.png')"></div></li>
+      <li class="vd__slide"><div class="vd__img" role="img" aria-label="결정문 9" style="background-image:url('./img/rolling-9.png')"></div></li>
+      <li class="vd__slide"><div class="vd__img" role="img" aria-label="결정문 10" style="background-image:url('./img/rolling-10.png')"></div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 섹션 5 - 최종 CTA (전화 안내) ============ -->
+<section class="ty-section ty-cta" id="cta" aria-label="상담 전화 안내">
+  <div class="mx-auto w-[min(700px,92vw)]">
+    <div class="ty-cta__box text-center px-6 py-12 min-[981px]:py-16">
+
+      <div class="ty-cta__icon mx-auto mb-6">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </svg>
+      </div>
+
+      <span class="ty-cta__badge inline-flex items-center px-3.5 py-1.5 mb-4">이제, 빚 걱정 없는 새로운 삶이 시작됩니다.</span>
+
+      <h2 class="ty-cta__title">
+        <span data-name-slot>고객명</span>님!<br>
+        <strong class="ty-cta__em">변호사 이정용 법률사무소에서</strong><br>
+        연락드릴 예정입니다
+      </h2>
+
+      <p class="ty-cta__desc mt-4">
+        <strong class="ty-cta__em">3회 이상 부재 시</strong> 상담이 어려울 수 있으니<br class="hidden min-[981px]:block">
+        전화를 <strong class="ty-cta__em">꼭 받아주세요</strong>
+      </p>
+
+      <div class="ty-cta__assure inline-flex items-center gap-2 mt-7 px-5 py-3">
+        <svg class="ty-cta__assure-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3l8 4v5c0 4-3 7-8 9-5-2-8-5-8-9V7l8-4z"/><path d="M9 12l2 2 4-4"/>
+        </svg>
+        <span>상담 내용은 철저히 비밀로 보호됩니다</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+  </main>
+
+  <!-- ============ 만료 시 대체 화면 (uid 없음 / 15분 경과) — 기본은 숨김 ============ -->
+  <main id="page-expired" data-content-expired hidden>
+
+    <section class="ty-hero ty-hero--mini" id="hero-expired">
+      <div class="mx-auto w-[min(1200px,92vw)] grid items-center grid-cols-1 min-[981px]:grid-cols-[1.15fr_1fr] gap-[18px] min-[981px]:gap-8 pt-7 pb-14">
+        <!-- 좌: 비주얼 -->
+        <figure class="ty-hero-visual" style="width:100%; max-width:500px; aspect-ratio:1/1; margin-inline:auto;" aria-label="개인회생 안내 비주얼">
+          <img src="./img/hero001.png" alt="개인회생 히어로" />
+        </figure>
+        <!-- 우: 카피 -->
+        <div class="px-1 py-2">
+          <span class="ty-kicker inline-flex items-center gap-2.5 px-3 py-1.5">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12 2v20M2 12h20M5.5 5.5l13 13M18.5 5.5l-13 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+           개인회생·파산 채무 탕감제도
+          </span>
+          <h1 class="text-4xl min-[981px]:text-5xl font-bold mt-3.5 mb-2.5"><strong class="highlight-text">신청이 완료되었습니다.</strong></h1>
+
+          <div class="lead mt-8 mb-4.5">
+            <span class="text-2xl min-[981px]:text-3xl">3회 이상 부재시 상담 진행이 어려울수 있으니, 전화를 꼭 받아주세요.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ 푸터 ============ -->
+  <footer class="site-footer" aria-labelledby="footer-title">
+    <h2 id="footer-title" class="ty-sr-only">사이트 정보</h2>
+
+  <div class="footer__top">
+  <div class="mx-auto w-[min(1200px,92vw)] grid gap-[clamp(20px,4vw,48px)] grid-cols-1 min-[981px]:grid-cols-[1.2fr_1fr] py-[clamp(28px,5vw,48px)]">
+    <div class="footer__brand">
+      <div class="footer__logo flex items-center gap-1 mb-2.5">
+        <img src="img/logo_50x50.png" alt="채무탕감 길라잡이" class="h-8 w-auto">
+        <span class="footer__logo-ko">채무탕감 길라잡이</span>
+      </div>
+      <p class="footer__slogan mt-2">더 이상 혼자 버티지 마세요.<br>편안한 일상으로 가는 길을 알려드립니다.</p>
+    </div>
+
+    <div class="footer__org self-start" role="list">
+      <p class="footer__item grid grid-cols-[120px_1fr] gap-2 my-2" role="listitem"><span class="k">사이트명</span><span class="v">채무탕감 길라잡이</span></p>
+      <p class="footer__item grid grid-cols-[120px_1fr] gap-2 my-2" role="listitem"><span class="k">사업자등록번호</span><span class="v">366-03-03344</span></p>
+      <p class="footer__item grid grid-cols-[120px_1fr] gap-2 my-2" role="listitem"><span class="k">개인정보관리책임자</span><span class="v">김선재</span></p>
+    </div>
+  </div>
+</div>
+
+    <div class="footer__bar">
+      <div class="mx-auto w-[min(1200px,92vw)]">
+        <p class="footer__copy py-4">채무탕감 길라잡이는 변호사 및 법무사(이하 ‘광고주’)와 소비자 간을 연결하는 플랫폼으로, 변호사법 및 기타 관련규정을 준수하기 위해 이용자의 법률상담 및 사건, 수임의 여부 및 내용에 어떠한 관여도 하지 않으며 광고주와 의뢰인간의 업무 전반에 대해 어떠한 법적책임도 부담하지 않습니다. <br><br>Ricco-corporation © All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+<!-- ============ 제한시간 띠배너 (스크롤 고정) ============ -->
+<div class="ttl-bar" data-countdown-bar aria-live="polite">
+  <div class="ttl-bar__inner">
+    <span class="ttl-bar__label">
+      <svg class="ttl-bar__ico" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="13" r="8" stroke="currentColor" stroke-width="2"/>
+        <path d="M12 9v4l2.5 2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M9 2h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      열람 제한시간
+    </span>
+    <span class="ttl-bar__time" data-countdown-time>15:00</span>
+    <span class="ttl-bar__hint">이후 자동 종료됩니다</span>
+  </div>
+</div>
+
+  <!-- ============ JS ============ -->
+  <script src="./js/thanks-uid-resolver-nude.js"></script>
+  <script src="./js/thanks-countdown-nude.js"></script>
+  <script src="./js/thanks-review-cards-nude.js"></script>
+  <script src="./js/thanks-verdicts-nude.js"></script>
+  <script src="./js/thanks-tracking-nude.js"></script>
+</body>
+</html>

@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ko" data-color-pattern="1">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>AI 진단 결과 | 개인회생 탕감액</title>
+
+  <link rel="icon" href="./img/favicon_32x32.png" />
+  <link rel="apple-touch-icon" href="./img/favicon_32x32.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="stylesheet" href="./css/brand-nude.css">
+  <link rel="stylesheet" href="./css/common-nude.css">
+  <link rel="stylesheet" href="./css/typography-nude.css">
+  <link rel="stylesheet" href="./css/premium-nude.css">
+</head>
+
+<body data-industry="legal" data-source="ai-jindan-result">
+
+  <main class="rz" data-rz="root">
+
+    <!-- ============================================================
+         가능 뷰 (블록1~7) — 계산 결과 accept 시 표시
+    ============================================================ -->
+    <div class="rz__view" data-rz="accept">
+
+      <!-- ---- 블록1 · 판정 + 금액 ---- -->
+      <section class="rz__block rz__block--white">
+        <div class="px-5 pt-[26px] pb-[26px]">
+          <div class="rz__top">
+            <button class="dx__iconbtn" data-rz="back" aria-label="뒤로"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
+            <a href="./index-nude.html" class="dx__iconbtn dx__iconbtn--mute" aria-label="닫기"><i class="ti ti-x" aria-hidden="true"></i></a>
+          </div>
+
+          <div class="mt-1">
+            <p class="rz__eyebrow">고객님의</p>
+            <p class="rz__title">AI 진단 결과입니다</p>
+          </div>
+
+          <div class="verdict-card mt-[18px] px-[22px] py-6">
+            <div class="verdict-card__blob"></div>
+            <div class="verdict-card__inner">
+              <div class="verdict-card__badge px-3.5 py-[7px]">
+                <i class="ti ti-circle-check" aria-hidden="true"></i>개인회생 신청 가능
+              </div>
+
+              <div class="gauge mt-[18px] mb-1.5 mx-0.5">
+                <div class="gauge__marker" style="right:12%"></div>
+              </div>
+              <div class="gauge__labels px-0.5 pb-5"><span>불가능</span><span>가능</span></div>
+
+              <div class="verdict-card__row py-[7px]">
+                <span class="vrow-k">채무 원금</span>
+                <span class="vrow-v" data-fill="principal">9,000만원</span>
+              </div>
+              <div class="verdict-card__row py-[7px]">
+                <span class="vrow-k">예상 이자 <span class="vrow-tag">면제 대상</span></span>
+                <span class="vrow-v" data-fill="interest">3,240만원</span>
+              </div>
+              <div class="verdict-card__arrow -my-px"><i class="ti ti-arrow-down text-[18px]" aria-hidden="true"></i></div>
+              <div class="verdict-card__row verdict-card__row--main py-[7px]">
+                <span class="vrow-k">회생 변제금</span>
+                <span class="vrow-v" data-fill="repay">2,824만원</span>
+              </div>
+
+              <div class="verdict-card__divider my-3.5"></div>
+
+              <div class="verdict-card__row verdict-card__row--mint py-[5px]">
+                <span class="vrow-k">예상 탕감액</span>
+                <span class="vrow-v" data-fill="reduced">6,176만원</span>
+              </div>
+              <div class="verdict-card__row verdict-card__row--mint py-[5px]">
+                <span class="vrow-k">예상 탕감률</span>
+                <span class="vrow-v" data-fill="rate">약 69%</span>
+              </div>
+
+              <div class="vstat mt-4 gap-2.5">
+                <div class="vstat__box px-3.5 py-3">
+                  <p class="vstat__k">월 변제액</p>
+                  <p class="vstat__v" data-fill="monthly">78만원</p>
+                  <p class="vstat__note" data-fill="monthly-note"></p>
+                </div>
+                <div class="vstat__box px-3.5 py-3">
+                  <p class="vstat__k">변제기간</p>
+                  <p class="vstat__v" data-fill="months">36개월</p>
+                  <p class="vstat__note" data-fill="months-note"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p class="rz__disclaimer">* 입력하신 값을 토대로 산정한 추정치로, 실제 결과는 법원 심리에 따라 유리하거나 불리하게 달라질 수 있습니다.<br>* 예상 이자는 채무 원금에 연 12%를 3년(36개월) 적용해 추정한 금액이며, 개인회생을 진행하면 전액 면제됩니다. 실제 금리와 상환 조건에 따라 달라질 수 있습니다.</p>
+        </div>
+      </section>
+
+      <!-- ---- 블록2 · 계산 근거 ---- -->
+      <section class="rz__block rz__block--white">
+        <div class="px-5 pb-[26px]">
+          <h2 class="rz__block-title">이렇게 계산했어요</h2>
+          <!-- 카드1 · 변제금이 정해진 근거 (factor별 3버전) -->
+          <!-- income: 가용소득 × 기간 = 변제금 -->
+          <div class="gcard mt-[18px] p-[1.2px]" data-rz="calc-income" style="border-radius:16px">
+            <div class="gcard__inner px-[18px] py-5" style="border-radius:14.5px">
+              <div class="calc__row py-1.5">
+                <span class="calc__k">월 소득</span>
+                <span class="calc__v" data-fill="income">400만원</span>
+              </div>
+              <div class="calc__row py-1.5">
+                <span class="calc__k" data-fill="cost-label">생계비(3인가구)</span>
+                <span class="calc__v calc__v--minus" data-fill="cost">− 321만원</span>
+              </div>
+              <div class="calc__row py-1.5" data-rz="housing-row" style="display:none">
+                <span class="calc__k" data-fill="housing-label">지역 주거비(서울)</span>
+                <span class="calc__v calc__v--minus" data-fill="housing">− 63만원</span>
+              </div>
+              <div class="calc__divider my-2.5"></div>
+              <div class="calc__row calc__row--sum py-1.5">
+                <span class="calc__k">월 가용소득</span>
+                <span class="calc__v" data-fill="usable">78만원</span>
+              </div>
+              <div class="calc__formula mt-3 px-3.5 py-3" data-rz="income-formula">
+                <span class="calc__formula-lead" data-rz="income-mult"><span data-fill="usable-2">78만원</span> <span class="x">×</span> <span data-fill="months-2">36개월</span> = </span>
+                <span class="calc__formula-lead" data-rz="income-lead" style="display:none;margin-bottom:6px;line-height:1.5" data-fill="income-lead"></span>
+                <span class="calc__formula-res">회생 변제금 <span data-fill="repay-2">2,824만원</span></span>
+              </div>
+              <div class="calc__need mt-2.5 px-3.5" data-rz="income-note" style="display:none" data-fill="income-note"></div>
+            </div>
+          </div>
+
+          <!-- asset: 보유 재산(청산가치)이 변제금을 결정 -->
+          <div class="gcard mt-[18px] p-[1.2px]" data-rz="calc-asset" style="border-radius:16px;display:none">
+            <div class="gcard__inner px-[18px] py-5" style="border-radius:14.5px">
+              <div class="calc__row py-1.5">
+                <span class="calc__k">월 소득</span>
+                <span class="calc__v" data-fill="income-a">260만원</span>
+              </div>
+              <div class="calc__row py-1.5">
+                <span class="calc__k" data-fill="cost-label-a">생계비(2인가구)</span>
+                <span class="calc__v calc__v--minus" data-fill="cost-a">− 252만원</span>
+              </div>
+              <div class="calc__row py-1.5" data-rz="housing-row-a" style="display:none">
+                <span class="calc__k" data-fill="housing-label-a">지역 주거비(서울)</span>
+                <span class="calc__v calc__v--minus" data-fill="housing-a">− 63만원</span>
+              </div>
+              <div class="calc__row py-1.5">
+                <span class="calc__k">월 가용소득</span>
+                <span class="calc__v" data-fill="usable-a">8만원</span>
+              </div>
+              <div class="calc__divider my-2.5"></div>
+              <div class="calc__row calc__row--sum py-1.5">
+                <span class="calc__k">보유 재산 (청산가치)</span>
+                <span class="calc__v" data-fill="assets-a">8,000만원</span>
+              </div>
+              <div class="calc__formula mt-3 px-3.5 py-3">
+                <span class="calc__formula-lead">가용소득보다 재산의 청산가치가<br>크기에 법이 정한 기준으로</span>
+                <span class="calc__formula-res">회생 변제금 <span data-fill="repay-a">8,000만원</span></span>
+              </div>
+              <div class="calc__need mt-2.5 px-3.5" data-fill="asset-note"></div>
+            </div>
+          </div>
+
+          <!-- minimum: 법정 최저 변제 기준 적용 -->
+          <div class="gcard mt-[18px] p-[1.2px]" data-rz="calc-minimum" style="border-radius:16px;display:none">
+            <div class="gcard__inner px-[18px] py-5" style="border-radius:14.5px">
+              <div class="calc__row py-1.5">
+                <span class="calc__k">월 소득</span>
+                <span class="calc__v" data-fill="income-m">390만원</span>
+              </div>
+              <div class="calc__row py-1.5">
+                <span class="calc__k" data-fill="cost-label-m">생계비(4인가구)</span>
+                <span class="calc__v calc__v--minus" data-fill="cost-m">− 390만원</span>
+              </div>
+              <div class="calc__row py-1.5" data-rz="housing-row-m" style="display:none">
+                <span class="calc__k" data-fill="housing-label-m">지역 주거비(서울)</span>
+                <span class="calc__v calc__v--minus" data-fill="housing-m">− 63만원</span>
+              </div>
+              <div class="calc__row py-1.5">
+                <span class="calc__k">월 가용소득</span>
+                <span class="calc__v" data-fill="usable-m">0만원</span>
+              </div>
+              <div class="calc__divider my-2.5"></div>
+              <div class="calc__row calc__row--sum py-1.5">
+                <span class="calc__k">법정 최저 변제 기준</span>
+                <span class="calc__v" data-fill="min-m">700만원</span>
+              </div>
+              <div class="calc__formula mt-3 px-3.5 py-3">
+                <span class="calc__formula-lead">소득·재산이 적어 법이 정한 최소 기준으로</span>
+                <span class="calc__formula-res">회생 변제금 <span data-fill="repay-m">700만원</span></span>
+              </div>
+              <div class="calc__need mt-2.5 px-3.5" data-fill="min-note"></div>
+            </div>
+          </div>
+
+          <!-- 탕감 구조: 원금+이자 중 회생후만 갚고 나머지 탕감 -->
+          <div class="gcard mt-3 p-[1.2px]" style="border-radius:16px">
+            <div class="gcard__inner px-[18px] py-5" style="border-radius:14.5px">
+              <div class="calc__row py-1.5">
+                <span class="calc__k">채무 원금</span>
+                <span class="calc__v" data-fill="principal-2">9,000만원</span>
+              </div>
+              <div class="calc__row py-1.5">
+                <span class="calc__k">예상 이자</span>
+                <span class="calc__v" data-fill="interest-2">＋ 3,240만원</span>
+              </div>
+              <div class="calc__row py-1.5">
+                <span class="calc__k">회생 변제금</span>
+                <span class="calc__v calc__v--minus" data-fill="repay-3">− 2,824만원</span>
+              </div>
+              <div class="calc__divider my-2.5"></div>
+              <div class="calc__row calc__row--sum py-1.5">
+                <span class="calc__k">예상 탕감액</span>
+                <span class="calc__v" data-fill="reduced-2">9,416만원</span>
+              </div>
+              <p class="calc__hint mt-2.5">개인회생을 진행하면 이자 <b data-fill="interest-3">3,240만원</b>이 전액 면제됩니다</p>
+            </div>
+          </div>
+          <p class="rz__disclaimer mt-3" data-rz="housing-note" style="display:none">* 거주 지역의 평균 주거비를 반영해 산정했으며, 실제 주소지·월세 납부 내역에 따라 최종 변제금이 달라질 수 있습니다. <span style="opacity:.7">(지역별 인정 한도의 50% 적용)</span></p>
+          <p class="rz__source" data-fill="cost-source">출처 · 보건복지부 2026년도 기준 중위소득 고시(60% 적용)</p>
+        </div>
+      </section>
+
+      <!-- ---- 블록3 · 법원통계 (히스토그램) ---- -->
+      <section class="rz__block rz__block--white">
+        <div class="px-5 pb-[26px]">
+          <h2 class="rz__block-title">서울회생법원 개인회생 신청자 중<br><span style="color:var(--primary-bright)">내 탕감률은 어디쯤일까요?</span></h2>
+          <div class="court mt-5 px-4 pt-[18px] pb-2">
+            <div class="court__chart">
+              <canvas data-rz="chart" role="img" aria-label="개인회생 신청자 탕감률 분포와 내 위치"></canvas>
+            </div>
+          </div>
+          <div class="mt-3.5 text-center">
+            <p class="court__mid-k">전체 신청자의 중위 탕감률은</p>
+            <p class="court__mid-v">66.8%<span>입니다</span></p>
+          </div>
+          <p class="rz__source">출처 · 서울회생법원 「2025년 상반기 개인회생사건 통계조사 결과보고서」</p>
+        </div>
+      </section>
+
+      <!-- ---- 블록4 · 가능 항목 배지 ---- -->
+      <section class="rz__block rz__block--tint">
+        <div class="px-5 pt-[26px] pb-[26px]">
+          <h2 class="rz__block-title">이젠 가능해요</h2>
+          <ul class="able__grid mt-4 gap-2.5">
+            <li class="able p-[1.2px]"><div class="able__inner px-3 py-4 gap-2"><i class="ti ti-cash-banknote" aria-hidden="true"></i><span class="able__name">원금 감면</span></div></li>
+            <li class="able p-[1.2px]"><div class="able__inner px-3 py-4 gap-2"><i class="ti ti-percentage" aria-hidden="true"></i><span class="able__name">이자 없음</span></div></li>
+            <li class="able p-[1.2px]"><div class="able__inner px-3 py-4 gap-2"><i class="ti ti-home" aria-hidden="true"></i><span class="able__name">재산 유지</span></div></li>
+            <li class="able p-[1.2px]"><div class="able__inner px-3 py-4 gap-2"><i class="ti ti-users" aria-hidden="true"></i><span class="able__name">채권자 동의 불필요</span></div></li>
+            <li class="able p-[1.2px]"><div class="able__inner px-3 py-4 gap-2"><i class="ti ti-phone-off" aria-hidden="true"></i><span class="able__name">독촉·추심 즉시 중단</span></div></li>
+            <li class="able p-[1.2px]"><div class="able__inner px-3 py-4 gap-2"><i class="ti ti-trending-up" aria-hidden="true"></i><span class="able__name">신용상태 개선</span></div></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ---- 블록5 · 탕감률 상승 여지 (소득/재산 버전 분기) ---- -->
+      <section class="rz__block rz__block--white">
+        <div class="px-5 py-[26px]">
+          <div class="uplift px-5 py-[26px]">
+            <div class="uplift__blob"></div>
+            <h2 class="uplift__title">잠깐, 여기서<br>끝이 아니에요</h2>
+
+            <!-- 소득기준 버전 (factor==income): 비교 게이지 -->
+            <div data-rz="uplift-income">
+              <div class="uplift__panel mt-[18px] p-[18px]">
+                <div class="uplift__panel-row">
+                  <div>
+                    <p class="uplift__now-k">현재 진단 결과</p>
+                    <p class="uplift__now-v" data-fill="rate-plain">68.6%</p>
+                  </div>
+                  <i class="ti ti-arrow-right uplift__panel-arrow" aria-hidden="true"></i>
+                  <div>
+                    <p class="uplift__max-k">추가 제도 확인 시</p>
+                    <p class="uplift__max-v" data-fill="uplift-max">최대 89%</p>
+                  </div>
+                </div>
+                <div class="uplift__bar mt-3.5">
+                  <div class="uplift__bar-fill" data-fill="uplift-bar" style="width:77%"></div>
+                  <div class="uplift__bar-dot" data-fill="uplift-dot" style="left:77%"></div>
+                </div>
+              </div>
+              <p class="uplift__lead mt-4 mx-1">같은 조건의 신청자 중 상당수가<br>확인하지 못한 제도로 탕감률을<br>더 끌어올렸어요</p>
+              <p class="uplift__sub mt-3 mx-1">추가 생계비, 소득 공제 항목, 재산 평가, 채무 발생 사유, 변제기간 조정 여지 확인 등 깊이 확인해볼수록 탕감률과 월상환액이 크게 달라져요</p>
+            </div>
+
+            <!-- 재산기준 버전 (factor==asset): 게이지(통일) + 재산 유지 전략 문구 -->
+            <div data-rz="uplift-asset" style="display:none">
+              <div class="uplift__panel mt-[18px] p-[18px]">
+                <div class="uplift__panel-row">
+                  <div>
+                    <p class="uplift__now-k">현재 진단 결과</p>
+                    <p class="uplift__now-v" data-fill="rate-plain-asset">68.6%</p>
+                  </div>
+                  <i class="ti ti-arrow-right uplift__panel-arrow" aria-hidden="true"></i>
+                  <div>
+                    <p class="uplift__max-k">추가 제도 확인 시</p>
+                    <p class="uplift__max-v" data-fill="uplift-max-asset">최대 89%</p>
+                  </div>
+                </div>
+                <div class="uplift__bar mt-3.5">
+                  <div class="uplift__bar-fill" data-fill="uplift-bar-asset" style="width:77%"></div>
+                  <div class="uplift__bar-dot" data-fill="uplift-dot-asset" style="left:77%"></div>
+                </div>
+              </div>
+              <p class="uplift__lead mt-4 mx-1">담보 설정 여부나 평가 방식 변경되거나 면제재산이 공제가 되어<br>실제로 인정되는 재산 가치가 달라지면<br>탕감률이 지금보다 더 높아질 수 있어요</p>
+              <p class="uplift__sub mt-3 mx-1">먼저 보유하신 재산을 처분하지 않고도 개인회생을 진행할 수 있는 방법을 찾고, 그래도 소득만으로 어렵다면 재산 일부를 처분해 변제기간 안에 개인회생을 진행할 수 있어요</p>
+            </div>
+
+            <!-- 최저변제액 버전 (factor==minimum): 상위 N% 게이지 + 방어·확인 카피 -->
+            <div data-rz="uplift-minimum" style="display:none">
+              <div class="uplift__panel mt-[18px] p-[18px]">
+                <div class="uplift__panel-row">
+                  <div>
+                    <p class="uplift__now-k">현재 탕감률</p>
+                    <p class="uplift__now-v" data-fill="rate-plain-min">95%</p>
+                  </div>
+                  <i class="ti ti-arrow-right uplift__panel-arrow" aria-hidden="true"></i>
+                  <div>
+                    <p class="uplift__max-k">신청자 중</p>
+                    <p class="uplift__max-v" data-fill="uplift-rank-min">상위 3%</p>
+                  </div>
+                </div>
+                <div class="uplift__bar mt-3.5">
+                  <div class="uplift__bar-fill" data-fill="uplift-bar-min" style="width:96%"></div>
+                  <div class="uplift__bar-dot" data-fill="uplift-dot-min" style="left:96%"></div>
+                </div>
+              </div>
+              <p class="uplift__lead mt-4 mx-1">축하해요! 이미 높은 탕감률이에요<br><span style="font-weight:400;color:rgba(255,255,255,.7);font-size:14px">소득·재산이 적어 기본 계산만으로도 최상위 구간에 들었어요. 다만 이게 최종은 아니에요</span></p>
+              <p class="uplift__sub mt-3 mx-1">실제 법원은 제세공과금·영업비용 공제, 재산 평가, 면제재산, 변제기간 조정까지 함께 봐요. 이 항목들을 확인하면 탕감률이 유지되는지, 월 상환액을 더 낮출 수 있는지 정확히 알 수 있어요</p>
+            </div>
+
+            <p class="uplift__cta-line mt-3.5 mx-1" data-fill="uplift-cta-line">상담을 통해 정확한 탕감률을 확인할 수 있어요</p>
+            <p class="uplift__note mt-3.5 mx-1">* 위 수치는 유사 조건 신청 사례의 통계 범위이며, 개별 결과와 다를 수 있습니다.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---- 블록6 · 수임료·진행 안내 ---- -->
+      <section class="rz__block rz__block--white">
+        <div class="px-5 pb-[26px]">
+          <h2 class="rz__block-title">고객님께는 이렇게<br>진행 가능해요</h2>
+          <ul class="steps6 mt-[18px] gap-2.5">
+            <li class="step6 step6--hl p-3.5"><span class="step6__no step6__no--blue">01</span><span class="step6__label">수임료 분할 납부 — 부담 없이 시작</span></li>
+            <li class="step6 p-3.5"><span class="step6__no step6__no--sky">02</span><span class="step6__label">개인회생 전문 변호사가 직접 처리</span></li>
+            <li class="step6 p-3.5"><span class="step6__no step6__no--sky">03</span><span class="step6__label">가장 유리한 변제안 도출</span></li>
+            <li class="step6 p-3.5"><span class="step6__no step6__no--sky">04</span><span class="step6__label">채권자 독촉 즉시 중단</span></li>
+            <li class="step6 p-3.5"><span class="step6__no step6__no--sky">05</span><span class="step6__label">진행 상황 실시간 안내</span></li>
+            <li class="step6 step6--hl p-3.5"><span class="step6__no step6__no--green">06</span><span class="step6__label">100% 환불 보장</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ---- 블록7 · CTA ---- -->
+      <section class="rz__block rz__block--white">
+        <div class="px-5 pt-5 pb-[26px]">
+          <button class="rz__cta py-[18px]" data-rz="cta">내 탕감률 정확히 확인하기</button>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ============================================================
+         신청불가 뷰 — 계산 결과 reject 시 표시
+    ============================================================ -->
+    <div class="rz__view" data-rz="reject">
+      <section class="rz__block rz__block--tint">
+        <div class="px-5 pt-[26px] pb-[26px] min-h-[100dvh] flex flex-col">
+          <div class="rz__top">
+            <button class="dx__iconbtn" data-rz="back" aria-label="뒤로"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
+            <a href="./index-nude.html" class="dx__iconbtn dx__iconbtn--mute" aria-label="닫기"><i class="ti ti-x" aria-hidden="true"></i></a>
+          </div>
+
+          <div class="mt-1">
+            <p class="rz__eyebrow">고객님의</p>
+            <p class="rz__title">AI 진단 결과입니다</p>
+          </div>
+
+          <div class="reject-card mt-[22px] px-[22px] py-[30px]">
+            <div class="reject-card__face"><i class="ti ti-mood-sad" aria-hidden="true"></i></div>
+            <h2 class="reject-card__title">개인회생 신청 불가</h2>
+            <div class="reject-card__gauge mt-[22px] mb-1.5 mx-0.5">
+              <div class="reject-card__fill"></div>
+              <div class="reject-card__marker"></div>
+            </div>
+            <div class="reject-card__labels px-0.5"><span>불가능</span><span>가능</span></div>
+            <div class="reject-card__msg mt-[22px] px-4 py-4">
+              <p class="reject-card__msg-title">다음의 경우 신청이 불가합니다</p>
+              <ul class="reject-card__reasons">
+                <li><span class="reject-card__bullet"></span>최근 5년 내 법원에서 면책받은 경우</li>
+                <li><span class="reject-card__bullet"></span>담보대출·체납 세금만 있는 경우</li>
+                <li><span class="reject-card__bullet"></span>총 채무가 2,000만원 미만인 경우</li>
+                <li><span class="reject-card__bullet"></span>소득이 최저생계비 이하인 경우</li>
+                <li><span class="reject-card__bullet"></span>재산이 채무보다 많거나 같은 경우</li>
+                <li><span class="reject-card__bullet"></span>총 채무가 15억원을 초과하는 경우</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="mt-auto pt-5">
+            <button class="rz__cta py-[17px]" data-rz="retry">다시 진단하기</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <!-- ============================================================
+       리드 모달 (번호인증 · 센터 모달) — 블록7 CTA 클릭 시 오픈
+       ★UI·카피만. 인증(OTP)·전송 로직은 추후 연결(자리만).
+  ============================================================ -->
+  <div class="lead" data-rz="lead-modal" hidden>
+    <div class="lead__dim" data-rz="lead-dim"></div>
+    <div class="lead__panel" role="dialog" aria-modal="true" aria-labelledby="lead-title">
+      <button class="lead__close" data-rz="lead-close" aria-label="닫기"><i class="ti ti-x" aria-hidden="true"></i></button>
+
+      <!-- 헤더 -->
+      <div class="lead__head">
+        <p class="lead__eyebrow">잠깐, 이게 끝이 아니에요</p>
+        <h2 class="lead__title" id="lead-title">같은 상황에서<br>더 받은 사람들이 있어요</h2>
+      </div>
+
+      <!-- 리드 본문 -->
+      <div class="lead__body">
+        <p class="lead__lead">방금 보신 건 입력 정보만으로 계산한 예상치예요. 실제 회생에서는 이것보다 훨씬 많은 걸 따집니다.</p>
+        <p class="lead__items">추가 생계비 인정 항목, 재산별 청산가치 평가, 채무 발생 사유와 시점, 변제기간 단축 대상 여부, 부양가족 범위, 소득 산정 방식, 면제재산 공제 등등</p>
+        <p class="lead__lead">위와 같은 세부 항목들을 어떻게 다투느냐에 따라 누군가는 탕감률을 더 높이고, 누군가는 살던 집과 재산을 지키고, 누군가는 높은 결과를 그대로 인정받았어요.</p>
+        <p class="lead__lead lead__lead--strong">일반인 혼자 판단하기 어려운 부분이라, 지금 연락처를 남기시면 아래 4가지를 바로 확인할 수 있어요.</p>
+      </div>
+
+      <!-- 가치제안 체크리스트 -->
+      <ul class="lead__checks">
+        <li><i class="ti ti-check" aria-hidden="true"></i><span><b>외부 비공개</b> — 나와 비슷한 상황에서 높은 탕감률 받은 실제 후기 8건</span></li>
+        <li><i class="ti ti-check" aria-hidden="true"></i><span>재산을 지키면서 탕감받는 방법</span></li>
+        <li><i class="ti ti-check" aria-hidden="true"></i><span>내 탕감률을 정확히 확인하는 방법</span></li>
+        <li><i class="ti ti-check" aria-hidden="true"></i><span>압류·독촉을 멈추는 절차</span></li>
+      </ul>
+
+      <p class="lead__promise">남겨주신 연락처로 담당자가<br><b>1:1 맞춤 최적의 탕감 방안</b>을 상세하게 안내드립니다</p>
+
+      <!-- 입력 폼 (UI만 · 전송 로직 추후) -->
+      <div class="lead__form">
+        <div class="lead__field">
+          <label class="lead__label">이름</label>
+          <input class="lead__input" type="text" data-rz="lead-name" placeholder="성함을 입력해 주세요" autocomplete="name">
+        </div>
+
+        <div class="lead__field">
+          <label class="lead__label">연락처</label>
+          <div class="lead__phone">
+            <input class="lead__input" type="tel" data-rz="lead-phone" placeholder="010-0000-0000" inputmode="numeric" autocomplete="off" maxlength="13">
+            <!-- 인증번호 받기 버튼은 OTP JS가 여기 삽입 -->
+            <div class="lead__verify-slot" data-rz="lead-verify-slot"></div>
+          </div>
+          <!-- 인증번호 입력칸은 OTP JS가 삽입 (발송 후 표시) -->
+          <div class="lead__otp-slot" data-rz="lead-otp-slot"></div>
+        </div>
+
+        <div class="lead__field">
+          <label class="lead__label">통화 가능 시간</label>
+          <select class="lead__select" data-rz="lead-calltime" required>
+            <option value="" selected disabled>통화가능 시간을 선택해주세요</option>
+            <option>오전 10~11시</option>
+            <option>오전 11시~12시</option>
+            <option>오후 12~1시</option>
+            <option>오후 1~2시</option>
+            <option>오후 2~3시</option>
+            <option>오후 3~4시</option>
+            <option>오후 4~5시</option>
+            <option>오후 5~6시</option>
+          </select>
+        </div>
+
+        <div class="lead__field">
+          <label class="lead__label">더 궁금한 점 <span class="lead__opt">(선택)</span></label>
+          <textarea class="lead__input lead__textarea" data-rz="lead-message" rows="2" placeholder="궁금한 점을 자유롭게 남겨주세요"></textarea>
+        </div>
+
+        <label class="lead__agree">
+          <input type="checkbox" data-rz="lead-agree" checked>
+          <span>개인정보 수집 및 이용 동의</span>
+          <a href="#" class="lead__terms" data-rz="lead-terms">전문 보기</a>
+        </label>
+
+        <p class="lead__ssl"><i class="ti ti-lock" aria-hidden="true"></i> SSL 보안 연결로 안전하게 전송됩니다</p>
+
+        <button class="lead__submit" data-rz="lead-submit" type="button">내 탕감률 정확히 확인하기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       개인정보 약관 모달 — 리드 모달 '전문 보기' 클릭 시 오픈
+  ============================================================ -->
+  <div class="privacy" data-rz="privacy-modal" hidden>
+    <div class="privacy__dim" data-rz="privacy-close"></div>
+    <div class="privacy__panel" role="dialog" aria-modal="true" aria-label="개인정보취급방침">
+      <div class="privacy__head">
+        <span class="privacy__title">개인정보취급방침</span>
+        <button class="privacy__close" data-rz="privacy-close" aria-label="닫기"><i class="ti ti-x" aria-hidden="true"></i></button>
+      </div>
+      <div class="privacy__body">
+        개인정보의 수집 및 이용 동의(필수)<br><br>
+        1. 수집하는 개인정보의 항목 및 수집 목적<br><br>
+        (1) 개인정보 수집목적<br>
+        리코코퍼레이션은 이용자의 개인정보를 다음과 같은 목적으로 수집∙이용합니다.<br>
+        가. 회원으로 가입한 이용자를 식별하고 가입의사 및 나이 확인, 불량회원의 부정한 이용을 방지하기 위하여 사용합니다.<br>
+        나. 이용자에게 리코코퍼레이션의 다양한 서비스를 제공하고 서비스 이용 과정에서 이용자의 문의사항이나 불만을 처리하고 공지사항 등을 전달하기 위해 사용합니다.<br>
+        다. 이용자와 약속한 서비스를 제공하고 유료 서비스 구매 및 이용이 이루어지는 경우 이에 따른 요금 정산을 위해 사용됩니다.<br>
+        라. 신규 서비스가 개발되거나 이벤트 행사 시 참여기회를 알리기 위한 정보 전달 및 마케팅 및 광고 등에도 사용됩니다.<br>
+        마. 이용자의 서비스 이용 기록과 접속 빈도 분석 및 서비스 이용에 대한 통계, 이를 통한 맞춤형 서비스 제공과 서비스 개선에도 사용됩니다.<br>
+        바. 회사에 마케팅을 의뢰한 제3자의 광고, 상품소개 등 관련 광고문자 발송, 이벤트 행사 및 경품/쿠폰 관련 고객문의 응대에도 사용됩니다.<br><br>
+        (2) 수집하는 개인정보의 항목<br>
+        회사는 회원(또는 서비스) 가입, 원활한 고객상담, 각종 서비스의 제공 등을 위해 아래와 같은 최소한의 개인정보를 필수항목으로 수집하고 있습니다.<br>
+        가. 개인회원 가입시<br>
+        휴대전화번호, 이름, 이메일 주소가 수집될 수 있습니다.<br>
+        나. 광고서비스 제공 시<br>
+        이름, 휴대폰 전화번호, 이메일이 수집될 수 있습니다.<br>
+        다. 상담 서비스 이용 시<br>
+        서비스 품질 확인 및 개선을 위해 연락처 정보(발/수신 전화번호), 서비스 이용 기록(통화시간, 통화 내용 등)이 수집될 수 있습니다.<br>
+        라. 기타<br>
+        서비스 이용과정에서 아래와 같은 정보들이 자동으로 생성되어 수집될 수 있습니다.<br>
+        IP Address, 쿠키, 방문 일시, 서비스 이용 기록, 불량 이용 기록, 기기정보<br><br>
+        2. 개인정보 수집방법<br>
+        - 회사는 다음과 같은 방법으로 개인정보를 수집합니다.<br>
+        - 서비스 내 관련 페이지, 서면 양식, 팩스, 전화, 상담 게시판, 이메일, 이벤트 응모<br>
+        - 협력회사 및 수탁자로부터의 제공<br>
+        - 회사의 이벤트 안내 팝업 내 이용자가 직접 입력한 정보 수집<br><br>
+        3. 개인정보의 보유 및 이용기간<br>
+        리코코퍼레이션은 이용자의 개인정보를 회원가입을 하는 시점부터 서비스를 제공하는 기간 동안에만 제한적으로 이용하고 있습니다.<br>
+        이용자가 회원탈퇴를 요청하거나 제공한 개인정보의 수집 및 이용에 대한 동의를 철회하는 경우, 또는 수집 및 이용목적이 달성되거나 보유 및 이용기간이 종료한 경우 해당 이용자의 개인정보는 지체 없이 파기되며 다음 정보에 대해서는 아래의 사유로 일정기간 동안 저장됩니다.<br>
+        전자상거래 등에서의 소비자보호에 관한 법률, 통신비밀보호법, 정보통신망 이용촉진 및 정보보호 등에 관한 법률 등 관계법령에 따라 보존할 필요가 있는 경우 회사는 관계법령에서 정한 기간 동안 고객의 개인정보를 보유하며, 그 기간은 다음과 같습니다.<br><br>
+        <table class="privacy__table">
+          <tr><th>보존근거</th><th>보존대상</th><th>보존기간</th></tr>
+          <tr><td>전자상거래 등에서의 소비자 보호에 관한 법률</td><td>대금결제 및 재화 등의 공급에 관한 기록</td><td>5년</td></tr>
+          <tr><td>전자상거래 등에서의 소비자 보호에 관한 법률</td><td>소비자의 불만 또는 분쟁처리에 관한 기록</td><td>3년</td></tr>
+          <tr><td>전자상거래 등에서의 소비자 보호에 관한 법률</td><td>표시, 광고에 관한 기록</td><td>6개월</td></tr>
+          <tr><td>전자금융거래법</td><td>전자금융 거래에 관한 기록</td><td>5년</td></tr>
+          <tr><td>통신비밀보호법</td><td>서비스 방문기록, 접속로그, 접속 아이피</td><td>3개월</td></tr>
+          <tr><td>정보통신망 이용촉진 및 정보보호 등에 관한 법률</td><td>본인 확인에 관한 기록</td><td>6개월</td></tr>
+        </table>
+        <br><br>개인정보의 제3자 제공 및 위탁 동의(필수)<br>
+        1. 회사는 이용자의 개인정보를 제 1조(수집하는 개인정보의 항목 및 수집방법)에서 명시한 범위 내에서 처리하며, 이용자의 동의, 법률의 특별한 규정 등 개인정보보호법 제17조 및 제 18조에 해당하는 경우에만 개인정보를 제3자에게 제공합니다.<br><br>
+        2. 회사는 다음과 같이 개인정보를 제3자에게 제공하고 있습니다.<br><br>
+        제3자 : 채무탕감 길라잡이<br>
+        제공하는 개인정보항목 : 이름, 연락처 등등<br>
+        제공받는자의 이용목적 : 맞춤형 서비스 제공, 운영 업무 대행<br>
+        제공받는자의 보유 및 이용기간 : 참여일로부터 12개월<br><br>
+        3. 회사는 이용자에게 다양한 서비스를 제공하는 데에 반드시 필요한 업무 중 일부를 외부 업체로 하여금 수행하도록 개인정보의 취급 업무를 위탁합니다. 개인정보 위탁처리 기관 및 위탁업무의 내용은 다음과 같습니다.<br><br>
+        수탁자(업체) : 리코코퍼레이션<br>
+        위탁업무 내용 : 개인정보 수집 및 제공<br>
+        위탁처리 정보 : 이름, 연락처 등등<br>
+        개인정보 이용기간 : 개인정보 제공을 완료한 시점까지만<br><br>
+        4. 이용자는 서비스 제공 및 이용 이외의 목적으로 제3자에게 본인의 개인정보를 제공하는 것에 동의하지 않을 수 있습니다.<br>
+        5. 회사는 개인정보 제공업체에 변경이 생길 수 있습니다. 이에 대한 변경사항은 회사 인터넷 사이트를 통해 제공받는자, 이용목적, 제공하는 개인정보항목, 보유 및 이용기간에 대해 공지하고 별도의 고객동의를 득하여 업체에게 제공됩니다.<br>
+        6. 이용자는 이미 동의한 개인정보 제3자 제공에 대한 철회를 요청할 수 있으며, 요청하는 창구는 다음과 같습니다.<br><br>
+        개인정보관리책임자<br>
+        이름 : 김선재<br>
+        소속/직위 : 개인정보관리책임자<br>
+        이메일 : ricco-corporation@naver.com<br><br>
+        기타 개인정보침해에 대한 신고나 상담이 필요하신 경우에는 아래 기관에 문의하시기 바랍니다.<br>
+        1. 개인분쟁조정위원회 (https://www.1336.or.kr/1336)<br>
+        2. 정보보호마크인증위원회 (https://www.eprivacy.or.kr / 02-580-0533~4)<br>
+        3. 대검찰청 인터넷범죄수사센터 (02-3480-3600)<br>
+        4. 경찰청 사이버테러대응센터 (https://www.ctrc.go.kr / 02-392-0330)<br>
+      </div>
+    </div>
+  </div>
+
+  <!-- 제출 로딩 오버레이 (lead-form.js가 제어) -->
+  <div id="submit-loading-overlay" class="submit-overlay" style="display:none;">
+    <div class="submit-overlay__box">
+      <div class="submit-overlay__spinner" aria-hidden="true"></div>
+      <p class="submit-overlay__text">접수 중입니다<br><span>잠시만 기다려 주세요</span></p>
+    </div>
+  </div>
+
+  <!-- ============ JS ============ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <script src="./js/traffic-nude.js"></script>
+  <script src="./js/living-cost-nude.js"></script>
+  <script src="./js/calc-nude.js"></script>
+  <script src="./js/result-nude.js"></script>
+  <script src="./js/lead-form-nude.js"></script>
+  <!-- 제휴사 동시전송 연동 시: partner-form.js를 여기 추가 (submitPartnerForm 노출) -->
+</body>
+</html>
