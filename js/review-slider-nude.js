@@ -1,16 +1,15 @@
 /* =====================================================================
-   review-slider.js — 블록5 후기 (Swiper 순정 슬라이드쇼)
+   review-slider.js — 블록5 후기 (Swiper, 안정 무한 루프)
    ---------------------------------------------------------------------
-   수동 translate 조작 없이 Swiper 기본 기능만 사용 → loop/드래그/무한이
-   서로 충돌하지 않고 안정적으로 동작.
-   - autoplay로 한 칸씩 부드럽게 자동 이동(경쟁사와 동일 방식).
-   - loop 무한. 드래그(스와이프)로 넘기기. 마우스 올려도 계속 진행.
+   [왜 이렇게] slidesPerView:'auto'는 loop과 상성이 나빠 드래그가 튀고
+   끝에서 안 이어진다. 그래서 slidesPerView를 '숫자'로 준다(loop 복제가
+   정확히 계산됨). 카드 폭을 320px로 유지하려고, 화면폭÷320 을 계산해
+   소수점 slidesPerView로 넣고 리사이즈 때 갱신한다.
 
-   ※ Swiper CDN(js/css)은 index <head>/하단에서 로드됨.
-   [OFF] index.html에서 이 <script>와 Swiper CDN 두 줄 제거.
-   [속도조절]
-     - speed  : 한 칸 넘어가는 이동 시간(ms). 클수록 부드럽고 느긋.
-     - delay  : 한 칸 후 다음까지 쉬는 시간(ms). 작을수록 자주 넘어감.
+   speed 4200 + autoplay delay:0 + linear → 거의 연속처럼 흐름.
+   loop 무한, 드래그 허용. 군더더기 옵션 없음.
+
+   ※ Swiper CDN 필요. [OFF] index.html에서 <script>+CDN 제거.
 ===================================================================== */
 (function () {
   'use strict';
@@ -18,27 +17,46 @@
   var el = document.querySelector('[data-review="viewport"].swiper');
   if (!el) return;
 
+  // 후기 8장은 PC에서 loop 복제가 부족해 '끝이 나는' 문제가 생긴다.
+  // 초기화 전에 슬라이드를 한 벌 복제해 16장으로 만들어 loop을 넉넉하게 한다.
+  var wrapEl = el.querySelector('.swiper-wrapper');
+  if (wrapEl && wrapEl.children.length <= 8) {
+    var slides = Array.prototype.slice.call(wrapEl.children);
+    slides.forEach(function (s) {
+      var c = s.cloneNode(true);
+      c.removeAttribute('data-review');
+      wrapEl.appendChild(c);
+    });
+  }
+
+  var CARD = 320 + 16;   // 카드 폭 + spaceBetween
+
+  function spv() {
+    // 화면(컨테이너) 폭에 카드가 몇 장 들어가는지 → 소수점 그대로
+    var w = el.clientWidth || window.innerWidth;
+    return Math.max(1.1, w / CARD);
+  }
+
   var sw = new Swiper(el, {
-    slidesPerView: 'auto',
-    spaceBetween: 50,
+    slidesPerView: spv(),          // 숫자(소수점) → loop 안정
+    spaceBetween: 16,
     loop: true,
-    grabCursor: true,
-    allowTouchMove: true,     // 드래그/스와이프로 넘기기
-    touchRatio: 1,            // 손가락 이동량 = 카드 이동량(1:1)
-    speed: 8000,              // 한 칸 이동을 길게 → 멈칫 지점 간격이 멀어져 거의 연속
+    loopAdditionalSlides: 6,       // 복제 넉넉히
+    speed: 4200,
+    allowTouchMove: true,
     autoplay: {
-      delay: 0,               // 쉬는 틈 없음
-      disableOnInteraction: false,  // 드래그 후에도 자동 재개
-      pauseOnMouseEnter: false,     // 마우스 올려도 안 멈춤
+      delay: 0,
+      disableOnInteraction: false,
     },
   });
 
-  // 드래그 중엔 자동 흐름을 멈춰, 손가락으로 민 만큼만 이동하게 한다.
-  // (안 멈추면 autoplay의 왼쪽 이동이 드래그에 더해져 '민 것보다 더 나감')
-  sw.on('touchStart', function () { sw.autoplay.stop(); });
-  sw.on('touchEnd',   function () { sw.autoplay.start(); });
+  // 리사이즈 시 slidesPerView 갱신(카드 폭 320 유지)
+  window.addEventListener('resize', function () {
+    sw.params.slidesPerView = spv();
+    sw.update();
+  });
 
-  // 각 칸 이동을 등속(linear)으로 → 가속/감속 없이 매끄럽게(멈칫 느낌 최소화)
+  // 각 전환 등속(linear) → 감속 없이 매끄럽게
   var wrap = el.querySelector('.swiper-wrapper');
   function linearize(){ if (wrap) wrap.style.transitionTimingFunction = 'linear'; }
   linearize();

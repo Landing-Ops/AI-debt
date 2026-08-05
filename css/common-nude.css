@@ -239,16 +239,20 @@ body.is-modal-open{ overflow:hidden; }
 
 /* 마퀴 뷰포트: Swiper 컨테이너 */
 .review__marquee{
-  margin-top:20px; width:100%;
+  margin-top:20px;
+  /* 블록5 슬라이더만 화면 풀폭으로(경쟁사처럼). 제목은 프레임 안 유지. */
+  width:100vw;
+  margin-left:calc(-50vw + 50%);
+  overflow:hidden;
 }
 .review__track{
   /* Swiper가 display:flex 및 transform 제어 */
 }
-/* Swiper 슬라이드 폭: 카드 실제 폭만큼(slidesPerView:auto) */
-.review__marquee .swiper-slide{ width:280px; height:auto; }
+/* slidesPerView 숫자(폭÷336) 방식 → slide 폭은 Swiper가 계산(약 320px). */
+.review__marquee .swiper-slide{ height:auto; }
 
 .rcard{                                            /* 흰 배경 + 얇은 그림자 */
-  flex:0 0 auto; width:200px; background:#fff;
+  width:100%; background:#fff;
   border-radius:var(--radius-xl); box-shadow:var(--shadow-card);
   display:flex; flex-direction:column;
 }
