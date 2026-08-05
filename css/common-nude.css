@@ -222,7 +222,7 @@ body.is-modal-open{ overflow:hidden; }
 }
 .bcard__icon img{ width:82%; height:82%; object-fit:contain; display:block; }
 .bcard__icon i{ font-size:24px; }
-.bcard__title{ margin:0; font-size:18px; font-weight:600; color:#fff; }
+.bcard__title{ margin:0; font-size:17px; font-weight:600; color:#fff; }
 .bcard__desc{ margin:5px 0 0; font-size:14px; color:rgba(255,255,255,.72); }
 /* .benefit__note{ margin:0; font-size:12px; color:var(--neutral-400); text-align:center; } */
 
@@ -242,10 +242,13 @@ body.is-modal-open{ overflow:hidden; }
   margin-top:20px; overflow:hidden; width:100%;
   -webkit-mask-image:linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
           mask-image:linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+  contain:layout paint style;                    /* 스크롤 중 리페인트 범위를 이 박스로 격리 */
 }
 .review__track{                                   /* 마퀴 트랙 (JS가 transform 제어) */
   display:flex; gap:50px; width:max-content; padding-left:12px;
   user-select:none; -webkit-user-select:none; touch-action:pan-y;
+  will-change:transform; transform:translateZ(0);   /* GPU 레이어 승격 */
+  -webkit-backface-visibility:hidden; backface-visibility:hidden;
 }
 
 .rcard{                                            /* 흰 배경 + 얇은 그림자 */

@@ -64,7 +64,9 @@
       while (offset >= setWidth) offset -= setWidth;
       while (offset < 0) offset += setWidth;
     }
-    track.style.transform = 'translateX(' + (-offset) + 'px)';
+    // 정수 픽셀 + translate3d → 서브픽셀 렌더링 제거 & GPU 가속 (모바일 버벅임 해소)
+    var px = Math.round(offset);
+    track.style.transform = 'translate3d(' + (-px) + 'px,0,0)';
   }
 
   /* ---------- 애니메이션 루프 ---------- */
@@ -114,10 +116,10 @@
   track.style.cursor = 'grab';
   track.style.willChange = 'transform';
 
-  /* 화면 밖이면 정지(성능) */
+  /* 화면 밖이면 정지(성능). rootMargin으로 뷰포트 안에 실제로 들어왔을 때만 돌림 */
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (en) { visible = en.isIntersecting; if (visible) lastT = 0; });
-  }, { threshold: 0 });
+  }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
   io.observe(viewport);
 
   /* 리사이즈/폰트로드 시 재측정 */
