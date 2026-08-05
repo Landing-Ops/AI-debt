@@ -29,7 +29,6 @@
    conic-gradient를 회전시키고, 안쪽을 흰 카드로 덮어 테두리만 흐르게 함
 ===================================================================== */
 .cta__overlay{
-  position:relative;
   background:
     linear-gradient(#fff,#fff) padding-box,
     conic-gradient(from var(--angle, 0deg),

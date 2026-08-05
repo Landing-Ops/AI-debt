@@ -1,98 +1,130 @@
 /* =====================================================================
-   review-slider.js — 블록5 진단 후기 가로 스크롤 슬라이더 (Vanilla)
+   review-slider.js — 블록5 진단 후기 무한 마퀴 (transform 기반, Vanilla)
    ---------------------------------------------------------------------
    [역할]
-   카드가 가로로 나열된 트랙을 자동으로 흘려보내고, 도트로 위치를 표시.
-   오른쪽 끝 카드에 .rcard--peek(반투명)을 붙여 "더 있음"을 암시.
+   후기 카드를 왼쪽으로 끊김 없이 흘려보낸다(marquee). 8장 뒤 1장이
+   자연스럽게 이어지고, 브라우저 확대/축소·어떤 폭에서도 이음매가 없다.
 
-   [동작]
-   - scrollTo로 카드 단위 이동(scroll-snap과 병행)
-   - 자동재생: 일정 주기로 다음 카드. hover(PC)·터치(모바일) 중 정지
-   - 사용자가 직접 스크롤하면 그 위치에 맞춰 도트·peek 갱신
-   - 요소 없으면 조용히 종료(섹션을 단계적으로 붙여도 안전)
+   [원리]
+   - 트랙(원본 카드 세트)을 통째로 1벌 복제해 [원본][복제]로 만든다.
+   - translateX(-offset)로 매 프레임 왼쪽 이동. offset이 '원본 1벌 폭'에
+     도달하면 offset을 그만큼 빼서 0 근처로 되돌린다(순간 점프이나 복제본이
+     같은 그림이라 눈에 안 띔) → 무한 루프.
+   - requestAnimationFrame + 경과시간(dt) 기반이라 프레임 드랍/줌에도 속도 일정.
 
-   [OFF 방법]
-   index.html에서 이 <script>만 제거. 트랙은 그대로 수동 스크롤됨.
+   [인터랙션]
+   - PC hover / 포인터 누름: 자동 흐름 정지
+   - 포인터 드래그(스와이프): 손가락 따라 좌우로 밀림. 놓으면 자동 재개.
+   - 화면에서 벗어나면(IntersectionObserver) 애니메이션 정지(성능).
+
+   [OFF] index.html에서 이 <script> 제거.
 ===================================================================== */
 (function () {
   'use strict';
 
+  var viewport = document.querySelector('[data-review="viewport"]');
   var track = document.querySelector('[data-review="track"]');
-  var dotsWrap = document.querySelector('[data-review="dots"]');
-  if (!track) return;
+  if (!viewport || !track) return;
 
-  var cards = Array.prototype.slice.call(track.children);
-  var dots  = dotsWrap ? Array.prototype.slice.call(dotsWrap.children) : [];
-  if (cards.length < 2) return;
+  var originals = Array.prototype.slice.call(track.children);
+  if (originals.length < 2) return;
 
-  var DURATION = 3500;
-  var index = 0;
-  var timer = null;
-  var isPaused = false;
+  var SPEED = 40;            // px/초 — 흐르는 속도(보통). 낮추면 느려짐
+  var offset = 0;           // 현재 이동량(px)
+  var setWidth = 0;         // 원본 1벌 폭(복제 경계)
+  var paused = false;       // hover/포인터로 정지
+  var dragging = false;
+  var lastX = 0;
+  var rafId = 0;
+  var lastT = 0;
+  var visible = true;
 
-  /* ---------- 현재 스크롤 위치로 활성 인덱스 계산 ---------- */
-  function nearestIndex() {
-    var left = track.scrollLeft;
-    var best = 0, bestDist = Infinity;
-    cards.forEach(function (c, i) {
-      var d = Math.abs(c.offsetLeft - track.offsetLeft - left);
-      if (d < bestDist) { bestDist = d; best = i; }
-    });
-    return best;
-  }
-
-  /* ---------- 도트 + peek(반투명) 상태 갱신 ---------- */
-  function paint(i) {
-    dots.forEach(function (d, di) {
-      d.setAttribute('aria-selected', di === i ? 'true' : 'false');
-    });
-    // 마지막으로 완전히 보이는 카드의 "다음" 카드에만 peek 적용
-    cards.forEach(function (c, ci) {
-      c.classList.toggle('rcard--peek', ci === i + 2);
-    });
-  }
-
-  function goTo(i) {
-    index = (i + cards.length) % cards.length;
-    var target = cards[index];
-    track.scrollTo({ left: target.offsetLeft - track.offsetLeft, behavior: 'smooth' });
-    paint(index);
-  }
-
-  /* ---------- 자동재생 ---------- */
-  function tick()  { if (!isPaused) goTo(index + 1); }
-  function start() { stop(); timer = setInterval(tick, DURATION); }
-  function stop()  { if (timer) clearInterval(timer); }
-
-  /* ---------- 사용자 직접 스크롤 → 인덱스 동기화 ---------- */
-  var scrollRaf = 0;
-  track.addEventListener('scroll', function () {
-    cancelAnimationFrame(scrollRaf);
-    scrollRaf = requestAnimationFrame(function () {
-      index = nearestIndex();
-      paint(index);
-    });
-  }, { passive: true });
-
-  /* ---------- hover(PC) / 터치(모바일) 중 정지 ---------- */
-  track.addEventListener('mouseenter', function () { isPaused = true; });
-  track.addEventListener('mouseleave', function () { isPaused = false; });
-  track.addEventListener('touchstart', function () { isPaused = true; }, { passive: true });
-  track.addEventListener('touchend',   function () { isPaused = false; }, { passive: true });
-
-  /* ---------- 도트 클릭 ---------- */
-  dots.forEach(function (d, di) {
-    d.style.cursor = 'pointer';
-    d.addEventListener('click', function () { goTo(di); start(); });
+  /* ---------- 복제: [원본][복제] 2벌 ---------- */
+  originals.forEach(function (node) {
+    var clone = node.cloneNode(true);
+    clone.setAttribute('aria-hidden', 'true');
+    track.appendChild(clone);
   });
 
-  /* ---------- 화면에 보일 때만 자동재생 시작 ---------- */
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (en) {
-      if (en.isIntersecting) { start(); } else { stop(); }
-    });
-  }, { threshold: 0.3 });
-  io.observe(track);
+  /* ---------- 원본 1벌 폭 측정 (gap 포함) ---------- */
+  function measure() {
+    // 원본 첫 카드 left ~ 복제 첫 카드 left 사이 거리 = 원본 1벌 폭(+gap)
+    var firstClone = track.children[originals.length];
+    if (firstClone) {
+      setWidth = firstClone.offsetLeft - track.children[0].offsetLeft;
+    } else {
+      setWidth = track.scrollWidth / 2;
+    }
+  }
 
-  paint(0);
+  /* ---------- 위치 적용 ---------- */
+  function apply() {
+    // offset 정규화: [0, setWidth) 범위로 랩
+    if (setWidth > 0) {
+      while (offset >= setWidth) offset -= setWidth;
+      while (offset < 0) offset += setWidth;
+    }
+    track.style.transform = 'translateX(' + (-offset) + 'px)';
+  }
+
+  /* ---------- 애니메이션 루프 ---------- */
+  function frame(t) {
+    if (!lastT) lastT = t;
+    var dt = (t - lastT) / 1000;   // 초 단위 경과
+    lastT = t;
+    if (!paused && !dragging && visible) {
+      offset += SPEED * dt;
+      apply();
+    }
+    rafId = requestAnimationFrame(frame);
+  }
+
+  /* ---------- 포인터(드래그/스와이프) ---------- */
+  function onDown(e) {
+    dragging = true;
+    lastX = (e.touches ? e.touches[0].clientX : e.clientX);
+    track.style.cursor = 'grabbing';
+  }
+  function onMove(e) {
+    if (!dragging) return;
+    var x = (e.touches ? e.touches[0].clientX : e.clientX);
+    var dx = x - lastX;
+    lastX = x;
+    offset -= dx;              // 손가락 방향으로 이동
+    apply();
+  }
+  function onUp() {
+    dragging = false;
+    track.style.cursor = 'grab';
+    lastT = 0;                 // dt 튀는 것 방지
+  }
+
+  /* hover 정지(PC) */
+  viewport.addEventListener('mouseenter', function () { paused = true; });
+  viewport.addEventListener('mouseleave', function () { paused = false; lastT = 0; });
+
+  /* 포인터 다운/무브/업 */
+  track.addEventListener('mousedown', onDown);
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onUp);
+  track.addEventListener('touchstart', onDown, { passive: true });
+  track.addEventListener('touchmove', onMove, { passive: true });
+  track.addEventListener('touchend', onUp);
+
+  track.style.cursor = 'grab';
+  track.style.willChange = 'transform';
+
+  /* 화면 밖이면 정지(성능) */
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) { visible = en.isIntersecting; if (visible) lastT = 0; });
+  }, { threshold: 0 });
+  io.observe(viewport);
+
+  /* 리사이즈/폰트로드 시 재측정 */
+  window.addEventListener('resize', measure);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+
+  measure();
+  apply();
+  rafId = requestAnimationFrame(frame);
 })();
