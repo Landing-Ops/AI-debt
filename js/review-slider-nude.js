@@ -1,21 +1,21 @@
 /* =====================================================================
-   review-slider.js — 블록5 진단 후기 무한 마퀴 (transform 기반, Vanilla)
+   review-slider.js — 블록5 진단 후기 무한 마퀴 (DOM 재배치 방식, Vanilla)
    ---------------------------------------------------------------------
-   [역할]
-   후기 카드를 왼쪽으로 끊김 없이 흘려보낸다(marquee). 8장 뒤 1장이
-   자연스럽게 이어지고, 브라우저 확대/축소·어떤 폭에서도 이음매가 없다.
+   [원리 — 복제 없이 무한 루프]
+   - 카드 8장만 사용(복제 안 함). 트랙을 translate3d로 왼쪽 이동.
+   - 맨 앞 카드가 화면 왼쪽 밖으로 완전히 나가면, 그 카드를 트랙 맨 뒤로
+     옮기고(appendChild) offset을 그 카드폭(+gap)만큼 빼서 위치를 보정한다.
+     → 눈에는 그대로인데 카드 순서만 8→1 로 돌아, 끊김 없이 무한 순환.
+   - 트랙 폭이 절반(8장)이라 모바일 GPU 부담이 크게 준다. gap 유지.
 
-   [원리]
-   - 트랙(원본 카드 세트)을 통째로 1벌 복제해 [원본][복제]로 만든다.
-   - translateX(-offset)로 매 프레임 왼쪽 이동. offset이 '원본 1벌 폭'에
-     도달하면 offset을 그만큼 빼서 0 근처로 되돌린다(순간 점프이나 복제본이
-     같은 그림이라 눈에 안 띔) → 무한 루프.
-   - requestAnimationFrame + 경과시간(dt) 기반이라 프레임 드랍/줌에도 속도 일정.
+   [부드러움]
+   - translate3d + 정수 px(서브픽셀 제거) + GPU 레이어.
+   - transform은 값이 바뀐 프레임에만 기록.
+   - rAF + 경과시간(dt) 기반 → 프레임 드랍/줌에도 속도 일정.
 
    [인터랙션]
-   - PC hover / 포인터 누름: 자동 흐름 정지
-   - 포인터 드래그(스와이프): 손가락 따라 좌우로 밀림. 놓으면 자동 재개.
-   - 화면에서 벗어나면(IntersectionObserver) 애니메이션 정지(성능).
+   - PC hover / 포인터 누름: 정지. 드래그(스와이프): 손가락 따라 이동.
+   - 화면 밖이면(IntersectionObserver) 정지.
 
    [OFF] index.html에서 이 <script> 제거.
 ===================================================================== */
@@ -25,63 +25,57 @@
   var viewport = document.querySelector('[data-review="viewport"]');
   var track = document.querySelector('[data-review="track"]');
   if (!viewport || !track) return;
+  if (track.children.length < 2) return;
 
-  var originals = Array.prototype.slice.call(track.children);
-  if (originals.length < 2) return;
+  var SPEED = 40;        // px/초
+  var offset = 0;        // 트랙 이동량(px). 항상 0 이상에서 시작해 커짐
+  var gap = 0;
+  var paused = false, dragging = false, visible = true;
+  var lastX = 0, lastT = 0, lastPx = null, rafId = 0;
 
-  var SPEED = 40;            // px/초 — 흐르는 속도(보통). 낮추면 느려짐
-  var offset = 0;           // 현재 이동량(px)
-  var setWidth = 0;         // 원본 1벌 폭(복제 경계)
-  var paused = false;       // hover/포인터로 정지
-  var dragging = false;
-  var lastX = 0;
-  var rafId = 0;
-  var lastT = 0;
-  var visible = true;
-
-  /* ---------- 복제: [원본][복제] 2벌 ---------- */
-  originals.forEach(function (node) {
-    var clone = node.cloneNode(true);
-    clone.setAttribute('aria-hidden', 'true');
-    track.appendChild(clone);
-  });
-
-  /* ---------- 원본 1벌 폭 측정 (gap 포함) ---------- */
-  function measure() {
-    // 원본 첫 카드 left ~ 복제 첫 카드 left 사이 거리 = 원본 1벌 폭(+gap)
-    var firstClone = track.children[originals.length];
-    if (firstClone) {
-      setWidth = firstClone.offsetLeft - track.children[0].offsetLeft;
-    } else {
-      setWidth = track.scrollWidth / 2;
-    }
+  /* gap 측정 (flex gap) */
+  function measureGap() {
+    var g = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap || '0');
+    gap = isNaN(g) ? 0 : g;
   }
 
-  /* ---------- 위치 적용 ---------- */
+  /* 위치 적용 — 정수 px가 바뀐 프레임에만 DOM 기록 */
   function apply() {
-    // offset 정규화: [0, setWidth) 범위로 랩
-    if (setWidth > 0) {
-      while (offset >= setWidth) offset -= setWidth;
-      while (offset < 0) offset += setWidth;
-    }
-    // 정수 픽셀 + translate3d → 서브픽셀 렌더링 제거 & GPU 가속 (모바일 버벅임 해소)
     var px = Math.round(offset);
+    if (px === lastPx) return;
+    lastPx = px;
     track.style.transform = 'translate3d(' + (-px) + 'px,0,0)';
   }
 
-  /* ---------- 애니메이션 루프 ---------- */
+  /* 맨 앞 카드가 완전히 밖으로 나갔으면 뒤로 재배치 + offset 보정 */
+  function recycle() {
+    // 여러 장이 한 번에 나갈 수도 있으니 while
+    var first = track.firstElementChild;
+    while (first) {
+      var w = first.offsetWidth + gap;   // 카드폭 + gap
+      if (offset >= w) {
+        track.appendChild(first);        // 맨 뒤로 이동
+        offset -= w;                     // 그만큼 빼서 화면 위치 유지(안 튐)
+        lastPx = null;                   // 다음 apply 강제 기록
+        first = track.firstElementChild;
+      } else break;
+    }
+  }
+
+  /* 애니메이션 루프 */
   function frame(t) {
     if (!lastT) lastT = t;
-    var dt = (t - lastT) / 1000;   // 초 단위 경과
+    var dt = (t - lastT) / 1000;
     lastT = t;
     if (!paused && !dragging && visible) {
       offset += SPEED * dt;
+      recycle();
       apply();
     }
     rafId = requestAnimationFrame(frame);
   }
 
-  /* ---------- 포인터(드래그/스와이프) ---------- */
+  /* 포인터(드래그/스와이프) */
   function onDown(e) {
     dragging = true;
     lastX = (e.touches ? e.touches[0].clientX : e.clientX);
@@ -90,22 +84,21 @@
   function onMove(e) {
     if (!dragging) return;
     var x = (e.touches ? e.touches[0].clientX : e.clientX);
-    var dx = x - lastX;
+    offset += (lastX - x);      // 손가락 방향으로 이동(왼쪽 스와이프 → offset↑)
     lastX = x;
-    offset -= dx;              // 손가락 방향으로 이동
+    if (offset < 0) offset = 0; // 음수 방지(뒤로 과도 스와이프 시)
+    recycle();
     apply();
   }
   function onUp() {
     dragging = false;
     track.style.cursor = 'grab';
-    lastT = 0;                 // dt 튀는 것 방지
+    lastT = 0;
   }
 
-  /* hover 정지(PC) */
   viewport.addEventListener('mouseenter', function () { paused = true; });
   viewport.addEventListener('mouseleave', function () { paused = false; lastT = 0; });
 
-  /* 포인터 다운/무브/업 */
   track.addEventListener('mousedown', onDown);
   window.addEventListener('mousemove', onMove);
   window.addEventListener('mouseup', onUp);
@@ -114,19 +107,16 @@
   track.addEventListener('touchend', onUp);
 
   track.style.cursor = 'grab';
-  track.style.willChange = 'transform';
 
-  /* 화면 밖이면 정지(성능). rootMargin으로 뷰포트 안에 실제로 들어왔을 때만 돌림 */
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (en) { visible = en.isIntersecting; if (visible) lastT = 0; });
   }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
   io.observe(viewport);
 
-  /* 리사이즈/폰트로드 시 재측정 */
-  window.addEventListener('resize', measure);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  window.addEventListener('resize', measureGap);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureGap);
 
-  measure();
+  measureGap();
   apply();
   rafId = requestAnimationFrame(frame);
 })();
