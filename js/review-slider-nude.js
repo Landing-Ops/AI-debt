@@ -24,7 +24,7 @@
     loop: true,
     grabCursor: true,
     allowTouchMove: true,     // 드래그/스와이프로 넘기기
-    speed: 5000,              // 한 칸 이동을 길게 → 멈칫 지점 간격이 멀어져 거의 연속
+    speed: 8000,              // 한 칸 이동을 길게 → 멈칫 지점 간격이 멀어져 거의 연속
     autoplay: {
       delay: 0,               // 쉬는 틈 없음
       disableOnInteraction: false,  // 드래그 후에도 자동 재개
