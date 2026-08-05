@@ -41,7 +41,7 @@
     slidesPerView: spv(),          // 숫자(소수점) → loop 안정
     spaceBetween: 16,
     loop: true,
-    loopAdditionalSlides: 6,       // 복제 넉넉히
+    loopAdditionalSlides: 3,       // 16장이면 3으로 충분(복제 과다 = 무거움)
     speed: 4200,
     allowTouchMove: true,
     autoplay: {
@@ -50,15 +50,32 @@
     },
   });
 
-  // 리사이즈 시 slidesPerView 갱신(카드 폭 320 유지)
+  // 드래그 중엔 자동 흐름 정지, 놓으면 살짝 텀 두고 재개.
+  // (즉시 재개하면 자동 이동이 드래그에 이어붙어 '홱 몇 px 더 감')
+  var resumeTimer = 0;
+  sw.on('touchStart', function () {
+    clearTimeout(resumeTimer);
+    sw.autoplay.stop();
+  });
+  sw.on('touchEnd', function () {
+    clearTimeout(resumeTimer);
+    resumeTimer = setTimeout(function () { sw.autoplay.start(); }, 350);
+  });
+
+  // 리사이즈 시 slidesPerView 갱신(카드 폭 유지)
   window.addEventListener('resize', function () {
     sw.params.slidesPerView = spv();
     sw.update();
   });
 
-  // 각 전환 등속(linear) → 감속 없이 매끄럽게
+  // 각 전환 등속(linear) + GPU 레이어 힌트 → 감속·미세 버벅 완화
   var wrap = el.querySelector('.swiper-wrapper');
-  function linearize(){ if (wrap) wrap.style.transitionTimingFunction = 'linear'; }
+  function linearize(){
+    if (wrap) {
+      wrap.style.transitionTimingFunction = 'linear';
+      wrap.style.willChange = 'transform';
+    }
+  }
   linearize();
   sw.on('setTransition', linearize);
 })();
