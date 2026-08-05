@@ -163,6 +163,7 @@ body.is-modal-open{ overflow:hidden; }
   color:var(--primary-bright); aspect-ratio:1/1;
 }
 .step__figure i{ font-size:46px; }
+.step__figure img{ width:78%; height:78%; object-fit:contain; display:block; }
 .step__badge{                                     /* STEP 배지 (테두리와 같은 그라데이션) */
   align-self:flex-start; font-size:11px; font-weight:500; color:#fff;
   background:linear-gradient(120deg,var(--green),var(--sky));
@@ -182,11 +183,11 @@ body.is-modal-open{ overflow:hidden; }
 .badge{ border-radius:14.5px; background:var(--grad-border); box-shadow:0 6px 18px rgba(12,68,124,.09); }
 .badge__inner{ background:#fff; border-radius:13.3px; text-align:center; }
 .badge__icon{
-  border-radius:12px; background:var(--primary-soft);
-  display:flex; align-items:center; justify-content:center; color:var(--primary-bright);
+  display:flex; align-items:center; justify-content:center;
 }
+.badge__icon img{ width:100%; height:100%; object-fit:contain; display:block; }
 .badge__icon i{ font-size:28px; }
-.badge__name{ margin:0; font-size:14px; font-weight:500; color:var(--primary-strong); }
+.badge__name{ margin:0; font-size:18px; font-weight:700; color:var(--primary-strong); }
 
 /* 네이비 결론 박스 (테두리는 밝게 조정한 그라데이션) */
 .verdict{ border-radius:18px; background:var(--grad-border-lite); box-shadow:0 16px 38px rgba(4,44,83,.26); }
@@ -215,10 +216,11 @@ body.is-modal-open{ overflow:hidden; }
   box-shadow:var(--shadow-navy);
 }
 .bcard__icon{
-  flex:0 0 auto; border-radius:14px;
-  background:rgba(255,255,255,.14);
+  flex:0 0 auto; border-radius:16px;
+  background:rgba(255,255,255,.250);
   display:flex; align-items:center; justify-content:center; color:#fff;
 }
+.bcard__icon img{ width:82%; height:82%; object-fit:contain; display:block; }
 .bcard__icon i{ font-size:24px; }
 .bcard__title{ margin:0; font-size:18px; font-weight:600; color:#fff; }
 .bcard__desc{ margin:5px 0 0; font-size:14px; color:rgba(255,255,255,.72); }
@@ -255,6 +257,10 @@ body.is-modal-open{ overflow:hidden; }
   width:38px; height:38px; border-radius:50%; background:var(--chip-bg);
   display:flex; align-items:center; justify-content:center;
   color:var(--primary-bright); font-size:13px; font-weight:500;
+  overflow:hidden; flex:0 0 auto;               /* 이미지가 원 밖으로 안 넘치게 */
+}
+.rcard__avatar img{
+  width:100%; height:100%; object-fit:cover; display:block;  /* 정사각 이미지를 원형에 꽉 채움 */
 }
 .rcard__who{ margin:0; font-size:14px; font-weight:500; color:var(--primary-strong); }
 .rcard__who span{ font-size:12px; color:var(--neutral-600); font-weight:400; }
