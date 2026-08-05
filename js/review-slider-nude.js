@@ -24,6 +24,7 @@
     loop: true,
     grabCursor: true,
     allowTouchMove: true,     // 드래그/스와이프로 넘기기
+    touchRatio: 1,            // 손가락 이동량 = 카드 이동량(1:1)
     speed: 8000,              // 한 칸 이동을 길게 → 멈칫 지점 간격이 멀어져 거의 연속
     autoplay: {
       delay: 0,               // 쉬는 틈 없음
@@ -31,6 +32,11 @@
       pauseOnMouseEnter: false,     // 마우스 올려도 안 멈춤
     },
   });
+
+  // 드래그 중엔 자동 흐름을 멈춰, 손가락으로 민 만큼만 이동하게 한다.
+  // (안 멈추면 autoplay의 왼쪽 이동이 드래그에 더해져 '민 것보다 더 나감')
+  sw.on('touchStart', function () { sw.autoplay.stop(); });
+  sw.on('touchEnd',   function () { sw.autoplay.start(); });
 
   // 각 칸 이동을 등속(linear)으로 → 가속/감속 없이 매끄럽게(멈칫 느낌 최소화)
   var wrap = el.querySelector('.swiper-wrapper');
