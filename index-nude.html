@@ -16,6 +16,10 @@
   <!-- 아이콘: Tabler Icons (CDN) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css">
 
+  <!-- 후기 슬라이더: Swiper (CDN) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+
   <!-- Tailwind: 레이아웃 전용 (초기 제작용 CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -267,10 +271,10 @@
         </div>
 
         <!-- 마퀴 뷰포트: JS가 트랙을 복제해 무한 루프 생성 -->
-        <div class="review__marquee" data-review="viewport">
-          <div class="review__track" data-review="track">
+        <div class="review__marquee swiper" data-review="viewport">
+          <div class="review__track swiper-wrapper" data-review="track">
 
-            <article class="rcard p-[18px]">
+            <article class="rcard swiper-slide p-[18px]">
               <div class="flex items-center gap-2.5">
                 <div class="rcard__avatar"><img src="./img/landing_review1.png" alt="" loading="lazy"></div>
                 <div><p class="rcard__who">류** <span>40대·남성·직장인</span></p></div>
@@ -284,7 +288,7 @@
               </div>
             </article>
 
-            <article class="rcard p-[18px]">
+            <article class="rcard swiper-slide p-[18px]">
               <div class="flex items-center gap-2.5">
                 <div class="rcard__avatar"><img src="./img/landing_review2.png" alt="" loading="lazy"></div>
                 <div><p class="rcard__who">조** <span>30대·남성·일용직</span></p></div>
@@ -298,7 +302,7 @@
               </div>
             </article>
 
-            <article class="rcard p-[18px]">
+            <article class="rcard swiper-slide p-[18px]">
               <div class="flex items-center gap-2.5">
                 <div class="rcard__avatar"><img src="./img/landing_review3.png" alt="" loading="lazy"></div>
                 <div><p class="rcard__who">이** <span>20대·남성·프리랜서</span></p></div>
@@ -312,7 +316,7 @@
               </div>
             </article>
 
-            <article class="rcard p-[18px]">
+            <article class="rcard swiper-slide p-[18px]">
               <div class="flex items-center gap-2.5">
                 <div class="rcard__avatar"><img src="./img/landing_review4.png" alt="" loading="lazy"></div>
                 <div><p class="rcard__who">최** <span>50대·남성·자영업</span></p></div>
@@ -326,7 +330,7 @@
               </div>
             </article>
 
-            <article class="rcard p-[18px]">
+            <article class="rcard swiper-slide p-[18px]">
               <div class="flex items-center gap-2.5">
                 <div class="rcard__avatar"><img src="./img/landing_review5.png" alt="" loading="lazy"></div>
                 <div><p class="rcard__who">정** <span>40대·여성·사업자</span></p></div>
@@ -340,7 +344,7 @@
               </div>
             </article>
 
-            <article class="rcard p-[18px]">
+            <article class="rcard swiper-slide p-[18px]">
               <div class="flex items-center gap-2.5">
                 <div class="rcard__avatar"><img src="./img/landing_review6.png" alt="" loading="lazy"></div>
                 <div><p class="rcard__who">이** <span>30대·남성·직장인</span></p></div>
@@ -354,7 +358,7 @@
               </div>
             </article>
 
-            <article class="rcard p-[18px]">
+            <article class="rcard swiper-slide p-[18px]">
               <div class="flex items-center gap-2.5">
                 <div class="rcard__avatar"><img src="./img/landing_review7.png" alt="" loading="lazy"></div>
                 <div><p class="rcard__who">배** <span>30대·남성·직장인</span></p></div>
@@ -368,7 +372,7 @@
               </div>
             </article>
 
-            <article class="rcard p-[18px]">
+            <article class="rcard swiper-slide p-[18px]">
               <div class="flex items-center gap-2.5">
                 <div class="rcard__avatar"><img src="./img/landing_review8.png" alt="" loading="lazy"></div>
                 <div><p class="rcard__who">조** <span>50대·여성·부업</span></p></div>
@@ -565,6 +569,7 @@
       if(tgl && list){ tgl.addEventListener('click', function(){ list.classList.toggle('is-open'); }); }
     })();
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script src="./js/review-slider-nude.js"></script>
 </body>
 </html>

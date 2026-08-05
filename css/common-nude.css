@@ -237,19 +237,15 @@ body.is-modal-open{ overflow:hidden; }
 .review__wrap{ position:relative; }
 .review__head{ width:min(var(--frame-w),92vw); margin-inline:auto; padding:0 4px; }
 
-/* 마퀴 뷰포트: 넘치는 부분 숨김. 화면 전폭 사용 */
+/* 마퀴 뷰포트: Swiper 컨테이너 */
 .review__marquee{
-  margin-top:20px; overflow:hidden; width:100%;
-  -webkit-mask-image:linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
-          mask-image:linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
-  contain:layout paint style;                    /* 스크롤 중 리페인트 범위를 이 박스로 격리 */
+  margin-top:20px; width:100%;
 }
-.review__track{                                   /* 마퀴 트랙 (JS가 transform 제어) */
-  display:flex; gap:50px; width:max-content; padding-left:12px;
-  user-select:none; -webkit-user-select:none; touch-action:pan-y;
-  will-change:transform; transform:translateZ(0);   /* GPU 레이어 승격 */
-  -webkit-backface-visibility:hidden; backface-visibility:hidden;
+.review__track{
+  /* Swiper가 display:flex 및 transform 제어 */
 }
+/* Swiper 슬라이드 폭: 카드 실제 폭만큼(slidesPerView:auto) */
+.review__marquee .swiper-slide{ width:330px; height:auto; }
 
 .rcard{                                            /* 흰 배경 + 얇은 그림자 */
   flex:0 0 auto; width:330px; background:#fff;
