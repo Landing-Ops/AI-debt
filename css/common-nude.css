@@ -245,10 +245,10 @@ body.is-modal-open{ overflow:hidden; }
   /* Swiper가 display:flex 및 transform 제어 */
 }
 /* Swiper 슬라이드 폭: 카드 실제 폭만큼(slidesPerView:auto) */
-.review__marquee .swiper-slide{ width:330px; height:auto; }
+.review__marquee .swiper-slide{ width:280px; height:auto; }
 
 .rcard{                                            /* 흰 배경 + 얇은 그림자 */
-  flex:0 0 auto; width:330px; background:#fff;
+  flex:0 0 auto; width:200px; background:#fff;
   border-radius:var(--radius-xl); box-shadow:var(--shadow-card);
   display:flex; flex-direction:column;
 }
