@@ -521,7 +521,7 @@ body.is-modal-open{ overflow:hidden; }
   position:relative; overflow:hidden; border-radius:var(--radius-xl);
   background:var(--navy); background-image:linear-gradient(160deg,var(--navy-lift) 0%,var(--navy) 60%,var(--navy-deep) 100%);
 }
-.uplift__icon{ display:block; width:170px; height:170px; object-fit:contain; margin:4px auto 0; }
+.uplift__icon{ display:block; width:150px; height:150px; object-fit:contain; margin:4px auto 0; }
 .uplift > *{ position:relative; }
 .uplift__title{ margin:0; font-size:28px; line-height:1.4; font-weight:600; color:#fff; }
 .uplift__panel{
@@ -603,21 +603,21 @@ body.is-modal-open{ overflow:hidden; }
 
 /* 리드 본문 */
 .lead__body{ margin-top:16px; }
-.lead__lead{ font-size:13px; line-height:1.62; color:var(--text-secondary,#5f6b7a); margin:0 0 9px; }
+.lead__lead{ font-size:16px; line-height:1.62; color:var(--text-secondary,#5f6b7a); margin:0 0 9px; }
 .lead__lead--strong{ color:var(--primary-strong); font-weight:600; margin-top:11px; }
 .lead__items{
-  font-size:12px; line-height:1.6; color:var(--primary); margin:0 0 9px;
+  font-size:14px; line-height:1.6; color:var(--primary); margin:0 0 9px;
   background:var(--chip-bg); border-radius:10px; padding:11px 13px;
 }
 
 /* 체크리스트 */
 .lead__checks{ list-style:none; margin:16px 0 0; padding:0; display:flex; flex-direction:column; gap:9px; }
-.lead__checks li{ display:flex; align-items:flex-start; gap:9px; font-size:12.5px; line-height:1.5; color:var(--text-primary,#0e3b64); }
+.lead__checks li{ display:flex; align-items:flex-start; gap:9px; font-size:14px; line-height:1.5; color:var(--text-primary,#0e3b64); }
 .lead__checks i{ flex:0 0 20px; width:20px; height:20px; margin-top:1px; display:inline-flex; align-items:center; justify-content:center; background:var(--primary-bg); color:var(--primary-bright); border-radius:50%; font-size:13px; }
 .lead__checks b{ font-weight:700; color:var(--primary-bright); }
 
-.lead__promise{ text-align:center; font-size:12.5px; line-height:1.6; color:var(--text-secondary,#5f6b7a); margin:16px 0 0; }
-.lead__promise b{ color:var(--primary-strong); font-weight:600; }
+.lead__promise{ text-align:center; font-size:14px; line-height:1.6; color:var(--text-secondary,#5f6b7a); margin:16px 0 0; }
+.lead__promise b{ color:var(--primary-strong); font-weight:700; }
 
 /* 폼 */
 .lead__form{ margin-top:18px; padding-top:18px; border-top:1px solid var(--border,#e3e9f0); }
