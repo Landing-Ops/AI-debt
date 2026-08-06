@@ -66,7 +66,7 @@
     return v === null || v === '';
   });
   if (missing) {
-    window.location.replace('./diagnosis.html');
+    window.location.replace('./diagnosis-nude.html');
     return;
   }
 
@@ -253,20 +253,41 @@
       set('cost-source', srcTxt);
     }
 
-    // 블록5 (탕감률 상승 여지) — 3버전 분기
+    // 블록5 (탕감률 상승 여지) — 버전 분기
+    // 탕감률 90% 초과면 '더 올림'이 무의미(상한 95 근처/초과) → 상위 N% 표기.
+    //   - factor=income & 90%초과 → 소득기준 상위N% 박스(income-high)
+    //   - factor=minimum → 최저변제 상위N% 박스(minimum)
+    // 90% 이하면 상승형(income/asset).
+    var ratePct = pctNum(r.rate);
     var incomeVer = viewAccept.querySelector('[data-rz="uplift-income"]');
     var assetVer  = viewAccept.querySelector('[data-rz="uplift-asset"]');
     var minVer    = viewAccept.querySelector('[data-rz="uplift-minimum"]');
+    var incHiVer  = viewAccept.querySelector('[data-rz="uplift-income-high"]');
 
-    incomeVer.style.display = (r.factor === 'income')  ? 'block' : 'none';
-    assetVer.style.display  = (r.factor === 'asset')   ? 'block' : 'none';
-    minVer.style.display    = (r.factor === 'minimum') ? 'block' : 'none';
+    function hideAll() {
+      incomeVer.style.display = 'none';
+      assetVer.style.display  = 'none';
+      minVer.style.display    = 'none';
+      if (incHiVer) incHiVer.style.display = 'none';
+    }
 
     if (r.factor === 'minimum') {
+      // 최저변제 — 항상 상위 N%
+      hideAll();
+      minVer.style.display = 'block';
       fillUpliftMinimum(r);
-      // CTA 라인: 월 부담 축 (탕감률 방어 → 확인)
+      set('uplift-cta-line', '상담을 통해 정확한 탕감률을 확인할 수 있어요');
+    } else if (ratePct > 90) {
+      // 소득/재산인데 탕감률 90% 초과 — 소득기준 상위 N% 박스
+      hideAll();
+      if (incHiVer) incHiVer.style.display = 'block';
+      fillUpliftIncomeHigh(r);
       set('uplift-cta-line', '상담을 통해 정확한 탕감률을 확인할 수 있어요');
     } else {
+      // 90% 이하 — 상승형
+      hideAll();
+      incomeVer.style.display = (r.factor === 'income') ? 'block' : 'none';
+      assetVer.style.display  = (r.factor === 'asset')  ? 'block' : 'none';
       var sfx = (r.factor === 'asset') ? '-asset' : '';
       fillUplift(r, sfx);
       // 소득/재산은 기본 CTA 라인 유지(HTML 기본값)
@@ -305,6 +326,22 @@
     var w = Math.min(Math.round(cur), 100);
     var bar = viewAccept.querySelector('[data-fill="uplift-bar-min"]');
     var dot = viewAccept.querySelector('[data-fill="uplift-dot-min"]');
+    if (bar) bar.style.width = w + '%';
+    if (dot) dot.style.left  = w + '%';
+  }
+
+  /* 블록5 — 소득/재산 factor인데 탕감률 90% 초과 (상위 N%형, income 카피) ----
+     로직은 minimum과 동일(상위 N%), 키만 -inchigh. HTML 카피가 소득기준용. */
+  function fillUpliftIncomeHigh(r) {
+    var cur = pctNum(r.rate);
+    var top = topPercentile(cur);
+
+    set('rate-plain-inchigh', pct(r.rate));
+    set('uplift-rank-inchigh', '상위 ' + top + '%');
+
+    var w = Math.min(Math.round(cur), 100);
+    var bar = viewAccept.querySelector('[data-fill="uplift-bar-inchigh"]');
+    var dot = viewAccept.querySelector('[data-fill="uplift-dot-inchigh"]');
     if (bar) bar.style.width = w + '%';
     if (dot) dot.style.left  = w + '%';
   }
@@ -446,7 +483,7 @@
     if (retry) retry.addEventListener('click', function () {
       // 다시 진단: 답변 비우고 진단 처음으로
       KEYS.forEach(function (k) { try { sessionStorage.removeItem(k); } catch (e) {} });
-      window.location.href = './diagnosis.html';
+      window.location.href = './diagnosis-nude.html';
     });
   }
 

@@ -290,7 +290,7 @@
                   <div class="uplift__bar-dot" data-fill="uplift-dot-asset" style="left:77%"></div>
                 </div>
               </div>
-              <p class="uplift__lead mt-4 mx-1">담보 설정 여부나 평가 방식이 변경되거나 면제재산이 공제 되는 등 실제로 인정되는 재산 가치가 줄어들면 월상환액이 더 줄어들고, 탕감률이 지금보다 더 높아질 수 있어요.</p>
+              <p class="uplift__lead mt-4 mx-1">담보 설정 여부나 평가 방식이 변경되거나 추가 생계비 지원 또는 면제재산이 공제 되는 등 실제로 인정되는 재산 가치가 줄어들면 월상환액이 더 줄어들고, 탕감률이 지금보다 더 높아질 수 있어요.</p>
               <p class="uplift__sub mt-3 mx-1">먼저 보유하신 재산을 처분하지 않고도 개인회생을 진행할 수 있는 방법을 찾고, 그래도 소득만으로 어렵다면 재산 일부를 처분해 변제기간 안에 개인회생을 진행할 수 있어요</p>
             </div>
 
@@ -313,10 +313,32 @@
                   <div class="uplift__bar-dot" data-fill="uplift-dot-min" style="left:96%"></div>
                 </div>
               </div>
-              <p class="uplift__lead mt-4 mx-1">소득·재산이 적어 기본 계산만으로도 높은 탕감률 범위에 들었어요. 다만 이게 최종은 아니에요.</span></p>
-              <p class="uplift__sub mt-3 mx-1">실제 법원은 제세공과금·영업비용 공제, 재산 평가, 면제재산, 변제기간 조정 등을 함께 봐요. 이와 같은 항목들을 확인하면 월상환액을 더 낮출 수 있는지, 높은 탕감률을 유지할 수 있는지 정확히 알 수 있어요.</p>
+              <p class="uplift__lead mt-4 mx-1">소득·재산이 적어 기본 계산만으로도 높은 탕감률 범위에 들었어요. 다만 이게 최종은 아니에요.</p>
+              <p class="uplift__sub mt-3 mx-1">실제 법원은 추가 생계비·제세공과금·영업비용 공제, 재산 평가, 면제재산, 변제기간 조정 등을 함께 봐요. 이와 같은 항목들을 확인하면 월상환액을 더 낮출 수 있는지, 높은 탕감률을 유지할 수 있는지 정확히 알 수 있어요.</p>
             </div>
 
+            <!-- 소득기준·탕감률 90% 초과 버전 (factor==income & rate>90): 상위 N% 게이지 + 소득기준 카피 -->
+            <div data-rz="uplift-income-high" style="display:none">
+              <div class="uplift__panel mt-[18px] p-[18px]">
+                <div class="uplift__panel-row">
+                  <div>
+                    <p class="uplift__now-k">현재 탕감률</p>
+                    <p class="uplift__now-v" data-fill="rate-plain-inchigh">95%</p>
+                  </div>
+                  <i class="ti ti-arrow-right uplift__panel-arrow" aria-hidden="true"></i>
+                  <div>
+                    <p class="uplift__max-k">신청자 중</p>
+                    <p class="uplift__max-v" data-fill="uplift-rank-inchigh">상위 3%</p>
+                  </div>
+                </div>
+                <div class="uplift__bar mt-3.5">
+                  <div class="uplift__bar-fill" data-fill="uplift-bar-inchigh" style="width:96%"></div>
+                  <div class="uplift__bar-dot" data-fill="uplift-dot-inchigh" style="left:96%"></div>
+                </div>
+              </div>
+              <p class="uplift__lead mt-4 mx-1">갚을 수 있는 금액에 비해 채무가 커서, 기본 계산만으로도 높은 탕감률 범위에 들었어요. 다만 이게 최종은 아니에요.</p>
+              <p class="uplift__sub mt-3 mx-1">실제 법원은 추가 생계비·제세공과금·영업비용 공제, 재산 평가, 면제재산, 변제기간 조정 등을 함께 봐요. 이와 같은 항목들을 확인하면 월상환액을 더 낮출 수 있는지, 높은 탕감률을 유지할 수 있는지 정확히 알 수 있어요.</p>
+            </div>
             <p class="uplift__cta-line mt-3.5 mx-1" data-fill="uplift-cta-line">상담을 통해 정확한 탕감률을 확인할 수 있어요</p>
             <p class="uplift__note mt-3.5 mx-1">* 위 수치는 유사 조건 신청 사례의 통계 범위이며, 개별 결과와 다를 수 있습니다.</p>
           </div>
@@ -378,7 +400,7 @@
           </div>
 
           <div class="reject-card mt-[22px] px-[22px] py-[30px]">
-            <div class="reject-card__face"><i class="ti ti-mood-sad" aria-hidden="true"></i></div>
+            <div class="reject-card__face"><img src="./img/reject-01.png" alt="" style="width:100px;height:100px;object-fit:contain;"></div>
             <h2 class="reject-card__title">개인회생 신청 불가</h2>
             <div class="reject-card__gauge mt-[22px] mb-1.5 mx-0.5">
               <div class="reject-card__fill"></div>
@@ -392,7 +414,7 @@
                 <li><span class="reject-card__bullet"></span>담보대출·체납 세금만 있는 경우</li>
                 <li><span class="reject-card__bullet"></span>총 채무가 2,000만원 미만인 경우</li>
                 <li><span class="reject-card__bullet"></span>소득이 최저생계비 이하인 경우</li>
-                <li><span class="reject-card__bullet"></span>재산이 채무보다 많거나 같은 경우</li>
+                <li><span class="reject-card__bullet"></span>재산이 채무보다 많은 경우</li>
                 <li><span class="reject-card__bullet"></span>총 채무가 15억원을 초과하는 경우</li>
               </ul>
             </div>
@@ -426,7 +448,7 @@
       <div class="lead__body">
         <p class="lead__lead">방금 보신 건 입력 정보만으로 계산한 예상치예요. 실제 회생에서는 이것보다 훨씬 많은 걸 따집니다.</p>
         <p class="lead__items">추가 생계비 인정 항목, 재산별 청산가치 평가, 채무 발생 사유와 시점, 변제기간 단축 대상 여부, 부양가족 범위, 소득 산정 방식, 면제재산 공제 등등</p>
-        <p class="lead__lead">위와 같은 세부 항목들을 어떻게 다투느냐에 따라 누군가는 탕감률을 더 높이고, 누군가는 재산을 지키고, 누군가는 높은 결과를 그대로 인정받습니다.</p>
+        <p class="lead__lead">위와 같은 세부 항목들을 어떻게 다루느냐에 따라 누군가는 탕감률을 더 높이고, 누군가는 재산을 지키고, 누군가는 높은 결과를 그대로 인정받아요.</p>
         <p class="lead__lead lead__lead--strong">지금 연락처를 남기시면<br>아래 4가지를 바로 확인할 수 있어요.</p>
       </div>
 

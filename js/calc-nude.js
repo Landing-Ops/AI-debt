@@ -143,7 +143,7 @@
   /* 블록5 '탕감률 상승 여지' — 최대 목표치 산정 규칙
      현재 탕감률에 최대 올림폭을 더하되, 90% 상한을 절대 안 넘김(상한 우선).
      올림폭 캡: 소득기준 27%p / 재산기준 21%p */
-  var UPLIFT_CAP = 90;                   // 상한(%) — 절대 안 넘음
+  var UPLIFT_CAP = 95;                   // 상한(%) — 절대 안 넘음
   var UPLIFT_ADD = { income: 27, asset: 21 };   // 최대 올림폭(%p)
 
   function upliftTarget(ratePct, factor) {
