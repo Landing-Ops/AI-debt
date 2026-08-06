@@ -513,7 +513,7 @@ body.is-modal-open{ overflow:hidden; }
 .able{ border-radius:14.5px; background:var(--grad-border); }
 .able__inner{ background:#fff; border-radius:13.3px; display:flex; flex-direction:column; align-items:center; }
 .able__inner i{ font-size:24px; color:var(--primary-bright); }
-.able__name{ font-size:18px; font-weight:500; color:var(--primary-strong); text-align:center; }
+.able__name{ font-size:16px; font-weight:500; color:var(--primary-strong); text-align:center; }
 
 /* ---------- 블록5 · 탕감률 상승 여지 (네이비, 가장 강한 전환) ---------- */
 .uplift{
