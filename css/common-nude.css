@@ -738,7 +738,7 @@ body.lead-open{ overflow:hidden; }
 }
 @keyframes submitSpin{ to{ transform:rotate(360deg); } }
 .submit-overlay__text{
-  text-align:center; font-size:15px; font-weight:700; color:var(--primary-strong,#0e3b64); margin:0; line-height:1.5;
+  text-align:center; font-size:16px; font-weight:700; color:var(--primary-strong,#0e3b64); margin:0; line-height:1.5;
 }
 .submit-overlay__text span{ font-size:12.5px; font-weight:400; color:var(--text-secondary,#5f6b7a); }
 
