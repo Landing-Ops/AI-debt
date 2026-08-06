@@ -1,64 +1,153 @@
 /* =====================================================================
-   review-slider.js — 블록5 후기 (Swiper, 안정 무한 루프)
+   review-slider.js — 블록5 후기 슬라이더 (순수 Vanilla, CDN 불필요)
    ---------------------------------------------------------------------
-   [왜 이렇게] slidesPerView:'auto'는 loop과 상성이 나빠 드래그가 튀고
-   끝에서 안 이어진다. 그래서 slidesPerView를 '숫자'로 준다(loop 복제가
-   정확히 계산됨). 카드 폭을 320px로 유지하려고, 화면폭÷320 을 계산해
-   소수점 slidesPerView로 넣고 리사이즈 때 갱신한다.
+   외부 라이브러리 없음. 이 파일 하나만 복사하면 다른 랜딩에도 그대로 이식.
 
-   speed 4200 + autoplay delay:0 + linear → 거의 연속처럼 흐름.
-   loop 무한, 드래그 허용. 군더더기 옵션 없음.
+   [무한 방식 — 재배치 없음]
+   원본 카드를 여러 벌 복제해 길게 깔고(REPEAT벌), 가운데 벌에서 시작한다.
+   위치는 '칸 index'로만 관리하고 transform = -(index*step).
+   좌우로 계속 넘겨 원본 한 바퀴(N칸)를 벗어나면, transition을 끈 채 index를
+   N만큼 되돌린다(같은 그림이라 눈에 안 띔). → DOM을 옮기는 재배치가 전혀
+   없어 '휘리릭/리셋/앞 카드 없음' 현상이 생기지 않는다. 양방향 무한.
 
-   ※ Swiper CDN 필요. [OFF] index.html에서 <script>+CDN 제거.
+   [동작]
+   - 자동: AUTO_GAP초마다 한 칸(왼쪽). 이동 MOVE초, 부드럽게.
+   - 드래그: 손가락 따라 이동 → 놓으면 미는 정도만큼 '칸 단위'로 스냅.
+   - 손 뗀 뒤 RESUME초가 오롯이 지나야 자동 재개(그 안에 다시 손대면 리셋).
+
+   [HTML 요구] [data-review="viewport"] > [data-review="track"] > .rcard*N
+   [OFF] index.html에서 이 <script> 제거.
 ===================================================================== */
 (function () {
   'use strict';
-  if (typeof Swiper === 'undefined') return;
-  var el = document.querySelector('[data-review="viewport"].swiper');
-  if (!el) return;
 
-  // 후기 8장은 PC에서 loop 복제가 부족해 '끝이 나는' 문제가 생긴다.
-  // 초기화 전에 슬라이드를 한 벌 복제해 16장으로 만들어 loop을 넉넉하게 한다.
-  var wrapEl = el.querySelector('.swiper-wrapper');
-  if (wrapEl && wrapEl.children.length <= 8) {
-    var slides = Array.prototype.slice.call(wrapEl.children);
-    slides.forEach(function (s) {
-      var c = s.cloneNode(true);
-      c.removeAttribute('data-review');
-      wrapEl.appendChild(c);
+  var viewport = document.querySelector('[data-review="viewport"]');
+  var track = document.querySelector('[data-review="track"]');
+  if (!viewport || !track) return;
+
+  var originals = Array.prototype.slice.call(track.children);
+  var N = originals.length;
+  if (N < 1) return;
+
+  // ---- 설정 ----
+  var AUTO_GAP = 2000;   // 자동 칸 간격(ms)
+  var MOVE     = 900;    // 한 칸 이동 시간(ms)
+  var RESUME   = 5000;   // 손 뗀 뒤 자동 재개(ms)
+  var EASE     = 'cubic-bezier(.22,.61,.36,1)';
+  var REPEAT   = 5;      // 카드 벌 수(홀수 권장, 가운데서 시작)
+
+  // ---- 복제로 길게 깔기 ([원본]×REPEAT) ----
+  for (var r = 1; r < REPEAT; r++) {
+    originals.forEach(function (node) {
+      var c = node.cloneNode(true);
+      c.setAttribute('aria-hidden', 'true');
+      track.appendChild(c);
     });
   }
 
-  var CARD = 320 + 16;   // 카드 폭 + spaceBetween
+  // ---- 상태 ----
+  var gap = 0, step = 0;
+  var index = N * Math.floor(REPEAT / 2);   // 가운데 벌에서 시작(양쪽에 카드 넉넉)
+  var dragBase = 0, dragPx = 0;             // 드래그 중 임시 px
+  var autoTimer = 0, resumeTimer = 0;
+  var dragging = false, startX = 0, lastX = 0, lastT = 0, vx = 0;
 
-  function spv() {
-    // 화면(컨테이너) 폭에 카드가 몇 장 들어가는지 → 소수점 그대로
-    var w = el.clientWidth || window.innerWidth;
-    return Math.max(1.1, w / CARD);
+  function measure() {
+    gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap || '0') || 0;
+    var c = track.firstElementChild;
+    step = c ? c.offsetWidth + gap : 0;
   }
 
-  var sw = new Swiper(el, {
-    slidesPerView: spv(),          // 숫자(소수점) → loop 안정
-    spaceBetween: 16,
-    loop: true,
-    loopAdditionalSlides: 6,       // 복제 넉넉히
-    speed: 4200,
-    allowTouchMove: true,
-    autoplay: {
-      delay: 0,
-      disableOnInteraction: false,
-    },
+  function setTransition(on) {
+    track.style.transition = on ? ('transform ' + MOVE + 'ms ' + EASE) : 'none';
+  }
+  function drawIndex() {
+    track.style.transform = 'translate3d(' + (-Math.round(index * step)) + 'px,0,0)';
+  }
+  function drawPx(px) {
+    track.style.transform = 'translate3d(' + (-Math.round(px)) + 'px,0,0)';
+  }
+
+  // 원본 한 바퀴(N칸) 벗어나면 transition 없이 index를 N배수로 되돌림(순환)
+  function wrapIndex() {
+    var lo = N, hi = N * (REPEAT - 1);       // 가장자리 벌은 여유로 남겨둠
+    if (index < lo || index > hi) {
+      setTransition(false);
+      // 가운데 벌 대응 위치로: N으로 나눈 나머지 유지하며 가운데로
+      var mod = ((index % N) + N) % N;
+      index = N * Math.floor(REPEAT / 2) + mod;
+      drawIndex();
+    }
+  }
+
+  /* ---- 자동: 한 칸씩 ---- */
+  function stepOnce() {
+    setTransition(true);
+    index += 1;
+    drawIndex();
+  }
+  track.addEventListener('transitionend', function () {
+    wrapIndex();
   });
 
-  // 리사이즈 시 slidesPerView 갱신(카드 폭 유지)
-  window.addEventListener('resize', function () {
-    sw.params.slidesPerView = spv();
-    sw.update();
-  });
+  function startAuto() { stopAuto(); autoTimer = setInterval(stepOnce, AUTO_GAP + MOVE); }
+  function stopAuto() { if (autoTimer) { clearInterval(autoTimer); autoTimer = 0; } }
+  function scheduleResume() { clearTimeout(resumeTimer); resumeTimer = setTimeout(startAuto, RESUME); }
+  function cancelResume() { clearTimeout(resumeTimer); }
 
-  // 각 전환 등속(linear) → 감속 없이 매끄럽게
-  var wrap = el.querySelector('.swiper-wrapper');
-  function linearize(){ if (wrap) wrap.style.transitionTimingFunction = 'linear'; }
-  linearize();
-  sw.on('setTransition', linearize);
+  /* ---- 포인터 ---- */
+  function onDown(e) {
+    dragging = true;
+    stopAuto(); cancelResume();
+    setTransition(false);
+    var x = (e.touches ? e.touches[0].clientX : e.clientX);
+    startX = lastX = x;
+    dragBase = index * step;     // 현재 px 위치에서 시작
+    dragPx = dragBase;
+    lastT = performance.now(); vx = 0;
+    track.style.cursor = 'grabbing';
+  }
+  function onMove(e) {
+    if (!dragging) return;
+    var x = (e.touches ? e.touches[0].clientX : e.clientX);
+    var now = performance.now(); var dt = now - lastT;
+    if (dt > 0) vx = (x - lastX) / dt;
+    lastX = x; lastT = now;
+    dragPx = dragBase - (x - startX);   // 손가락 방향
+    drawPx(dragPx);                     // 재배치 없음 — 그냥 px로 이동
+  }
+  function onUp() {
+    if (!dragging) return;
+    dragging = false;
+    track.style.cursor = 'grab';
+    // 미는 속도 반영해 목표 px 예측 → 칸 단위로 스냅 → index 갱신
+    var projected = dragPx + (-vx) * 120;
+    index = Math.round(projected / step);
+    setTransition(true);
+    drawIndex();
+    scheduleResume();
+  }
+
+  track.addEventListener('mousedown', onDown);
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onUp);
+  track.addEventListener('touchstart', onDown, { passive: true });
+  track.addEventListener('touchmove', onMove, { passive: true });
+  track.addEventListener('touchend', onUp);
+  track.style.cursor = 'grab';
+
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (en) {
+      if (en.isIntersecting) { if (!dragging) startAuto(); }
+      else { stopAuto(); cancelResume(); }
+    });
+  }, { threshold: 0 });
+  io.observe(viewport);
+
+  window.addEventListener('resize', function () { measure(); if (!dragging) { setTransition(false); drawIndex(); } });
+
+  measure();
+  setTransition(false);
+  drawIndex();
+  startAuto();
 })();

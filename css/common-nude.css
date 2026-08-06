@@ -237,19 +237,21 @@ body.is-modal-open{ overflow:hidden; }
 .review__wrap{ position:relative; }
 .review__head{ width:min(var(--frame-w),92vw); margin-inline:auto; padding:0 4px; }
 
-/* 마퀴 뷰포트: Swiper 컨테이너 */
+/* 마퀴 뷰포트: 화면 풀폭(제목은 프레임 안 유지). 넘침 숨김 */
 .review__marquee{
   margin-top:20px;
-  /* 블록5 슬라이더만 화면 풀폭으로(경쟁사처럼). 제목은 프레임 안 유지. */
   width:100vw;
   margin-left:calc(-50vw + 50%);
   overflow:hidden;
 }
+/* 트랙: flex 가로 나열, JS가 transform으로 한 칸씩 이동 */
 .review__track{
-  /* Swiper가 display:flex 및 transform 제어 */
+  display:flex; gap:16px; width:max-content; padding-left:16px;
+  user-select:none; -webkit-user-select:none; touch-action:pan-y;
+  will-change:transform;
 }
-/* slidesPerView 숫자(폭÷336) 방식 → slide 폭은 Swiper가 계산(약 320px). */
-.review__marquee .swiper-slide{ height:auto; }
+/* 카드 폭 고정(한 칸 = 이 폭 + gap) */
+.review__track > .rcard{ flex:0 0 auto; width:320px; }
 
 .rcard{                                            /* 흰 배경 + 얇은 그림자 */
   width:100%; background:#fff;
