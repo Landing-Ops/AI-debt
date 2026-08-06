@@ -196,8 +196,8 @@
         incMult.style.display = 'none';
         incLead.style.display = 'block';
         incNote.style.display = 'block';
-        set('income-lead', '회생 변제기간은 원칙 3년이지만,<br> 원금을 다 갚으면 법원이 조기 종료를 인정해요');
-        set('income-note', '원금을 월 가용소득으로 나눠 ' + r.months + '개월간 나누어 갚아요');
+        setHtml('income-lead', '회생 변제기간은 원칙 3년이지만,<br>'+'원금을 다 갚으면 법원이 조기 종료를 인정해요');
+        setHtml('income-note', '원금을 월 가용소득으로 나눠 <br>' + '<span style="color:#0b5bd3;font-weight:700">' + r.months + '개월'+'</span>'+'간 나누어 갚아요');
       } else {
         // 일반 36개월: 가용소득 × 36 = 회생변제금 (곱셈 정확)
         incMult.style.display = 'inline';
