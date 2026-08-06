@@ -247,7 +247,7 @@ body.is-modal-open{ overflow:hidden; }
 /* 트랙: flex 가로 나열, JS가 transform으로 한 칸씩 이동 */
 .review__track{
   display:flex; gap:16px; width:max-content; padding-left:16px;
-  user-select:none; -webkit-user-select:none; touch-action:pan-y;
+  user-select:none; -webkit-user-select:none; touch-action:pan-x;
   will-change:transform;
 }
 /* 카드 폭 고정(한 칸 = 이 폭 + gap) */

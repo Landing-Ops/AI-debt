@@ -109,6 +109,8 @@
   }
   function onMove(e) {
     if (!dragging) return;
+    // 슬라이드 미는 동안 세로 스크롤 차단(모바일 렉 방지). passive:false라야 먹음.
+    if (e.cancelable) e.preventDefault();
     var x = (e.touches ? e.touches[0].clientX : e.clientX);
     var now = performance.now(); var dt = now - lastT;
     if (dt > 0) vx = (x - lastX) / dt;
@@ -132,7 +134,7 @@
   window.addEventListener('mousemove', onMove);
   window.addEventListener('mouseup', onUp);
   track.addEventListener('touchstart', onDown, { passive: true });
-  track.addEventListener('touchmove', onMove, { passive: true });
+  track.addEventListener('touchmove', onMove, { passive: false });
   track.addEventListener('touchend', onUp);
   track.style.cursor = 'grab';
 
