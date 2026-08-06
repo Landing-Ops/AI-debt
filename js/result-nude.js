@@ -215,9 +215,9 @@
       set('repay-a',       won(r.repay));
       // 안내 문구: 60개월 초과일 때만 "기간을 넘어요", 이내면 정상 변제 안내
       if (r.overCap) {
-        set('asset-note', '현재 소득만으로 재산만큼 갚으려면 너무 오래 걸려, 법이 정한 기간을 넘어요');
+        setHtml('asset-note', '현재 가용소득으로 재산만큼 갚으려면<br>'+'너무 오래 걸려, 법이 정한 기간을 넘어요<br>'+'<span style="color:#0b5bd3;font-weight:700">'+'전문가의 의견이 필요해요'+'</span>');
       } else {
-        setHtml('asset-note', '재산 청산가치를 월 가용소득으로 나눠<br>' + '<span style="color:#0b5bd3;font-weight:700">' + r.months + '개월'+'</span>'+'간 나누어 갚아요');
+        setHtml('asset-note', '청산가치를 월 가용소득으로 나눠<br>' + '<span style="color:#0b5bd3;font-weight:700">' + r.months + '개월'+'</span>'+'간 나누어 갚아요');
       }
     } else {
       // 최저변제액: 법정 최저 변제 기준
@@ -228,9 +228,9 @@
       set('repay-m',       won(r.repay));
       // 안내 문구: 60개월 초과일 때만 "기간을 넘어요", 이내면 정상 변제 안내
       if (r.overCap) {
-        set('min-note', '현재 소득만으로 최저변제금을 갚으려면 너무 오래 걸려, 법이 정한 기간을 넘어요');
+        setHtml('min-note', '현재 가용소득으로 최저변제금을 갚으려면<br>'+'너무 오래 걸려, 법이 정한 기간을 넘어요<br>'+'<span style="color:#0b5bd3;font-weight:700">'+'전문가의 의견이 필요해요'+'</span>');
       } else {
-        set('min-note', '법정 최저 변제금을 월 가용소득으로 나눠<br>' + '<span style="color:#0b5bd3;font-weight:700">' + r.months + '개월'+'</span>'+ '간 나누어 갚아요');
+        setHtml('min-note', '법정 최저 변제금을 월 가용소득으로 나눠<br>' + '<span style="color:#0b5bd3;font-weight:700">' + r.months + '개월'+'</span>'+ '간 나누어 갚아요');
       }
     }
 
@@ -265,7 +265,7 @@
     if (r.factor === 'minimum') {
       fillUpliftMinimum(r);
       // CTA 라인: 월 부담 축 (탕감률 방어 → 확인)
-      set('uplift-cta-line', '상담을 통해 이 탕감률이 실제로 인정되는지 확인할 수 있어요');
+      set('uplift-cta-line', '상담을 통해 정확한 탕감률을 확인할 수 있어요');
     } else {
       var sfx = (r.factor === 'asset') ? '-asset' : '';
       fillUplift(r, sfx);

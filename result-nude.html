@@ -157,7 +157,7 @@
                 <span class="calc__v" data-fill="assets-a">8,000만원</span>
               </div>
               <div class="calc__formula mt-3 px-3.5 py-3">
-                <span class="calc__formula-lead">가용소득보다 재산의 청산가치가<br>크기에 법이 정한 기준으로</span>
+                <span class="calc__formula-lead">예상 변제금보다<br>재산의 청산가치가 더 크므로 법이 정한 기준으로</span><br>
                 <span class="calc__formula-res">회생 변제금 <span data-fill="repay-a">8,000만원</span></span>
               </div>
               <div class="calc__need mt-2.5 px-3.5" data-fill="asset-note"></div>
@@ -185,11 +185,11 @@
               </div>
               <div class="calc__divider my-2.5"></div>
               <div class="calc__row calc__row--sum py-1.5">
-                <span class="calc__k">법정 최저 변제 기준</span>
+                <span class="calc__k">법정 최저 변제금</span>
                 <span class="calc__v" data-fill="min-m">700만원</span>
               </div>
               <div class="calc__formula mt-3 px-3.5 py-3">
-                <span class="calc__formula-lead">소득·재산이 적어 법이 정한 최소 기준으로</span>
+                <span class="calc__formula-lead">소득·재산이 적어 법이 정한 최소 기준으로</span><br>
                 <span class="calc__formula-res">회생 변제금 <span data-fill="repay-m">700만원</span></span>
               </div>
               <div class="calc__need mt-2.5 px-3.5" data-fill="min-note"></div>
@@ -204,7 +204,7 @@
                 <span class="calc__v" data-fill="principal-2">9,000만원</span>
               </div>
               <div class="calc__row py-1.5">
-                <span class="calc__k">예상 이자</span>
+                <span class="calc__k">예상 이자 <span style="font-size: 12px;">(연12% 적용시)</span></span>
                 <span class="calc__v" data-fill="interest-2">＋ 3,240만원</span>
               </div>
               <div class="calc__row py-1.5">
@@ -225,7 +225,7 @@
       </section>
 
       <!-- ---- 블록3 · 법원통계 (히스토그램) ---- -->
-      <section class="rz__block rz__block--white">
+      <!-- <section class="rz__block rz__block--white">
         <div class="px-5 pb-[26px]">
           <h2 class="rz__block-title">서울회생법원 개인회생 신청자 중<br><span style="color:var(--primary-bright)">내 탕감률은 어디쯤일까요?</span></h2>
           <div class="court mt-5 px-4 pt-[18px] pb-2">
@@ -233,13 +233,13 @@
               <canvas data-rz="chart" role="img" aria-label="개인회생 신청자 탕감률 분포와 내 위치"></canvas>
             </div>
           </div>
-          <!-- <div class="mt-3.5 text-center">
+          <div class="mt-3.5 text-center">
             <p class="court__mid-k">전체 신청자의 중위 탕감률은</p>
             <p class="court__mid-v">66.8%<span>입니다</span></p>
-          </div> -->
+          </div>
           <p class="rz__source">출처 · 서울회생법원 「2025년 상반기 개인회생사건 통계조사 결과보고서」</p>
         </div>
-      </section>
+      </section> -->
 
       <!-- ---- 블록4 · 가능 항목 배지 ---- -->
       <section class="rz__block rz__block--tint">
@@ -305,7 +305,7 @@
                   <div class="uplift__bar-dot" data-fill="uplift-dot-asset" style="left:77%"></div>
                 </div>
               </div>
-              <p class="uplift__lead mt-4 mx-1">담보 설정 여부나 평가 방식 변경되거나 면제재산이 공제가 되어<br>실제로 인정되는 재산 가치가 달라지면<br>탕감률이 지금보다 더 높아질 수 있어요</p>
+              <p class="uplift__lead mt-4 mx-1">담보 설정 여부나 평가 방식 변경되거나 면제재산이 공제가 되어 실제로 인정되는 재산 가치가 달라지면 탕감률이 지금보다 더 높아질 수 있어요</p>
               <p class="uplift__sub mt-3 mx-1">먼저 보유하신 재산을 처분하지 않고도 개인회생을 진행할 수 있는 방법을 찾고, 그래도 소득만으로 어렵다면 재산 일부를 처분해 변제기간 안에 개인회생을 진행할 수 있어요</p>
             </div>
 
@@ -328,8 +328,8 @@
                   <div class="uplift__bar-dot" data-fill="uplift-dot-min" style="left:96%"></div>
                 </div>
               </div>
-              <p class="uplift__lead mt-4 mx-1">축하해요! 이미 높은 탕감률이에요<br><span style="font-weight:400;color:rgba(255,255,255,.7);font-size:14px">소득·재산이 적어 기본 계산만으로도 최상위 구간에 들었어요. 다만 이게 최종은 아니에요</span></p>
-              <p class="uplift__sub mt-3 mx-1">실제 법원은 제세공과금·영업비용 공제, 재산 평가, 면제재산, 변제기간 조정까지 함께 봐요. 이 항목들을 확인하면 탕감률이 유지되는지, 월 상환액을 더 낮출 수 있는지 정확히 알 수 있어요</p>
+              <p class="uplift__lead mt-4 mx-1">소득·재산이 적어 기본 계산만으로도 높은 탕감률 범위에 들었어요. 다만 이게 최종은 아니에요.</span></p>
+              <p class="uplift__sub mt-3 mx-1">실제 법원은 제세공과금·영업비용 공제, 재산 평가, 면제재산, 변제기간 조정까지 함께 봐요. 이 항목들을 확인하면 높은 탕감률을 유지할 수 있는지, 월 상환액을 더 낮출 수 있는지 정확히 알 수 있어요</p>
             </div>
 
             <p class="uplift__cta-line mt-3.5 mx-1" data-fill="uplift-cta-line">상담을 통해 정확한 탕감률을 확인할 수 있어요</p>

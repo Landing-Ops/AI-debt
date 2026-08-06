@@ -478,8 +478,8 @@ body.is-modal-open{ overflow:hidden; }
 .vstat__box{ flex:1; background:rgba(255,255,255,.1); border-radius:12px; text-align:center; }
 .vstat__k{ margin:0; font-size:16px; color:rgba(255,255,255,.6); }
 .vstat__v{ margin:4px 0 0; font-size:22px; color:#fff; font-weight:600; word-break:keep-all; line-height:1.25; }
-.vstat__v:not(:empty).is-long{ font-size:14px; }
-.vstat__note{ margin:3px 0 0; font-size:10.5px; color:rgba(255,255,255,.5); line-height:1.3; }
+.vstat__v:not(:empty).is-long{ font-size:22px; }
+.vstat__note{ margin:3px 0 0; font-size:14px; color:rgba(255,255,255,.5); line-height:1.3; }
 .vstat__note:empty{ display:none; }
 
 .rz__disclaimer{ margin:14px 4px 0; font-size:13px; line-height:1.6; color:var(--neutral-400); }
