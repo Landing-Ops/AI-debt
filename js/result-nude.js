@@ -115,6 +115,11 @@
     var els = viewAccept.querySelectorAll('[data-fill="' + key + '"]');
     els.forEach(function (el) { el.textContent = text; });
   }
+  // HTML 태그(<br>, <span> 등)를 그대로 반영해야 하는 문구용
+  function setHtml(key, html) {
+    var els = viewAccept.querySelectorAll('[data-fill="' + key + '"]');
+    els.forEach(function (el) { el.innerHTML = html; });
+  }
   function setLong(key, isLong) {
     var els = viewAccept.querySelectorAll('[data-fill="' + key + '"]');
     els.forEach(function (el) { el.classList.toggle('is-long', isLong); });
@@ -191,7 +196,7 @@
         incMult.style.display = 'none';
         incLead.style.display = 'block';
         incNote.style.display = 'block';
-        set('income-lead', '회생 변제기간은 원칙 3년이지만, 원금을 다 갚으면 법원이 조기 종료를 인정해요');
+        set('income-lead', '회생 변제기간은 원칙 3년이지만,<br> 원금을 다 갚으면 법원이 조기 종료를 인정해요');
         set('income-note', '원금을 월 가용소득으로 나눠 ' + r.months + '개월간 나누어 갚아요');
       } else {
         // 일반 36개월: 가용소득 × 36 = 회생변제금 (곱셈 정확)
@@ -212,7 +217,7 @@
       if (r.overCap) {
         set('asset-note', '현재 소득만으로 재산만큼 갚으려면 너무 오래 걸려, 법이 정한 기간을 넘어요');
       } else {
-        set('asset-note', '재산 청산가치를 월 가용소득으로 나눠 ' + r.months + '개월간 나누어 갚아요');
+        setHtml('asset-note', '재산 청산가치를 월 가용소득으로 나눠<br>' + '<span style="color:#0b5bd3;font-weight:700">' + r.months + '개월'+'</span>'+'간 나누어 갚아요');
       }
     } else {
       // 최저변제액: 법정 최저 변제 기준
@@ -225,7 +230,7 @@
       if (r.overCap) {
         set('min-note', '현재 소득만으로 최저변제금을 갚으려면 너무 오래 걸려, 법이 정한 기간을 넘어요');
       } else {
-        set('min-note', '법정 최저 변제금을 월 가용소득으로 나눠 ' + r.months + '개월간 나누어 갚아요');
+        set('min-note', '법정 최저 변제금을 월 가용소득으로 나눠<br>' + '<span style="color:#0b5bd3;font-weight:700">' + r.months + '개월'+'</span>'+ '간 나누어 갚아요');
       }
     }
 
