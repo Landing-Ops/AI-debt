@@ -247,6 +247,7 @@ body.is-modal-open{ overflow:hidden; }
 /* 트랙: flex 가로 나열, JS가 transform으로 한 칸씩 이동 */
 .review__track{
   display:flex; gap:16px; width:max-content; padding-left:16px;
+  align-items:stretch;                 /* 카드 높이를 가장 큰 것에 맞춰 통일 */
   user-select:none; -webkit-user-select:none; touch-action:pan-x;
   will-change:transform;
 }
@@ -254,7 +255,7 @@ body.is-modal-open{ overflow:hidden; }
 .review__track > .rcard{ flex:0 0 auto; width:320px; }
 
 .rcard{                                            /* 흰 배경 + 얇은 그림자 */
-  width:100%; background:#fff;
+  width:100%; height:auto; background:#fff;
   border-radius:var(--radius-xl); box-shadow:var(--shadow-card);
   display:flex; flex-direction:column;
 }

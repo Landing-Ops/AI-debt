@@ -96,37 +96,60 @@
   function cancelResume() { clearTimeout(resumeTimer); }
 
   /* ---- 포인터 ---- */
+  var startY = 0, axisLocked = false, horiz = false;
   function onDown(e) {
     dragging = true;
+    axisLocked = false; horiz = false;
     stopAuto(); cancelResume();
     setTransition(false);
-    var x = (e.touches ? e.touches[0].clientX : e.clientX);
-    startX = lastX = x;
-    dragBase = index * step;     // 현재 px 위치에서 시작
+    var t = e.touches ? e.touches[0] : e;
+    startX = lastX = t.clientX;
+    startY = t.clientY;
+    dragBase = index * step;
     dragPx = dragBase;
     lastT = performance.now(); vx = 0;
     track.style.cursor = 'grabbing';
   }
   function onMove(e) {
     if (!dragging) return;
-    // 슬라이드 미는 동안 세로 스크롤 차단(모바일 렉 방지). passive:false라야 먹음.
+    var t = e.touches ? e.touches[0] : e;
+    var x = t.clientX, y = t.clientY;
+
+    // 첫 움직임에서 가로/세로 의도 판정(한 번만)
+    if (!axisLocked) {
+      var dx = Math.abs(x - startX), dy = Math.abs(y - startY);
+      if (dx > 6 || dy > 6) {         // 최소 이동 후 판정
+        horiz = dx > dy;              // 가로가 더 크면 슬라이드
+        axisLocked = true;
+      }
+    }
+    // 세로 의도면 슬라이드 취소하고 브라우저 스크롤에 맡김
+    if (axisLocked && !horiz) {
+      dragging = false;
+      scheduleResume();
+      return;
+    }
+    if (!horiz) return;               // 아직 판정 전엔 대기
+
+    // 가로 슬라이드: 세로 스크롤 차단
     if (e.cancelable) e.preventDefault();
-    var x = (e.touches ? e.touches[0].clientX : e.clientX);
     var now = performance.now(); var dt = now - lastT;
     if (dt > 0) vx = (x - lastX) / dt;
     lastX = x; lastT = now;
-    dragPx = dragBase - (x - startX);   // 손가락 방향
-    drawPx(dragPx);                     // 재배치 없음 — 그냥 px로 이동
+    dragPx = dragBase - (x - startX);
+    drawPx(dragPx);
   }
   function onUp() {
     if (!dragging) return;
     dragging = false;
     track.style.cursor = 'grab';
-    // 미는 속도 반영해 목표 px 예측 → 칸 단위로 스냅 → index 갱신
-    var projected = dragPx + (-vx) * 120;
-    index = Math.round(projected / step);
-    setTransition(true);
-    drawIndex();
+    if (horiz) {
+      // 가로 슬라이드였을 때만 스냅. 미는 속도 반영 → 칸 단위 스냅 → index 갱신
+      var projected = dragPx + (-vx) * 120;
+      index = Math.round(projected / step);
+      setTransition(true);
+      drawIndex();
+    }
     scheduleResume();
   }
 
