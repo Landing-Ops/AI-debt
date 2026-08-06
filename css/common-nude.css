@@ -255,7 +255,7 @@ body.is-modal-open{ overflow:hidden; }
 .review__track > .rcard{ flex:0 0 auto; width:320px; }
 
 .rcard{                                            /* 흰 배경 + 얇은 그림자 */
-  width:100%; height:auto; background:#fff;
+  width:100%; min-height:260px; background:#fff;    /* 최소높이 고정 → 카피 길이 무관 통일 */
   border-radius:var(--radius-xl); box-shadow:var(--shadow-card);
   display:flex; flex-direction:column;
 }
