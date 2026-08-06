@@ -385,8 +385,8 @@ body.is-modal-open{ overflow:hidden; }
 /* gcard 재사용하되 진단용 라운드(14px)만 다름 */
 .notecard{ border-radius:14px; background:var(--grad-border); }
 .notecard__inner{ background:#fff; border-radius:12.5px; }
-.notecard__title{ margin:0; font-size:16px; font-weight:500; color:var(--primary-bright); }
-.notecard__desc{ margin:8px 0 0; font-size:14px; line-height:1.65; color:var(--neutral-600); }
+.notecard__title{ margin:0; font-size:18px; font-weight:500; color:var(--primary-bright); }
+.notecard__desc{ margin:8px 0 0; font-size:16px; line-height:1.65; color:var(--neutral-600); }
 .notecard__list{ margin:8px 0 0; display:flex; flex-direction:column; gap:5px; list-style:none; padding:0; }
 .notecard__li{ display:flex; align-items:center; gap:7px; font-size:13px; color:var(--neutral-600); }
 .notecard__dot{ width:4px; height:4px; border-radius:50%; background:var(--neutral-400); flex:0 0 auto; }
