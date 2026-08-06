@@ -32,16 +32,13 @@
       </div>
 
       <div class="dx__body flex flex-col items-center justify-center text-center px-5">
-        <div class="w-[88px] h-[88px] rounded-full bg-white flex items-center justify-center"
-             style="box-shadow:0 10px 28px rgba(12,68,124,.14);">
-          <i class="ti ti-sparkles text-[42px]" style="color:var(--primary-bright)" aria-hidden="true"></i>
-        </div>
-        <h1 class="dx__q mt-6" style="font-size:24px; line-height:1.4; color:var(--primary-strong)">7가지만 알려주시면<br>바로 계산해드려요</h1>
-        <p class="mt-3.5 text-[14px] leading-[1.7]" style="color:var(--neutral-600)">이름·연락처 없이, 딱 필요한 정보만<br>물어볼게요. 30초면 충분해요.</p>
+      <img src="./img/diagnosis-Q1.png" alt="" style="width:180px;height:180px;object-fit:contain;display:block;margin:0 auto;">
+        <h1 class="dx__q" style="font-size:24px; line-height:1.4; color:var(--primary-strong)">정밀 진단 AI가<br><span style="color:#0b5bd3">고객님의 예상 탕감액</span>을<br>계산해드려요</h1>
+        <!-- <p class="mt-3.5 text-[14px] leading-[1.7]" style="color:var(--neutral-600)">단, 30초면 충분해요.</p> -->
         <div class="mt-[22px] inline-flex items-center gap-2 bg-white rounded-full px-[18px] py-[9px]"
              style="box-shadow:0 4px 14px rgba(12,68,124,.08);">
-          <i class="ti ti-calculator text-[16px]" style="color:var(--green)" aria-hidden="true"></i>
-          <span class="text-[13px]" style="color:var(--neutral-700)">개인정보 입력 없이 진행돼요</span>
+          <i class="ti ti-clock text-[16px]" style="color:var(--green)" aria-hidden="true"></i>
+          <span class="text-[16px]" style="color:var(--neutral-700)">딱, 30초면 충분해요</span>
         </div>
       </div>
 
@@ -56,8 +53,8 @@
         <button class="dx__iconbtn" data-dx="back" aria-label="뒤로"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
       </div>
       <div class="dx__body px-[22px]">
-        <h2 class="dx__q mt-4">어디 사세요?</h2>
-        <p class="dx__hint">생계비 계산에 필요해요</p>
+        <h2 class="dx__q mt-4">거주 지역을 선택해주세요</h2>
+        <p class="dx__hint">지역별 추가 주거비 기준으로 변제금이 줄어들 가능성을 확인해요</p>
         <div class="opt-grid grid-cols-3 gap-[9px] mt-5" data-dx="options">
           <button class="opt py-3.5 px-1.5" data-value="서울">서울</button>
           <button class="opt py-3.5 px-1.5" data-value="부산">부산</button>
@@ -89,7 +86,7 @@
         <button class="dx__iconbtn" data-dx="back" aria-label="뒤로"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
       </div>
       <div class="dx__body px-[22px]">
-        <h2 class="dx__q mt-4">혼인 여부를<br>알려주세요</h2>
+        <h2 class="dx__q mt-4">혼인 여부를 알려주세요</h2>
         <div class="opt-grid grid-cols-3 gap-[9px] mt-4" data-dx="marital">
           <button class="opt py-3.5 px-1.5" data-value="기혼">기혼이에요</button>
           <button class="opt py-3.5 px-1.5" data-value="미혼">미혼이에요</button>
@@ -97,8 +94,8 @@
         </div>
 
         <div class="dx__reveal mt-7" data-dx="dependents-wrap">
-          <h2 class="dx__q">등본상 부양가족은<br>몇 명인가요?</h2>
-          <p class="dx__hint">본인은 제외하고 세어주세요</p>
+          <h2 class="dx__q">등본상 부양가족은 몇 명인가요?</h2>
+          <p class="dx__hint"><span style="color: red;">*본인은 제외하고 선택주세요</span></p>
           <div class="opt-grid grid-cols-5 gap-[7px] mt-4" data-dx="dependents">
             <button class="opt py-3.5 px-0.5" data-value="0">0명</button>
             <button class="opt py-3.5 px-0.5" data-value="1">1명</button>
@@ -119,7 +116,7 @@
         <button class="dx__iconbtn" data-dx="back" aria-label="뒤로"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
       </div>
       <div class="dx__body px-[22px]">
-        <h2 class="dx__q mt-4">한 달에 얼마 정도<br>버세요?</h2>
+        <h2 class="dx__q mt-4">월 평균 소득을 입력해주세요</h2>
         <div class="moneyfield mt-[22px] px-4 py-3.5">
           <input class="moneyfield__input" data-dx="money" type="text" inputmode="numeric"
                  placeholder="0" aria-label="월 평균 소득">
@@ -158,8 +155,9 @@
             <p class="notecard__title">이런 게 재산에 들어가요</p>
             <ul class="notecard__list">
               <li class="notecard__li"><span class="notecard__dot"></span>통장에 있는 돈</li>
+              <li class="notecard__li"><span class="notecard__dot"></span>월세·전세 보증금</li>
               <li class="notecard__li"><span class="notecard__dot"></span>보험 해지하면 받는 돈</li>
-              <li class="notecard__li"><span class="notecard__dot"></span>차 같은 처분 가능한 자산</li>
+              <li class="notecard__li"><span class="notecard__dot"></span>주식·차·부동산 같은 처분 가능한 자산</li>
             </ul>
           </div>
         </div>
@@ -178,7 +176,7 @@
         <h2 class="dx__q mt-4">담보 잡힌 빚이나<br>밀린 세금, 있으세요?</h2>
         <div class="flex flex-col gap-2.5 mt-[22px]" data-dx="options">
           <button class="opt opt--wide py-[17px] px-4" data-value="담보·체납만">담보 대출이랑<br>체납 세금만 있어요</button>
-          <button class="opt opt--wide py-[17px] px-4" data-value="혼재">담보·체납 세금이랑<br>일반 채무도 섞여 있어요</button>
+          <button class="opt opt--wide py-[17px] px-4" data-value="혼재">담보 대출·체납 세금이랑<br>채무도 섞여 있어요</button>
           <button class="opt opt--wide py-[17px] px-4" data-value="일반채무만">일반 채무만 있어요</button>
         </div>
       </div>
@@ -194,7 +192,7 @@
       </div>
       <div class="dx__body px-[22px]">
         <h2 class="dx__q mt-4">최근 5년 안에<br>법원에서 면책받은 적<br>있으세요?</h2>
-        <p class="dx__hint">개인회생이나 개인파산을 끝까지 마치신 경우예요</p>
+        <p class="dx__hint">개인회생을 끝까지 마치신 경우예요</p>
         <div class="opt-grid grid-cols-2 gap-2.5 mt-5" data-dx="options">
           <button class="opt py-4" data-value="있음">있어요</button>
           <button class="opt py-4" data-value="없음">없어요</button>
@@ -217,8 +215,8 @@
         <button class="dx__iconbtn" data-dx="back" aria-label="뒤로"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
       </div>
       <div class="dx__body px-[22px]">
-        <h2 class="dx__q mt-4">지금 갚아야 할 빚,<br>다 합치면 얼마예요?</h2>
-        <p class="dx__hint">이자 빼고 원금만 더해서 적어주세요</p>
+        <h2 class="dx__q mt-4">지금 갚아야 할 빚,<br>총 채무를 입력해주세요</h2>
+        <p class="dx__hint"><span style="color: red;">*이자 빼고 원금만 더해서 적어주세요</span></p>
         <div class="moneyfield mt-[22px] px-4 py-3.5">
           <input class="moneyfield__input" data-dx="money" type="text" inputmode="numeric"
                  placeholder="0" aria-label="총 채무액">
@@ -235,13 +233,13 @@
     <section class="dx__screen dx__screen--tint dx__loading" data-step="loading" data-terminal>
       <div class="px-[30px]">
         <div class="loading__ring">
-          <svg width="96" height="96" viewBox="0 0 96 96" aria-hidden="true">
-            <circle class="loading__ring-track" cx="48" cy="48" r="42"/>
-            <circle class="loading__ring-arc" cx="48" cy="48" r="42"/>
+          <svg width="230" height="230" viewBox="0 0 230 230" aria-hidden="true">
+            <circle class="loading__ring-track" cx="115" cy="115" r="107"/>
+            <circle class="loading__ring-arc" cx="115" cy="115" r="107"/>
           </svg>
-          <i class="ti ti-calculator" aria-hidden="true"></i>
+          <img class="loading__ring-img" src="./img/diagnosis-Overray.png" alt="" />
         </div>
-        <h2 class="loading__title">입력해주신 걸로<br>계산하는 중이에요</h2>
+        <h2 class="loading__title">고객님의 예상 탕감액을<br>계산하는 중이에요</h2>
         <div class="loading__steps">
           <div class="loading__step loading__step--done">
             <i class="ti ti-circle-check-filled" aria-hidden="true"></i>

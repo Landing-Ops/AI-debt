@@ -333,14 +333,14 @@ body.is-modal-open{ overflow:hidden; }
 .dx__foot{ margin-top:auto; }
 
 /* 질문 타이포 */
-.dx__q{ margin:0; font-size:22px; line-height:1.35; font-weight:500; color:var(--neutral-900); }
-.dx__hint{ margin:8px 0 0; font-size:13px; color:var(--neutral-400); }
+.dx__q{ margin:0; font-size:28px; line-height:1.35; font-weight:700; color:var(--neutral-900); }
+.dx__hint{ margin:8px 0 0; font-size:16px; color:var(--neutral-400); }
 
 /* 하단 CTA (진단 전용 — 랜딩 btn-cta-main 재사용하되 radius/weight만) */
 .dx__next{
   width:100%; border:none; border-radius:12px;
   background:var(--color-cta-main); color:#fff;
-  font-size:16px; font-weight:500; cursor:pointer;
+  font-size:20px; font-weight:500; cursor:pointer;
 }
 .dx__next--final{ font-weight:600; box-shadow:0 10px 24px rgba(11,91,211,.24); }
 .dx__next:disabled{ background:var(--color-cta-disabled); cursor:not-allowed; }
@@ -349,10 +349,10 @@ body.is-modal-open{ overflow:hidden; }
 .opt{
   text-align:center; background:#fff;
   border:1.5px solid var(--border-default); border-radius:11px;
-  font-size:14px; color:var(--neutral-700); cursor:pointer;
+  font-size:18px; color:var(--neutral-700); cursor:pointer;
   font-family:inherit;
 }
-.opt--wide{ text-align:left; border-radius:12px; font-size:15px; line-height:1.4; }
+.opt--wide{ text-align:left; border-radius:12px; font-size:18px; line-height:1.4; }
 .opt[aria-pressed="true"]{
   background:var(--chip-bg); border-color:var(--primary-bright);
   color:var(--primary-bright); font-weight:500;
@@ -385,8 +385,8 @@ body.is-modal-open{ overflow:hidden; }
 /* gcard 재사용하되 진단용 라운드(14px)만 다름 */
 .notecard{ border-radius:14px; background:var(--grad-border); }
 .notecard__inner{ background:#fff; border-radius:12.5px; }
-.notecard__title{ margin:0; font-size:13px; font-weight:500; color:var(--primary-bright); }
-.notecard__desc{ margin:8px 0 0; font-size:13px; line-height:1.65; color:var(--neutral-600); }
+.notecard__title{ margin:0; font-size:16px; font-weight:500; color:var(--primary-bright); }
+.notecard__desc{ margin:8px 0 0; font-size:14px; line-height:1.65; color:var(--neutral-600); }
 .notecard__list{ margin:8px 0 0; display:flex; flex-direction:column; gap:5px; list-style:none; padding:0; }
 .notecard__li{ display:flex; align-items:center; gap:7px; font-size:13px; color:var(--neutral-600); }
 .notecard__dot{ width:4px; height:4px; border-radius:50%; background:var(--neutral-400); flex:0 0 auto; }
@@ -395,15 +395,15 @@ body.is-modal-open{ overflow:hidden; }
    로딩 오버레이 (진단 → 결과 사이 2초 연출)
 ===================================================================== */
 .dx__loading{ align-items:center; justify-content:center; text-align:center; }
-.loading__ring{ position:relative; width:96px; height:96px; margin:0 auto;
+.loading__ring{ position:relative; width:230px; height:230px; margin:0 auto;
   border-radius:50%; background:#fff; box-shadow:0 10px 28px rgba(12,68,124,.14);
   display:flex; align-items:center; justify-content:center; }
 .loading__ring svg{ position:absolute; top:0; left:0; }
-.loading__ring-track{ fill:none; stroke:var(--border-default); stroke-width:4; }
-.loading__ring-arc{ fill:none; stroke:var(--primary-bright); stroke-width:4; stroke-linecap:round;
-  stroke-dasharray:180 264; transform-origin:48px 48px; animation:loading-spin 1s linear infinite; }
+.loading__ring-track{ fill:none; stroke:var(--border-default); stroke-width:5; }
+.loading__ring-arc{ fill:none; stroke:var(--primary-bright); stroke-width:5; stroke-linecap:round;
+  stroke-dasharray:269 403; transform-origin:115px 115px; animation:loading-spin 1s linear infinite; }
 @keyframes loading-spin{ to{ transform:rotate(360deg); } }
-.loading__ring i{ font-size:38px; color:var(--primary-bright); }
+.loading__ring-img{ width:170px; height:170px; object-fit:contain; position:relative; z-index:1; }
 .loading__title{ margin:26px 0 0; font-size:20px; line-height:1.5; font-weight:500; color:var(--primary-strong); }
 .loading__steps{ margin-top:20px; display:flex; flex-direction:column; gap:9px; align-items:center; }
 .loading__step{ display:flex; align-items:center; gap:8px; font-size:13px; }
