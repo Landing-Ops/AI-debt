@@ -34,7 +34,7 @@
   var MOVE     = 900;    // 한 칸 이동 시간(ms)
   var RESUME   = 5000;   // 손 뗀 뒤 자동 재개(ms)
   var EASE     = 'cubic-bezier(.22,.61,.36,1)';
-  var REPEAT   = 5;      // 카드 벌 수(홀수 권장, 가운데서 시작)
+  var REPEAT   = 9;      // 카드 벌 수(홀수 권장, 가운데서 시작)
 
   // ---- 복제로 길게 깔기 ([원본]×REPEAT) ----
   for (var r = 1; r < REPEAT; r++) {
