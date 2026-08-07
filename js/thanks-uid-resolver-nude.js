@@ -12,7 +12,7 @@
 (function () {
   'use strict';
 
-  var LOOKUP_URL   = 'https://script.google.com/macros/s/AKfycbzA7H33-PUzlk1XUyk00nfJRefIVwtCPIlzAXK_PvXDTozOSehIk7bACcmKoPwcDNZs/exec'; //웹앱2
+  var LOOKUP_URL   = 'https://ai-debt.softman007.workers.dev/lookup'; // 5단계: Workers /lookup → D1 (GAS 웹앱2 대체)
   var TIMEOUT_MS   = 10000;
   var MAX_ATTEMPTS = 2;   // 최초 시도 1 + 재시도 1
 
@@ -57,22 +57,16 @@
     return;
   }
 
-  /* ---------- JSONP lookup 호출 (재시도 포함) ---------- */
+  /* ---------- lookup 호출 (fetch, 재시도 포함) ---------- */
   function attemptLookup(attemptNo) {
+    // 5단계: JSONP → fetch(GET). worker /lookup은 CORS 열려있어 정석 사용.
     var settled = false;
-    var callbackName = 'thanksLookupCb_' + Date.now() + '_' + attemptNo;
-    var script = document.createElement('script');
-
-    function cleanup() {
-      if (script.parentNode) script.parentNode.removeChild(script);
-      delete window[callbackName];
-    }
+    var controller = (typeof AbortController !== 'undefined') ? new AbortController() : null;
 
     var timeoutId = setTimeout(function () {
       if (settled) return;
       settled = true;
-      cleanup();
-
+      if (controller) controller.abort();
       if (attemptNo < MAX_ATTEMPTS) {
         attemptLookup(attemptNo + 1);   // ★ 재시도
       } else {
@@ -81,12 +75,10 @@
       }
     }, TIMEOUT_MS);
 
-    window[callbackName] = function (data) {
+    function onResult(data) {
       if (settled) return;
       settled = true;
       clearTimeout(timeoutId);
-      cleanup();
-
       if (data && data.ok) {
         replaceName(data.name);
         showContent(data.remainMs);
@@ -94,28 +86,25 @@
         // reason: 'expired' | 'not_found' 등 — 어떤 사유든 만료 화면으로
         showExpired();
       }
-    };
+    }
 
-    var lookupParams = new URLSearchParams({
-      action: 'lookup',
-      uid: uid,
-      callback: callbackName
-    });
+    var reqUrl = LOOKUP_URL + '?uid=' + encodeURIComponent(uid);
+    var opts = {};
+    if (controller) opts.signal = controller.signal;
 
-    script.src = LOOKUP_URL + '?' + lookupParams.toString();
-    script.onerror = function () {
-      if (settled) return;
-      settled = true;
-      clearTimeout(timeoutId);
-      cleanup();
-
-      if (attemptNo < MAX_ATTEMPTS) {
-        attemptLookup(attemptNo + 1);   // ★ 재시도
-      } else {
-        showContent();
-      }
-    };
-    document.body.appendChild(script);
+    fetch(reqUrl, opts)
+      .then(function (r) { return r.json(); })
+      .then(function (data) { onResult(data); })
+      .catch(function () {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timeoutId);
+        if (attemptNo < MAX_ATTEMPTS) {
+          attemptLookup(attemptNo + 1);   // ★ 재시도
+        } else {
+          showContent();
+        }
+      });
   }
 
   /* ---------- 이름 즉시 렌더 (lookup 응답 대기 없이) ---------- */
