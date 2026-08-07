@@ -4,11 +4,14 @@
    [흐름]
    1. sessionStorage에서 진단 답변 8개 로드
    2. 하나라도 비면 → 진단시작으로 리다이렉트 (직접 접근·이탈 재진입 방지)
-   3. JindanCalc.run()으로 판정+계산
+   3. 서버 /calc(POST)로 답변 전송 → 판정+계산+분기 결과 꾸러미 수신 (async)
    4. verdict에 따라 가능/불가 뷰 하나만 표시
    5. 가능이면 data-fill 자리에 계산값 주입 + 블록5 버전 분기 + 히스토그램
 
-   ※ 계산 자체는 calc.js(순수함수). 여기선 로드·렌더·분기만 담당.
+   ※ 2단계: 계산·9갈래 분기는 서버(ai-debt Worker)에서 실행.
+     프론트는 결과를 받아 그리는 껍데기. calc-nude.js·living-cost-nude.js 불필요.
+     렌더가 참조하던 상수(UPLIFT_CAP·source·housingSource)는 서버 응답에 실려와
+     applyShim()이 window.JindanCalc / window.LIVING_COST 에 되꽂아 기존 코드 유지.
 ===================================================================== */
 (function () {
   'use strict';
@@ -70,24 +73,70 @@
     return;
   }
 
-  /* ---------- 3) 계산 ---------- */
-  var r = window.JindanCalc.run(answers);
+  /* ---------- 3) 계산 (서버 /calc 호출) ----------
+     2단계: 계산·9갈래 분기를 서버에서 실행(calc/living-cost 프론트 제거).
+     동기 run()이 async fetch로 바뀌므로, 아래 분기·렌더를 콜백 안에서 실행. */
+  var CALC_URL = 'https://ai-debt.softman007.workers.dev/calc';
 
-  /* ---------- 4) 뷰 분기 ---------- */
   var viewAccept = root.querySelector('[data-rz="accept"]');
   var viewReject = root.querySelector('[data-rz="reject"]');
 
-  if (r.verdict === 'reject') {
-    viewReject.classList.add('is-active');
-    bindReject();
-    return;
-  }
-  viewAccept.classList.add('is-active');
+  runCalc(answers);
 
-  /* ---------- 5) 값 주입 ---------- */
-  fillAccept(r);
-  bindAccept();
-  renderChart(r);
+  function runCalc(answers) {
+    fetch(CALC_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(answers)
+    })
+    .then(function (res) {
+      if (!res.ok) throw new Error('calc_http_' + res.status);
+      return res.json();
+    })
+    .then(function (r) {
+      if (!r || !r.verdict) throw new Error('calc_bad_response');
+      applyShim(r);      // 렌더 코드가 참조하는 전역값을 서버 응답으로 채움
+      render(r);
+    })
+    .catch(function (err) {
+      showCalcError();   // 네트워크·서버 오류 시 안내(무한 로딩 방지)
+    });
+  }
+
+  /* 서버 응답에 실려온 상수로 window shim 구성 —
+     기존 렌더 코드의 window.LIVING_COST / window.JindanCalc 참조를 그대로 살림
+     (calc-nude.js·living-cost-nude.js 를 프론트에서 제거해도 동작) */
+  function applyShim(r) {
+    window.JindanCalc = window.JindanCalc || {};
+    if (typeof r.upliftCap === 'number') window.JindanCalc.UPLIFT_CAP = r.upliftCap;
+    window.LIVING_COST = window.LIVING_COST || {};
+    if (r.source)        window.LIVING_COST.source = r.source;
+    if (r.housingSource) window.LIVING_COST.housingSource = r.housingSource;
+  }
+
+  /* ---------- 4) 뷰 분기 + 5) 값 주입 ---------- */
+  function render(r) {
+    if (r.verdict === 'reject') {
+      viewReject.classList.add('is-active');
+      bindReject();
+      return;
+    }
+    viewAccept.classList.add('is-active');
+
+    fillAccept(r);
+    bindAccept();
+    renderChart(r);
+  }
+
+  /* 계산 실패(네트워크/서버) 안내 — reject 뷰를 재사용해 '다시 시도' 유도 */
+  function showCalcError() {
+    if (viewReject) {
+      viewReject.classList.add('is-active');
+      bindReject();
+    } else {
+      window.location.replace('./diagnosis-nude.html');
+    }
+  }
 
   /* =====================================================================
      금액 포맷 — 원 단위 숫자 → "N,NNN만원" / "N억 N,NNN만원"
