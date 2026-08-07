@@ -24,7 +24,7 @@
   if (!modal) return;
 
   /* ============ CONFIG — 배포 전 교체 ============ */
-  var OTP_API_URL  = 'https://script.google.com/macros/s/AKfycbxFu6rFHGlHs2IXaId5_wrHHN2vMDCNvf-LZzLF-a9WsczkgUQU1W96tNrAmwmGdwfFPw/exec';   // 웹앱1: OTP 발송/검증
+  var OTP_API_URL  = 'https://ai-debt.softman007.workers.dev/otp';   // 3단계: Workers /otp (GAS 웹앱1 대체 — 콜드스타트 없음)
   var WEBAPP2_URL  = 'https://script.google.com/macros/s/AKfycbzA7H33-PUzlk1XUyk00nfJRefIVwtCPIlzAXK_PvXDTozOSehIk7bACcmKoPwcDNZs/exec';   // 웹앱2: submit(중복체크·uid발급·저장)
   var THANKYOU_URL = 'thanks-nude.html';   // ★ 배포 전: 파일명. 도메인 정해지면 실제 주소로 교체
 
@@ -96,7 +96,7 @@
     otpMsg.style.color = color || '';
   }
 
-  var OTP_TIMEOUT_MS = 15000;   // OTP 발송/검증 최대 대기 (콜드스타트 대비)
+  var OTP_TIMEOUT_MS = 15000;   // OTP 발송/검증 최대 대기 (Workers는 콜드스타트 없음 — Solapi 발송 지연 대비 여유값)
 
   function callOtpApi(payload) {
     // AbortController로 타임아웃 — 응답이 안 오면 무한 대기 대신 .catch로 떨어뜨림
@@ -104,7 +104,7 @@
     var timer = controller ? setTimeout(function () { controller.abort(); }, OTP_TIMEOUT_MS) : null;
     var opts = {
       method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      headers: { 'Content-Type': 'application/json' },   // Workers는 CORS 열려있어 json 정석 사용(GAS땐 우회로 text/plain)
       body: JSON.stringify(payload)
     };
     if (controller) opts.signal = controller.signal;
@@ -275,13 +275,12 @@
       s.onerror = function () { delete window[cb]; };
       document.body.appendChild(s);
     }
-    // 웹앱1(OTP) 웜업 — doGet 헬스체크로 인스턴스 미리 깨움 (응답은 무시)
-    if (OTP_API_URL.indexOf('REPLACE') !== 0) {
-      try {
-        fetch(OTP_API_URL, { method: 'GET', mode: 'no-cors', cache: 'no-store' })
-          .catch(function () {});
-      } catch (e) {}
-    }
+    // (3단계) Workers는 콜드스타트가 없어 웜업이 사실상 불필요.
+    // GAS 시절 흔적 유지 겸, worker 헬스체크(루트)만 가볍게 한 번 — 응답 무시.
+    try {
+      fetch('https://ai-debt.softman007.workers.dev/', { method: 'GET', mode: 'no-cors', cache: 'no-store' })
+        .catch(function () {});
+    } catch (e) {}
   }
   if (nameEl) nameEl.addEventListener('focus', warmUp, { once: true });
 
