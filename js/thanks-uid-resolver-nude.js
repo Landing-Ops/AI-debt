@@ -5,9 +5,9 @@
            (thanks-countdown.js가 이 값으로 카운트다운 시작)
    - 만료/미존재/uid없음: 콘텐츠 숨기고 만료 화면 표시
    - 응답 지연 대비 1회 재시도(느린 왕복에 바로 폴백하면 이름 없이 뜨는 문제)
-   - ★뒤로가기→앞으로가기(bfcache 복원): pageshow(persisted)에서 서버 재조회.
+   - ★뒤로가기→앞으로가기로 페이지 재등장 시 서버 재조회(persisted 무관).
      first_view는 서버에 고정돼 있으므로 재조회하면 남은시간이 이어짐
-     (PC는 bfcache 복원 시 스크립트가 다시 안 돌아 15분이 리셋되던 문제 해결)
+     (PC는 bfcache 복원/재로드가 뒤섞여 15분이 리셋되던 문제 해결)
 ===================================================================== */
 (function () {
   'use strict';
@@ -113,10 +113,12 @@
 
   attemptLookup(1, false);
 
-  // ★bfcache 복원 시 서버 재조회 (뒤로가기→앞으로가기 리셋 방지)
-  window.addEventListener('pageshow', function (e) {
-    if (e.persisted && !window.__THANKS_EXPIRED__) {
-      attemptLookup(1, true);
-    }
+  // ★뒤로가기→앞으로가기로 페이지가 다시 보일 때 서버 재조회.
+  // persisted(bfcache)로만 한정하면 PC 크롬이 bfcache를 안 쓰는 경우 놓치므로,
+  // 최초 로드(직후 발생하는 pageshow 1회)만 걸러내고 그 뒤 재등장은 모두 재조회.
+  var firstShow = true;
+  window.addEventListener('pageshow', function () {
+    if (firstShow) { firstShow = false; return; }  // 최초 로드분은 위 attemptLookup(1,false)가 이미 처리
+    if (!window.__THANKS_EXPIRED__) attemptLookup(1, true);
   });
 })();

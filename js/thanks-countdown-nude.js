@@ -73,4 +73,9 @@
 
   // ★bfcache 복원 재조회 완료 → 최신 남은시간으로 다시 그림
   document.addEventListener('thanks:uid-refreshed', render);
+
+  // ★페이지가 숨겨질 때(뒤로가기 등) 타이머 정지 — bfcache로 복원될 때
+  //   낡은 타이머가 되살아나 옛 값을 그리는 것을 막음. 복원 시엔 resolver의
+  //   pageshow 재조회 → 'thanks:uid-refreshed' → render()가 새로 시작시킴.
+  window.addEventListener('pagehide', stop);
 })();
