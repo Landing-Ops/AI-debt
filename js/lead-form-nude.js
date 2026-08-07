@@ -12,10 +12,7 @@
    · 전화번호 단일 입력칸(lead-phone) — 기존 3분할(phone1/2/3) 아님
    · OTP UI는 lead-otp-slot(빈 div)에 삽입
    · 트래픽 SOURCE는 traffic.js가 저장한 sessionStorage('traffic')에서 읽음
-
-   ★배포 전 반드시 교체할 값 (아래 CONFIG):
-     OTP_API_URL, WEBAPP2_URL — 이 프로젝트 전용 구글시트로 새로 배포한 GAS
-     THANKYOU_URL — 이 프로젝트 땡큐페이지 주소
+   
    ===================================================================== */
 (function () {
   'use strict';
@@ -25,7 +22,7 @@
 
   /* ============ CONFIG — 배포 전 교체 ============ */
   var OTP_API_URL  = 'https://ai-debt.softman007.workers.dev/otp';   // 3단계: Workers /otp (GAS 웹앱1 대체 — 콜드스타트 없음)
-  var WEBAPP2_URL  = 'https://script.google.com/macros/s/AKfycbzA7H33-PUzlk1XUyk00nfJRefIVwtCPIlzAXK_PvXDTozOSehIk7bACcmKoPwcDNZs/exec';   // 웹앱2: submit(중복체크·uid발급·저장)
+  var WEBAPP2_URL  = 'https://ai-debt.softman007.workers.dev/submit';   // 4단계: Workers /submit → D1 (GAS 웹앱2 대체)
   var THANKYOU_URL = 'thanks-nude.html';   // ★ 배포 전: 파일명. 도메인 정해지면 실제 주소로 교체
 
   /* ============ 유입경로(SOURCE) — traffic.js가 저장한 값 재사용 ============ */
@@ -266,16 +263,7 @@
   function warmUp() {
     if (warmed) return;
     warmed = true;
-    // 웹앱2 웜업 (JSONP ping)
-    if (WEBAPP2_URL.indexOf('REPLACE') !== 0) {
-      var cb = 'warmCb_' + Date.now();
-      window[cb] = function () { delete window[cb]; };
-      var s = document.createElement('script');
-      s.src = WEBAPP2_URL + '?action=ping&callback=' + cb;
-      s.onerror = function () { delete window[cb]; };
-      document.body.appendChild(s);
-    }
-    // (3단계) Workers는 콜드스타트가 없어 웜업이 사실상 불필요.
+    // (3·4단계) Workers는 콜드스타트가 없어 웜업이 사실상 불필요.
     // GAS 시절 흔적 유지 겸, worker 헬스체크(루트)만 가볍게 한 번 — 응답 무시.
     try {
       fetch('https://ai-debt.softman007.workers.dev/', { method: 'GET', mode: 'no-cors', cache: 'no-store' })
@@ -287,8 +275,8 @@
   /* ============ 제출 파라미터 (진단8 + 팝업5 + 소스) ============ */
   function buildSubmitParams(requestId) {
     var dg = getDiagnosis();
-    var params = {
-      action: 'submit',
+    // 4단계: worker /submit은 JSON body를 받음(경로로 구분하므로 action 불필요)
+    return {
       // 진단 입력값 8
       region: dg.region, marital: dg.marital, dependents: dg.dependents,
       income: dg.income, assets: dg.assets, secured: dg.secured,
@@ -303,7 +291,6 @@
       source: getSource(),
       requestId: requestId
     };
-    return new URLSearchParams(params);
   }
 
   /* ============ 전송 (웹앱2 JSONP + 재시도) ============ */
@@ -324,24 +311,20 @@
   }
 
   function attemptSubmit(attemptNo, requestId) {
-    var cbName = 'leadSubmitCb_' + Date.now() + '_' + attemptNo;
-    var script = document.createElement('script');
+    // 4단계: JSONP → fetch(POST JSON). worker /submit은 CORS 열려있어 정석 사용.
     var settled = false;
-
-    function cleanup() {
-      if (script.parentNode) script.parentNode.removeChild(script);
-      delete window[cbName];
-    }
+    var controller = (typeof AbortController !== 'undefined') ? new AbortController() : null;
     var timeoutId = setTimeout(function () {
       if (settled) return;
-      settled = true; cleanup();
+      settled = true;
+      if (controller) controller.abort();
       if (attemptNo < SUBMIT_MAX_ATTEMPTS) attemptSubmit(attemptNo + 1, requestId);
       else { hideLoadingOverlay(); alert('네트워크 지연으로 접수가 지연되고 있습니다. 잠시 후 다시 시도해주세요.'); resetSubmit(); }
     }, SUBMIT_TIMEOUT_MS);
 
-    window[cbName] = function (data) {
+    function onResult(data) {
       if (settled) return;
-      settled = true; clearTimeout(timeoutId); cleanup();
+      settled = true; clearTimeout(timeoutId);
       hideLoadingOverlay();   // 응답 도착 → 결과 안내 직전 오버레이 제거
       if (data && data.ok) {
         // ★ 성공 시 이 번호의 requestId 정리 — 뒤로가기 후 같은 번호 재제출 시
@@ -357,18 +340,24 @@
       } else {
         alert('접수 처리 중 오류가 발생했습니다. 다시 시도해주세요.'); resetSubmit();
       }
-    };
+    }
 
-    var params = buildSubmitParams(requestId);
-    params.append('callback', cbName);
-    script.src = WEBAPP2_URL + '?' + params.toString();
-    script.onerror = function () {
-      if (settled) return;
-      settled = true; clearTimeout(timeoutId); cleanup();
-      if (attemptNo < SUBMIT_MAX_ATTEMPTS) attemptSubmit(attemptNo + 1, requestId);
-      else { hideLoadingOverlay(); alert('네트워크 오류가 발생했습니다. 다시 시도해주세요.'); resetSubmit(); }
+    var opts = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(buildSubmitParams(requestId))
     };
-    document.body.appendChild(script);
+    if (controller) opts.signal = controller.signal;
+
+    fetch(WEBAPP2_URL, opts)
+      .then(function (r) { return r.json(); })
+      .then(function (data) { onResult(data); })
+      .catch(function () {
+        if (settled) return;
+        settled = true; clearTimeout(timeoutId);
+        if (attemptNo < SUBMIT_MAX_ATTEMPTS) attemptSubmit(attemptNo + 1, requestId);
+        else { hideLoadingOverlay(); alert('네트워크 오류가 발생했습니다. 다시 시도해주세요.'); resetSubmit(); }
+      });
   }
 
   /* ============ 제출 클릭 ============ */
