@@ -1,21 +1,59 @@
 /* =====================================================================
-   traffic.js — 유입경로 파싱·저장 (읽기 전용 소스)
+   traffic.js — 유입경로·광고분석 파라미터 파싱·저장 (읽기 전용 소스)
    ---------------------------------------------------------------------
    [역할]
-   랜딩 도착 시 1회, URL 파라미터(mp·rg·ag·ad)를 파싱해 규칙대로 변환하고
+   랜딩 도착 시 1회, URL 파라미터를 파싱해 규칙대로 변환하고
    sessionStorage(키: traffic)에 저장한다. 이후 진단·결과·팝업 화면은
    URL을 보지 않고 이 저장값만 참조한다(화면 이동 중 파라미터 누락 방지).
 
-   [기술구현 기획안 3번 근거]
-   - mp(매체)·rg(지역): 화이트리스트에 있는 값만 인정, 한글로 변환
-   - ag(연령): 이번 서비스에선 값 조합에 미사용. 구조만 남겨둠(주석)
-   - ad(소재ID): 화이트리스트 없이 들어온 값 그대로 신뢰
-   - 최종 저장 형태: { media, region, ad } → 시트 전달 시
-     유입경로="매체-지역", 소재ID=ad 로 분리 사용
+   [광고 분석용 필드 — 나중에 마케터용 분석 페이지/매체 API 연동 대비]
+   지금은 한글로 저장(광고주·마케터가 바로 보기 좋게). 값은 준비되는 대로 채움.
+   ┌─ URL 파라미터 → 저장 필드 → (나중에 매체 API 연동 시 대응할 UTM 표준) ─┐
+   │  mp → media    유입매체     ↔ utm_source   (메타/구글/네이버SA…)          │
+   │  rg → region   유입지역     ↔ (커스텀)     (서울/부산/전국…)              │
+   │  ag → age      연령         ↔ (커스텀)     (20대/30대/40대…)              │
+   │  ad → ad       광고소재     ↔ utm_content  (소재ID, 예: A_변제금)         │
+   │  cp → campaign 캠페인       ↔ utm_campaign (예: 8월_변제금강조)           │
+   │  st → adset    광고세트     ↔ (커스텀)     (타겟그룹, 예: 리타겟팅)       │
+   │  lp → lp       랜딩버전     ↔ (커스텀)     (A안/B안, A/B테스트용)          │
+   │  kw → keyword  키워드       ↔ utm_term     (검색광고 유입 키워드)         │
+   │  (자동)device  디바이스     ↔ (커스텀)     (모바일/PC, 브라우저 감지)     │
+   └──────────────────────────────────────────────────────────────────────┘
+   ★ API 연동 시점에는 위 UTM 표준 파라미터(utm_source 등)를 그대로 읽도록
+     확장하면 매체 리포트와 자동 매칭됨. 지금은 짧은 커스텀 파라미터 사용.
+
+   [파싱 규칙]
+   - media·region·age: 화이트리스트에 있는 값만 인정, 한글로 변환(오염 방지)
+   - ad·campaign·adset·lp·keyword: 화이트리스트 없이 들어온 값 그대로 신뢰
+   - device: URL 아닌 브라우저 userAgent로 자동 판별
 
    [OFF 방법]
    index.html에서 이 <script> 태그만 제거하면 됨. 저장값이 없으면
    이후 화면은 기본값('직접유입' 등)으로 폴백하도록 설계할 것.
+
+   [URL 파라미터 넣는 법 — 광고 세팅할 때 랜딩 주소 뒤에 붙이기]
+   첫 파라미터 앞엔 ?, 그 다음부터는 & 로 이어붙임. 순서는 상관없음.
+   필요한 것만 골라 붙이면 됨(안 붙인 건 빈 값으로 저장).
+
+   · 메타 광고, 서울 타겟, 20~65세, A소재:
+     ...?mp=meta&rg=seoul&ag=2065&ad=A_변제금
+
+   · 구글 광고, 전국, 30~50세, 8월 캠페인:
+     ...?mp=google&rg=all&ag=3050&cp=8월_변제금강조
+
+   · 네이버SA 검색광고, 키워드까지:
+     ...?mp=naversa&rg=seoul&kw=개인회생&ad=B_후기
+
+   · 랜딩 A/B 테스트(같은 광고, 랜딩만 다르게):
+     ...?mp=meta&ad=A_변제금&lp=A안   /   ...?mp=meta&ad=A_변제금&lp=B안
+
+   · 풀 세팅(광고세트·랜딩버전까지 전부):
+     ...?mp=meta&rg=gyeonggi&ag=2040&ad=C_압류&cp=9월캠페인&st=리타겟팅&lp=B안
+
+   ※ 값 설명: mp=매체(meta/google/naversa…), rg=지역(seoul/busan/all…),
+     ag=연령(4자리, 2065→20~65세), ad=소재ID, cp=캠페인, st=광고세트,
+     lp=랜딩버전, kw=키워드. device(모바일/PC)는 URL 없이 자동 판별.
+     한글·공백이 값에 들어가도 브라우저가 자동 인코딩하니 그냥 써도 됨.
 ===================================================================== */
 (function () {
   'use strict';
@@ -36,27 +74,66 @@
     jeonbuk:'전북', jeonnam:'전남', gyeongbuk:'경북', gyeongnam:'경남', jeju:'제주'
   };
 
+  /* 연령: 매체·지역과 달리 화이트리스트 안 씀(타겟이 범위라 자유). ★규칙 = 4자리 숫자.
+     ag=2065 → '20~65세', ag=2040 → '20~40세' (앞2·뒤2로 쪼갬).
+     4자리 숫자가 아니면(다른 형식) 들어온 값 원문 그대로 신뢰. */
+  function parseAge(v) {
+    if (!v) return '';
+    if (/^\d{4}$/.test(v)) return v.slice(0, 2) + '~' + v.slice(2) + '세';
+    return v;   // 규칙 밖 값은 원문 유지
+  }
+
   var qs = new URLSearchParams(location.search);
   function pick(name){ return (qs.get(name) || '').trim().toLowerCase(); }
+  function raw(name){ return (qs.get(name) || '').trim(); }   // 대소문자 유지
 
-  var mpRaw = pick('mp');
-  var rgRaw = pick('rg');
-  var adRaw = (qs.get('ad') || '').trim();   // 소재ID는 원문 대소문자 유지
-  // var agRaw = pick('ag');   // 연령: 이번 서비스 미사용. 다른 캠페인 대비 구조만 남김
+  /* ---------- 화이트리스트 대상 (오염 방지) ---------- */
+  var mpRaw = pick('mp');   // 매체
+  var rgRaw = pick('rg');   // 지역
 
-  // URL에 파라미터가 있으면 파싱해 저장, 없으면(재방문 등) 이전 값 재사용
-  var hasParam = mpRaw || rgRaw || adRaw;
+  /* ---------- 원문 신뢰 대상 (마케터가 자유롭게 지정) ---------- */
+  var agRaw = raw('ag');    // 연령 (4자리 숫자 → 범위 변환, 그 외 원문)
+  var adRaw = raw('ad');    // 광고소재 ID
+  var cpRaw = raw('cp');    // 캠페인
+  var stRaw = raw('st');    // 광고세트
+  var lpRaw = raw('lp');    // 랜딩버전
+  var kwRaw = raw('kw');    // 키워드
+
+  /* ---------- 디바이스 자동 감지 (URL 아님, 브라우저 판별) ---------- */
+  function detectDevice() {
+    var ua = (navigator.userAgent || '').toLowerCase();
+    return /mobile|android|iphone|ipad|ipod/.test(ua) ? '모바일' : 'PC';
+  }
+
+  // URL에 광고 파라미터가 하나라도 있으면 파싱해 저장, 없으면(재방문 등) 이전 값 재사용
+  var hasParam = mpRaw || rgRaw || agRaw || adRaw || cpRaw || stRaw || lpRaw || kwRaw;
 
   if (hasParam) {
     var traffic = {
-      media:  MEDIA_MAP[mpRaw]  || '직접유입',
-      region: REGION_MAP[rgRaw] || '전국',
-      ad:     adRaw || ''
-      // age: agRaw || ''   // 미사용
+      media:    MEDIA_MAP[mpRaw]  || '직접유입',
+      region:   REGION_MAP[rgRaw] || '전국',
+      age:      parseAge(agRaw),
+      ad:       adRaw || '',
+      campaign: cpRaw || '',
+      adset:    stRaw || '',
+      lp:       lpRaw || '',
+      keyword:  kwRaw || '',
+      device:   detectDevice()
     };
     try { sessionStorage.setItem(KEY, JSON.stringify(traffic)); } catch (e) {}
+  } else {
+    /* 광고 파라미터가 전혀 없는 직접 유입: 최소한 디바이스는 남겨둠.
+       (기존 저장값이 있으면 건드리지 않고, 없을 때만 기본 객체 생성) */
+    var existing = null;
+    try { existing = sessionStorage.getItem(KEY); } catch (e) {}
+    if (!existing) {
+      try {
+        sessionStorage.setItem(KEY, JSON.stringify({
+          media:'직접유입', region:'전국', age:'', ad:'',
+          campaign:'', adset:'', lp:'', keyword:'', device: detectDevice()
+        }));
+      } catch (e) {}
+    }
   }
-  // 파라미터 없이 들어온 경우: 기존 저장값 유지(sessionStorage가 자동 보존).
-  // 최초 진입 + 파라미터 없음 = 저장 안 함 → 이후 화면이 기본값으로 폴백.
 
 })();

@@ -25,13 +25,27 @@
   var SUBMIT_URL   = 'https://ai-debt.softman007.workers.dev/submit';   // 리드 제출 → D1 (원 GAS 웹앱2 대체)
   var THANKYOU_URL = 'thanks-nude.html';   // ★ 배포 전: 파일명. 도메인 정해지면 실제 주소로 교체
 
-  /* ============ 유입경로(SOURCE) — traffic.js가 저장한 값 재사용 ============ */
-  function getSource() {
+  /* ============ 트래픽 파라미터 — traffic.js가 저장한 값 그대로 읽음 ============
+     예전엔 media-region-age를 '-'로 합쳐 source 한 곳에 넣었으나,
+     이제 각 필드를 leads 테이블 개별 열로 저장(광고 분석·나중 API 연동 대비). */
+  function getTraffic() {
     try {
       var t = JSON.parse(sessionStorage.getItem('traffic') || '{}');
-      var s = [t.media, t.region, t.age].filter(Boolean).join('-');
-      return s || '직접유입';
-    } catch (e) { return '직접유입'; }
+      return {
+        media:    t.media    || '직접유입',
+        region:   t.region   || '전국',
+        age:      t.age      || '',
+        ad:       t.ad       || '',
+        campaign: t.campaign || '',
+        adset:    t.adset    || '',
+        lp:       t.lp       || '',
+        keyword:  t.keyword  || '',
+        device:   t.device   || ''
+      };
+    } catch (e) {
+      return { media:'직접유입', region:'전국', age:'', ad:'',
+               campaign:'', adset:'', lp:'', keyword:'', device:'' };
+    }
   }
 
   /* ============ 진단 답변 8개 — result.js가 노출한 window.JINDAN ============ */
@@ -280,6 +294,7 @@
   /* ============ 제출 파라미터 (진단8 + 팝업5 + 소스) ============ */
   function buildSubmitParams(requestId) {
     var dg = getDiagnosis();
+    var tf = getTraffic();
     // 4단계: worker /submit은 JSON body를 받음(경로로 구분하므로 action 불필요)
     return {
       // 진단 입력값 8
@@ -292,8 +307,11 @@
       phoneCheck: isPhoneVerified ? '번호인증 완료' : '번호인증 미완료',
       calltime: ((calltimeEl && calltimeEl.value) || '').trim(),
       message: ((messageEl && messageEl.value) || '').trim(),
+      // 트래픽·광고분석 9 (각 필드 개별 전송 → leads 개별 열)
+      media: tf.media, adregion: tf.region, adage: tf.age, ad: tf.ad,
+      campaign: tf.campaign, adset: tf.adset, lp: tf.lp,
+      keyword: tf.keyword, device: tf.device,
       // 메타
-      source: getSource(),
       requestId: requestId
     };
   }
