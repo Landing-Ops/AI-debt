@@ -346,7 +346,7 @@
   /* 블록5 게이지·수치 채우기 — 소득/재산 버전 (상승형) --------------------
      현재 탕감률 → 목표치(upliftTarget) 를 게이지로. 상한 90 트랙 스케일 */
   function fillUplift(r, sfx) {
-    var UP_MAX = window.JindanCalc.UPLIFT_CAP || 90;   // 트랙 상한
+    var UP_MAX = window.JindanCalc.UPLIFT_CAP || 95;   // 트랙 상한(서버 upliftCap=95와 동일)
     var curPct = Math.min(pctNum(r.rate), UP_MAX);     // 현재 탕감률(%)
     var target = r.upliftTarget;                       // 목표 탕감률(%)
 

@@ -22,7 +22,7 @@
 
   /* ============ CONFIG — 배포 전 교체 ============ */
   var OTP_API_URL  = 'https://ai-debt.softman007.workers.dev/otp';   // 3단계: Workers /otp (GAS 웹앱1 대체 — 콜드스타트 없음)
-  var WEBAPP2_URL  = 'https://ai-debt.softman007.workers.dev/submit';   // 4단계: Workers /submit → D1 (GAS 웹앱2 대체)
+  var SUBMIT_URL   = 'https://ai-debt.softman007.workers.dev/submit';   // 리드 제출 → D1 (원 GAS 웹앱2 대체)
   var THANKYOU_URL = 'thanks-nude.html';   // ★ 배포 전: 파일명. 도메인 정해지면 실제 주소로 교체
 
   /* ============ 유입경로(SOURCE) — traffic.js가 저장한 값 재사용 ============ */
@@ -256,15 +256,14 @@
   });
   updateSubmit();
 
-  /* ============ 웜업 — 모달 열릴 때 GAS 콜드스타트 완화 ============
-     웹앱2(제출) + 웹앱1(OTP) 둘 다 미리 깨움. OTP는 콜드스타트로 인한
-     "네트워크 오류로 발송 실패"가 첫 방문자에게 뜨는 걸 막는 게 핵심. */
+  /* ============ 웜업 — 모달 열릴 때 worker 헬스체크 ============
+     원래 GAS 콜드스타트(첫 방문자 "발송 실패") 완화용이었음. Workers는
+     콜드스타트가 없어 사실상 불필요하지만, 루트 헬스체크만 가볍게 한 번
+     쳐서 연결을 미리 데워둠(응답 무시). */
   var warmed = false;
   function warmUp() {
     if (warmed) return;
     warmed = true;
-    // (3·4단계) Workers는 콜드스타트가 없어 웜업이 사실상 불필요.
-    // GAS 시절 흔적 유지 겸, worker 헬스체크(루트)만 가볍게 한 번 — 응답 무시.
     try {
       fetch('https://ai-debt.softman007.workers.dev/', { method: 'GET', mode: 'no-cors', cache: 'no-store' })
         .catch(function () {});
@@ -293,7 +292,7 @@
     };
   }
 
-  /* ============ 전송 (웹앱2 JSONP + 재시도) ============ */
+  /* ============ 전송 (worker /submit — fetch POST + 재시도) ============ */
   var SUBMIT_TIMEOUT_MS = 25000;
   var SUBMIT_MAX_ATTEMPTS = 2;
 
@@ -311,7 +310,7 @@
   }
 
   function attemptSubmit(attemptNo, requestId) {
-    // 4단계: JSONP → fetch(POST JSON). worker /submit은 CORS 열려있어 정석 사용.
+    // worker /submit은 CORS가 열려있어 fetch(POST JSON) 정석 사용.
     var settled = false;
     var controller = (typeof AbortController !== 'undefined') ? new AbortController() : null;
     var timeoutId = setTimeout(function () {
@@ -349,7 +348,7 @@
     };
     if (controller) opts.signal = controller.signal;
 
-    fetch(WEBAPP2_URL, opts)
+    fetch(SUBMIT_URL, opts)
       .then(function (r) { return r.json(); })
       .then(function (data) { onResult(data); })
       .catch(function () {
@@ -371,7 +370,7 @@
 
     showLoadingOverlay();   // 클릭 즉시 오버레이 표시 (재시도 중에도 유지)
 
-    // ★ 제휴사 폼 동시 전송 — partner-form.js 있을 때만 (웹앱2보다 먼저)
+    // ★ 제휴사 폼 동시 전송 — partner-form.js 있을 때만 (리드 제출보다 먼저)
     if (typeof window.submitPartnerForm === 'function') {
       window.submitPartnerForm();
     }
