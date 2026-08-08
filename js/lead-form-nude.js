@@ -237,7 +237,13 @@
 
     if (!/^[가-힣]{2,}$/.test(name)) return { ok: false, msg: '성함을 입력해주세요.' };
     if (!phone)                     return { ok: false, msg: '연락처를 정확히 입력해주세요.' };
-    if (!isPhoneVerified)           return { ok: false, msg: '휴대폰 인증을 완료해주세요.' };
+
+    /* ===== [번호인증 OTP 임시 OFF 경계 · 시작] =====================================
+       번호인증 없이 연락처만으로 제출 테스트할 때 아래 한 줄을 주석처리.
+       실제 운영 복귀 시 반드시 주석 해제할 것! (인증 안 한 리드가 들어옴) */
+    // if (!isPhoneVerified)           return { ok: false, msg: '휴대폰 인증을 완료해주세요.' };
+    /* ===== [번호인증 OTP 임시 OFF 경계 · 끝] ===================================== */
+
     if (!calltime)                  return { ok: false, msg: '통화 가능 시간을 선택해주세요.' };
     if (!agreed)                    return { ok: false, msg: '개인정보 수집 및 이용에 동의해주세요.' };
     return { ok: true, msg: '내 탕감률 정확히 확인하기' };
