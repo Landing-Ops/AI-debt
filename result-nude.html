@@ -28,9 +28,8 @@
        · result.js가 /calc 응답 받아 render 끝내면 is-hidden 붙여 페이드아웃
        · 진단 로딩 → 결과 로딩이 끊김 없이 이어지게 하는 장치
   ============================================================ -->
-  <div id="result-loading" class="dx__loading"
+  <div id="result-loading" class="dx__loading dx__screen--tint"
        style="position:fixed; inset:0; z-index:9999; display:flex;
-              background:var(--primary-strong,#0c447c);
               transition:opacity .4s ease;">
     <div class="px-[30px]">
       <div class="loading__ring">
