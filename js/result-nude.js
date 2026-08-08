@@ -459,9 +459,10 @@
     bindLeadModal();
   }
 
-  /* ---------- 리드 모달 (번호인증 · UI만) ----------
-     열기/닫기, 통화시간 버튼, 전화번호 하이픈 자동, 인증 UI 토글까지.
-     ★실제 OTP 발송·검증·구글폼 전송은 추후 연결 (TODO 표시된 자리). */
+  /* ---------- 리드 모달 — 팝업 껍데기(열기/닫기/약관)만 담당 ----------
+     ★ 역할 분담: 이 파일(result.js)은 팝업을 여닫고 약관 모달을 띄우는 것까지만.
+        전화번호 하이픈·번호인증·입력검증·실제 제출은 전부 lead-form.js가 전담한다.
+        (lead-phone 등은 lead-form.js가 주인이므로 여기서 중복 바인딩하지 않음) */
   function openLeadModal() {
     var m = document.querySelector('[data-rz="lead-modal"]');
     if (!m) return;
@@ -489,19 +490,6 @@
       if (e.key === 'Escape' && !m.hidden) closeLeadModal();
     });
 
-    // 통화 가능 시간: select (별도 로직 불필요)
-
-    // 전화번호 하이픈 자동 (010-0000-0000)
-    var phone = m.querySelector('[data-rz="lead-phone"]');
-    if (phone) phone.addEventListener('input', function () {
-      var v = phone.value.replace(/\D/g, '').slice(0, 11);
-      if (v.length > 7)      v = v.slice(0,3) + '-' + v.slice(3,7) + '-' + v.slice(7);
-      else if (v.length > 3) v = v.slice(0,3) + '-' + v.slice(3);
-      phone.value = v;
-    });
-
-    // 인증번호 입력 UI는 OTP JS가 lead-otp-slot에 삽입 (별도 로직 없음)
-
     // 약관 전문 보기 → 개인정보 약관 모달 오픈
     var terms = m.querySelector('[data-rz="lead-terms"]');
     var privacy = document.querySelector('[data-rz="privacy-modal"]');
@@ -516,12 +504,6 @@
         el.addEventListener('click', function () { privacy.hidden = true; });
       });
     }
-
-    // 제출 버튼 (UI만 · 전송은 추후)
-    var submit = m.querySelector('[data-rz="lead-submit"]');
-    if (submit) submit.addEventListener('click', function () {
-      // TODO(연결): 필드 검증 + 인증 확인 + 구글폼/제휴사폼 전송 → 땡큐페이지 이동.
-    });
   }
 
   function bindReject() {
