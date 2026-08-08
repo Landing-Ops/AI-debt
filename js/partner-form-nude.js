@@ -124,7 +124,7 @@
     if (dg.secured)      parts.push('담보·체납-' + dg.secured);
     if (dg.immunity)     parts.push('면책이력-' + dg.immunity);
     if (val(calltimeEl)) parts.push('통화가능시간-' + val(calltimeEl));
-    if (val(messageEl))  parts.push('문의사항-' + val(messageEl));
+    if (val(messageEl))  parts.push('문의사항-' + val(messageEl));   // 테스트할 때는 '' << 이렇게 비우고 하기
 
     return parts.join(' / ');
   }
