@@ -22,6 +22,41 @@
 
 <body data-industry="legal" data-source="ai-jindan-result">
 
+  <!-- ============================================================
+       결과 계산 로딩 오버레이 (diagnosis 로딩화면과 동일 디자인)
+       · 페이지 로드 시 화면 전체를 덮어 흰 화면 노출 방지
+       · result.js가 /calc 응답 받아 render 끝내면 is-hidden 붙여 페이드아웃
+       · 진단 로딩 → 결과 로딩이 끊김 없이 이어지게 하는 장치
+  ============================================================ -->
+  <div id="result-loading" class="dx__loading"
+       style="position:fixed; inset:0; z-index:9999; display:flex;
+              background:var(--primary-strong,#0c447c);
+              transition:opacity .4s ease;">
+    <div class="px-[30px]">
+      <div class="loading__ring">
+        <svg width="230" height="230" viewBox="0 0 230 230" aria-hidden="true">
+          <circle class="loading__ring-track" cx="115" cy="115" r="107"/>
+          <circle class="loading__ring-arc" cx="115" cy="115" r="107"/>
+        </svg>
+        <img class="loading__ring-img" src="./img/diagnosis-Overray.png" alt="" />
+      </div>
+      <h2 class="loading__title">고객님의 예상 탕감액을<br>계산하는 중이에요</h2>
+      <div class="loading__steps">
+        <div class="loading__step loading__step--done">
+          <i class="ti ti-circle-check-filled" aria-hidden="true"></i>
+          <span>2026년 생계비 기준 확인</span>
+        </div>
+        <div class="loading__step loading__step--doing">
+          <span class="loading__spinner"></span>
+          <span>예상 탕감률 산정 중</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <style>
+    #result-loading.is-hidden{ opacity:0; pointer-events:none; }
+  </style>
+
   <main class="rz" data-rz="root">
 
     <!-- ============================================================
@@ -589,6 +624,6 @@
   <script src="./js/traffic-nude.js"></script>
   <script src="./js/result-nude.js"></script>
   <script src="./js/lead-form-nude.js"></script>
-  <script src="./js/partner-form-nude.js"></script>  <!--제휴사 안할땐 이것만 OFF하기-->
+  <script src="./js/partner-form.js"></script> <!--제휴사 안할땐 이것만 OFF하기-->
 </body>
 </html>

@@ -115,10 +115,22 @@
   }
 
   /* ---------- 4) 뷰 분기 + 5) 값 주입 ---------- */
+  /* 결과 로딩 오버레이 걷어내기 — 화면을 다 그린 직후 호출.
+     계산이 빠르든 느리든 '결과 완성 시점'에 딱 맞춰 사라지므로 흰 화면이 없다.
+     (한 프레임 뒤에 숨겨 렌더 완료 후 페이드아웃되게 함) */
+  function hideResultLoading() {
+    var ov = document.getElementById('result-loading');
+    if (!ov) return;
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { ov.classList.add('is-hidden'); });
+    });
+  }
+
   function render(r) {
     if (r.verdict === 'reject') {
       viewReject.classList.add('is-active');
       bindReject();
+      hideResultLoading();
       return;
     }
     viewAccept.classList.add('is-active');
@@ -126,6 +138,7 @@
     fillAccept(r);
     bindAccept();
     renderChart(r);
+    hideResultLoading();
   }
 
   /* 계산 실패(네트워크/서버) 안내 — reject 뷰를 재사용해 '다시 시도' 유도 */
@@ -133,6 +146,7 @@
     if (viewReject) {
       viewReject.classList.add('is-active');
       bindReject();
+      hideResultLoading();
     } else {
       window.location.replace('./diagnosis-nude.html');
     }
