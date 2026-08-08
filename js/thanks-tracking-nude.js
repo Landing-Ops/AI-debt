@@ -5,13 +5,13 @@
      · thanks:uid-resolved 이벤트를 기다렸다 boot() (countdown.js와 동일 패턴)
    - 최대 스크롤 도달률(%, max) + 활성 체류시간(초, 탭 숨김 구간 제외, 누적)
    - sendBeacon 으로 15초 주기 + 탭 hidden + pagehide 시점에 스냅샷 전송
-   - 체류는 델타(증가분)로 전송 → 웹앱3가 += 누적, 스크롤은 max upsert
+   - 체류는 델타(증가분)로 전송 → 서버(worker /track)가 += 누적, 스크롤은 max upsert
 ===================================================================== */
 (function () {
   'use strict';
 
-  var TRACK_URL = 'https://ai-debt.softman007.workers.dev/track'; // 5단계: Workers /track → D1 (GAS 웹앱3 대체)
-  var SEND_INTERVAL_MS = 15000;  // 앱스서버로 15초마다 데이터값을 보내주는 주기
+  var TRACK_URL = 'https://ai-debt.softman007.workers.dev/track'; // 트래킹 → D1 (원 GAS 웹앱3 대체)
+  var SEND_INTERVAL_MS = 15000;  // 서버로 데이터 보내는 주기(15초)
 
   /* ---------- uid 파싱 (resolver와 동일) ---------- */
   var params = new URLSearchParams(window.location.search);
