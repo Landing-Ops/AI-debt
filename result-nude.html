@@ -32,7 +32,8 @@
        · 진단 로딩 → 결과 로딩이 끊김 없이 이어지게 하는 장치
   ============================================================ -->
   <div id="result-loading" class="dx__loading dx__screen--tint"
-       style="position:fixed; inset:0; z-index:9999; display:flex;
+       style="position:fixed; top:0; bottom:0; left:50%; transform:translateX(-50%);
+              width:min(var(--frame-w,420px),100vw); z-index:9999; display:flex;
               transition:opacity .4s ease;">
     <div class="px-[30px]">
       <div class="loading__ring">
