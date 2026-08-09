@@ -21,6 +21,60 @@
   <link rel="stylesheet" href="./css/common.css">
   <link rel="stylesheet" href="./css/typography.css">
   <link rel="stylesheet" href="./css/premium.css">
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!--  광고 추적 픽셀 (PageView 전용 · 전환신호 없음)                        -->
+  <!--  · 랜딩·진단·결과 3페이지 공통. 방문(도착) 추적만 함.                 -->
+  <!--  · 전환(Lead/conversion)은 오직 땡큐페이지에서만 발사 → 여기엔 없음.  -->
+  <!--  · 메타 2253155728441697 / 당근 1785159334599355001 / 구글 AW-830866619 -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '2253155728441697');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=2253155728441697&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+
+  <!-- Danggeun Market Code -->
+  <script>
+    (function (w, d) {
+      if (w.karrotPixel) return;
+      var k = { stub: true, queue: [] };
+      k.init = function () { k.queue.push(['init', arguments, Date.now()]); };
+      k.track = function () { k.queue.push(['track', arguments, Date.now()]); };
+      w.karrotPixel = k;
+      var s = d.createElement('script');
+      s.async = true;
+      s.src = 'https://karrot-pixel.business.daangn.com/karrot-pixel.js';
+      var f = d.getElementsByTagName('script')[0];
+      f && f.parentNode ? f.parentNode.insertBefore(s, f) : d.head.appendChild(s);
+    })(window, document);
+    window.karrotPixel.init('1786277802369401001');
+    window.karrotPixel.track('ViewPage');
+  </script>
+  <!-- End Danggeun Market Code -->
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-830866619"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-830866619');
+  </script>
+  <!-- End Google tag (gtag.js) -->
+
 </head>
 
 <body data-industry="legal" data-source="ai-jindan-result">
@@ -407,7 +461,7 @@
             <li class="step6 p-3.5"><span class="step6__no step6__no--sky">02</span><span class="step6__label">개인회생 변호사/법무사가 직접 처리</span></li>
             <li class="step6 p-3.5"><span class="step6__no step6__no--sky">03</span><span class="step6__label">가장 유리한 변제계획안 도출</span></li>
             <li class="step6 p-3.5"><span class="step6__no step6__no--sky">04</span><span class="step6__label">진행 상황 실시간 안내</span></li>
-            <li class="step6 step6--hl p-3.5"><span class="step6__no step6__no--green">05</span><span class="step6__label">수임료 부담완화 및 최적의 탕감안 도출</span></li>
+            <li class="step6 step6--hl p-3.5"><span class="step6__no step6__no--green">05</span><span class="step6__label">수임료 부담 최소화 및 최적의 탕감안 도출</span></li>
           </ul>
         </div>
       </section>
@@ -486,7 +540,7 @@
       <div class="lead__body">
         <p class="lead__lead">방금 보신 건 입력 정보만으로 계산한 예상치예요. 실제 회생에서는 이것보다 훨씬 많은 걸 따집니다.</p>
         <p class="lead__items">추가 생계비 인정 항목, 재산별 청산가치 평가, 채무 발생 사유와 시점, 변제기간 단축 대상 여부, 부양가족 범위, 소득 산정 방식, 면제재산 공제 등등</p>
-        <p class="lead__lead">위와 같은 세부 항목들을 어떻게 다루느냐에 따라 누군가는 탕감률을 더 높이고, 누군가는 재산을 지키며, 누군가는 높은 결과를 그대로 인정받아요.</p>
+        <p class="lead__lead">위와 같은 세부 항목들을 어떻게 다루느냐에 따라 누군가는 탕감률을 더 높이고, 누군가는 재산을 지키고, 누군가는 높은 결과를 그대로 인정받아요.</p>
         <p class="lead__lead lead__lead--strong">지금 연락처를 남기시면<br>아래 4가지를 바로 확인할 수 있어요.</p>
       </div>
 
@@ -495,10 +549,10 @@
         <li><i class="ti ti-check" aria-hidden="true"></i><span><span style="color: red; font-weight:500;">외부 비공개</span>—나와 비슷한 상황에서 높은 탕감률 받은 실제사례</span></span></li>
         <li><i class="ti ti-check" aria-hidden="true"></i><span><span style="color: red; font-weight:500;">월상환액 줄이고·탕감률은 높이는 방법</span></span></li>
         <li><i class="ti ti-check" aria-hidden="true"></i><span>재산을 지키면서 탕감받는 방법</span></li>
-        <li><i class="ti ti-check" aria-hidden="true"></i><span><span style="color: red; font-weight:500;">긴급하게 압류·독촉을 멈추는 방법</span></span></li>
+        <li><i class="ti ti-check" aria-hidden="true"></i><span><span style="color: red; font-weight:500;">긴급하게 압류·독촉을 멈추는 절차</span></span></li>
       </ul>
 
-      <p class="lead__promise">남겨주신 연락처로 담당자가<br><b>1:1맞춤 최적의 탕감 방안</b>을 자세히 안내드립니다</p>
+      <p class="lead__promise">남겨주신 연락처로 담당자가<br><b>1:1 맞춤 최적의 탕감 방안</b>을 상세하게 안내드립니다</p>
 
       <!-- 입력 폼 (UI만 · 전송 로직 추후) -->
       <div class="lead__form">

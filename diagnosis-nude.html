@@ -21,6 +21,60 @@
   <link rel="stylesheet" href="./css/common.css">
   <link rel="stylesheet" href="./css/typography.css">
   <link rel="stylesheet" href="./css/premium.css">
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!--  광고 추적 픽셀 (PageView 전용 · 전환신호 없음)                        -->
+  <!--  · 랜딩·진단·결과 3페이지 공통. 방문(도착) 추적만 함.                 -->
+  <!--  · 전환(Lead/conversion)은 오직 땡큐페이지에서만 발사 → 여기엔 없음.  -->
+  <!--  · 메타 2253155728441697 / 당근 1785159334599355001 / 구글 AW-830866619 -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '2253155728441697');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=2253155728441697&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+
+  <!-- Danggeun Market Code -->
+  <script>
+    (function (w, d) {
+      if (w.karrotPixel) return;
+      var k = { stub: true, queue: [] };
+      k.init = function () { k.queue.push(['init', arguments, Date.now()]); };
+      k.track = function () { k.queue.push(['track', arguments, Date.now()]); };
+      w.karrotPixel = k;
+      var s = d.createElement('script');
+      s.async = true;
+      s.src = 'https://karrot-pixel.business.daangn.com/karrot-pixel.js';
+      var f = d.getElementsByTagName('script')[0];
+      f && f.parentNode ? f.parentNode.insertBefore(s, f) : d.head.appendChild(s);
+    })(window, document);
+    window.karrotPixel.init('1786277802369401001');
+    window.karrotPixel.track('ViewPage');
+  </script>
+  <!-- End Danggeun Market Code -->
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-830866619"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-830866619');
+  </script>
+  <!-- End Google tag (gtag.js) -->
+
 </head>
 
 <body data-industry="legal" data-source="ai-jindan-diagnosis">
