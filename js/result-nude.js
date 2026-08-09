@@ -9,7 +9,7 @@
    5. 가능이면 data-fill 자리에 계산값 주입 + 블록5 버전 분기 + 히스토그램
 
    ※ 2단계: 계산·9갈래 분기는 서버(ai-debt Worker)에서 실행.
-     프론트는 결과를 받아 그리는 껍데기. calc-nude.js·living-cost-nude.js 불필요.
+     프론트는 결과를 받아 그리는 껍데기. calc.js·living-cost.js 불필요.
      렌더가 참조하던 상수(UPLIFT_CAP·source·housingSource)는 서버 응답에 실려와
      applyShim()이 window.JindanCalc / window.LIVING_COST 에 되꽂아 기존 코드 유지.
 ===================================================================== */
@@ -69,7 +69,7 @@
     return v === null || v === '';
   });
   if (missing) {
-    window.location.replace('./diagnosis-nude.html');
+    window.location.replace('./diagnosis.html');
     return;
   }
 
@@ -105,7 +105,7 @@
 
   /* 서버 응답에 실려온 상수로 window shim 구성 —
      기존 렌더 코드의 window.LIVING_COST / window.JindanCalc 참조를 그대로 살림
-     (calc-nude.js·living-cost-nude.js 를 프론트에서 제거해도 동작) */
+     (calc.js·living-cost.js 를 프론트에서 제거해도 동작) */
   function applyShim(r) {
     window.JindanCalc = window.JindanCalc || {};
     if (typeof r.upliftCap === 'number') window.JindanCalc.UPLIFT_CAP = r.upliftCap;
@@ -148,7 +148,7 @@
       bindReject();
       hideResultLoading();
     } else {
-      window.location.replace('./diagnosis-nude.html');
+      window.location.replace('./diagnosis.html');
     }
   }
 
@@ -528,7 +528,7 @@
     if (retry) retry.addEventListener('click', function () {
       // 다시 진단: 답변 비우고 진단 처음으로
       KEYS.forEach(function (k) { try { sessionStorage.removeItem(k); } catch (e) {} });
-      window.location.href = './diagnosis-nude.html';
+      window.location.href = './diagnosis.html';
     });
   }
 

@@ -23,7 +23,7 @@
   /* ============ CONFIG — 배포 전 교체 ============ */
   var OTP_API_URL  = 'https://ai-debt.softman007.workers.dev/otp';   // 3단계: Workers /otp (GAS 웹앱1 대체 — 콜드스타트 없음)
   var SUBMIT_URL   = 'https://ai-debt.softman007.workers.dev/submit';   // 리드 제출 → D1 (원 GAS 웹앱2 대체)
-  var THANKYOU_URL = 'thanks-nude.html';   // ★ 배포 전: 파일명. 도메인 정해지면 실제 주소로 교체
+  var THANKYOU_URL = 'thanks.html';   // ★ 배포 전: 파일명. 도메인 정해지면 실제 주소로 교체 (놔둬도 됨. 현재주소 따라감)
 
   /* ============ 트래픽 파라미터 — traffic.js가 저장한 값 그대로 읽음 ============
      예전엔 media-region-age를 '-'로 합쳐 source 한 곳에 넣었으나,

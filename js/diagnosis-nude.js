@@ -25,7 +25,7 @@
   if (!screens.length) return;
 
   var LOADING_MS = 2000;
-  var RESULT_URL = './result-nude.html';
+  var RESULT_URL = './result.html';
 
   /* ---------- 현재 화면 인덱스 ---------- */
   var current = 0;
