@@ -260,7 +260,7 @@
         incLead.style.display = 'block';
         incNote.style.display = 'block';
         setHtml('income-lead', '회생 변제기간은 원칙 3년이지만,<br>'+'원금을 다 갚으면 법원이 조기 종료를 인정해요');
-        setHtml('income-note', '원금을 월 가용소득으로 나눠 <br>' + '<span style="color:#0b5bd3;font-weight:700">' + r.months + '개월'+'</span>'+'간 나누어 갚는게 원칙이에요.');
+        setHtml('income-note', '원금을 월 가용소득으로 나눠 <br>' + '<span style="color:#0b5bd3;font-weight:700">' + r.months + '개월'+'</span>'+'간 나누어 갚어요.');
       } else {
         // 일반 36개월: 가용소득 × 36 = 회생변제금 (곱셈 정확)
         incMult.style.display = 'inline';
@@ -280,7 +280,7 @@
       if (r.overCap) {
         setHtml('asset-note', '현재 가용소득으로 재산만큼 갚으려면<br>'+'법이 정한 기간(최대 60개월)을 넘어요<br>'+'<span style="color:#0b5bd3;font-weight:700">'+'전문가의 의견이 필요해요'+'</span>');
       } else {
-        setHtml('asset-note', '청산가치를 월 가용소득으로 나눠<br>' + '<span style="color:#0b5bd3;font-weight:700">' + r.months + '개월'+'</span>'+'간 나누어 갚는게 원칙이에요');
+        setHtml('asset-note', '청산가치를 월 가용소득으로 나눠<br>' + '<span style="color:#0b5bd3;font-weight:700">' + r.months + '개월'+'</span>'+'간 나누어 갚어요.');
       }
     } else {
       // 최저변제액: 법정 최저 변제 기준
@@ -293,7 +293,7 @@
       if (r.overCap) {
         setHtml('min-note', '현재 가용소득으로 최저변제금을 갚으려면<br>'+'법이 정한 기간(최대 60개월)을 넘어요<br>'+'<span style="color:#0b5bd3;font-weight:700">'+'전문가의 의견이 필요해요'+'</span>');
       } else {
-        setHtml('min-note', '법정 최저 변제금을 월 가용소득으로 나눠<br>' + '<span style="color:#0b5bd3;font-weight:700">' + r.months + '개월'+'</span>'+ '간 나누어 갚는게 원칙이에요.');
+        setHtml('min-note', '법정 최저 변제금을 월 가용소득으로 나눠<br>' + '<span style="color:#0b5bd3;font-weight:700">' + r.months + '개월'+'</span>'+ '간 나누어 갚어요.');
       }
     }
 
