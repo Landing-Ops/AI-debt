@@ -96,8 +96,8 @@ module.exports = {
     // ── index.html (랜딩) ──
     {
       src: 'js/traffic-nude.js',
-      preset: 'light',
-      reason: 'URL 파라미터 파싱 + sessionStorage 저장뿐, 이벤트/전송 없음. 문자열(매체·지역 한글맵) 가려도 안전 → light.'
+      preset: 'minimal',
+      reason: 'URL 파라미터 파싱 + sessionStorage 저장. 이벤트/전송 없어 light도 되나, 프로젝트 방침(위험군 전부 minimal 통일)에 맞춰 minimal.'
     },
     {
       src: 'js/review-slider-nude.js',
@@ -108,8 +108,8 @@ module.exports = {
     // ── diagnosis.html (진단) ──
     {
       src: 'js/diagnosis-nude.js',
-      preset: 'light',
-      reason: 'sessionStorage 저장 + pushState/popstate 히스토리 제어. CF-flattening이 popstate 콜백 흐름 꼬을 수 있어 구조변형 회피 → light.'
+      preset: 'minimal',
+      reason: 'sessionStorage 저장 + pushState/popstate 히스토리 제어 + 이벤트 위임. result.js가 light(base64)에서 깨진 전례 → 문자열인코딩 위험 회피 위해 minimal.'
     },
 
     // ── result.html (결과) ──
@@ -120,8 +120,8 @@ module.exports = {
     },
     {
       src: 'js/lead-form-nude.js',
-      preset: 'light',
-      reason: 'OTP 인증·리드 제출 fetch + 전화검증 + submitPartnerForm 호출. 전송/콜백 많아 구조변형 시 위험 → light (문자열만 가림).'
+      preset: 'minimal',
+      reason: 'OTP 인증·리드 제출 fetch + 전화검증 + submitPartnerForm 호출. 전송/콜백 많음. result.js가 light(base64)에서 is-not-a-function으로 깨진 전례 → 같은 위험이라 minimal.'
     },
     {
       src: 'js/partner-form-nude.js',
@@ -142,8 +142,8 @@ module.exports = {
     },
     {
       src: 'js/thanks-tracking-nude.js',
-      preset: 'light',
-      reason: 'sendBeacon 트래킹 + CustomEvent 수신. 전송 안정성 위해 구조변형 회피, 문자열만 가림 → light.'
+      preset: 'minimal',
+      reason: 'sendBeacon 트래킹 + CustomEvent 수신. result.js가 light(base64)에서 깨진 전례 → 문자열인코딩 위험 회피 위해 minimal.'
     },
     {
       src: 'js/thanks-review-cards-nude.js',
