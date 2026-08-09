@@ -71,7 +71,6 @@
 
 <!-- ▼▼▼ [1] 메타(페이스북/인스타) 픽셀 ▼▼▼ -->
 <!-- ※ 발사 방식: 큐 기반 → 타이밍에 강함. IIFE 즉시실행 그대로 둘 것. -->
-
 <!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
@@ -158,97 +157,7 @@ src="https://www.facebook.com/tr?id=2528518574251558&ev=PageView&noscript=1"
     if (!uid) return;                                                  // uid 없으면 발사 안 함
     var googleFiredKey = 'google_lead_' + uid;                         // 이 uid 전용 저장 키
     if (!localStorage.getItem(googleFiredKey)) {                       // 아직 안 찍혔으면
-      gtag('event', 'conversion', {'send_to': 'AW-830866619/uKWbCN397tccELuJmIwD'});  // → 전환 발사 ★
-      localStorage.setItem(googleFiredKey, '1');                       //   → "찍었음" 기록
-    }
-  });
-</script>
-<!-- End Google tag (gtag.js) -->
-<!-- ▲▲▲ [3] 구글 끝 ▲▲▲ -->
-
-<!-- ▼▼▼ [1] 메타(페이스북/인스타) 픽셀 ▼▼▼ -->
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-
-fbq('init', '2528518574251558');  // 메타 픽셀 ID
-fbq('track', 'PageView');         // 페이지 도착 → 매번 찍힘 (중복 OK)
-
-// ── 전환(Lead): uid 1개당 딱 1번만 ──
-(function () {
-  var uid = new URLSearchParams(window.location.search).get('uid');  // URL에서 uid 꺼냄
-  if (!uid) return;                                                  // uid 없으면 아무것도 안 함
-  var firedKey = 'lead_fired_' + uid;                                // 이 uid 전용 저장 키
-  if (!localStorage.getItem(firedKey)) {                             // 아직 안 찍혔으면
-    fbq('track', 'Lead');                                            //   → 전환 1번 발사 ★
-    localStorage.setItem(firedKey, '1');                             //   → "찍었음" 기록 (다음엔 스킵)
-  }
-})();
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=2528518574251558&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
-<!-- ▲▲▲ [1] 메타 끝 ▲▲▲ -->
-
-
-<!-- ▼▼▼ [2] 당근마켓 픽셀 ▼▼▼ -->
-<!-- Danggeun Market Code -->
-<script>
-  (function (w, d) {
-    if (w.karrotPixel) return;
-    var k = { stub: true, queue: [] };
-    k.init = function () { k.queue.push(['init', arguments, Date.now()]); };
-    k.track = function () { k.queue.push(['track', arguments, Date.now()]); };
-    w.karrotPixel = k;
-    var s = d.createElement('script');
-    s.async = true;
-    s.src = 'https://karrot-pixel.business.daangn.com/karrot-pixel.js';
-    var f = d.getElementsByTagName('script')[0];
-    f && f.parentNode ? f.parentNode.insertBefore(s, f) : d.head.appendChild(s);
-  })(window, document);
-
-  window.karrotPixel.init('1786277802369401001');  // 당근 픽셀 ID
-  window.karrotPixel.track('ViewPage');            // 페이지 도착 → 매번 찍힘 (중복 OK)
-
-  // ── 전환(Lead): uid 1개당 딱 1번만 ──
-  (function () {
-    var uid = new URLSearchParams(window.location.search).get('uid');   // URL에서 uid 꺼냄
-    if (!uid) return;                                                   // uid 없으면 아무것도 안 함
-    var karrotFiredKey = 'karrot_lead_fired_' + uid;                    // 이 uid 전용 저장 키 (당근 전용 접두어)
-    if (!localStorage.getItem(karrotFiredKey)) {                        // 아직 안 찍혔으면
-      window.karrotPixel.track('Lead');                                 //   → 전환 1번 발사 ★
-      localStorage.setItem(karrotFiredKey, '1');                        //   → "찍었음" 기록 (다음엔 스킵)
-    }
-  })();
-</script>
-<!-- End Danggeun Market Code -->
-<!-- ▲▲▲ [2] 당근 끝 ▲▲▲ -->
-
-
-<!-- ▼▼▼ [3] 구글애즈(유튜브 포함) 전환 태그 ▼▼▼ -->
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-830866619"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'AW-830866619');  // 페이지 로드 추적, 매번 실행 (중복 OK)
-
-  // ── 전환(conversion): 페이지 완전히 로드된 후 발사 → uid당 1번만 ──
-  window.addEventListener('load', function () {
-    var uid = new URLSearchParams(window.location.search).get('uid');  // URL에서 uid 꺼냄
-    if (!uid) return;                                                  // uid 없으면 발사 안 함
-    var googleFiredKey = 'google_lead_' + uid;                         // 이 uid 전용 저장 키
-    if (!localStorage.getItem(googleFiredKey)) {                       // 아직 안 찍혔으면
-      gtag('event', 'conversion', {'send_to': 'AW-830866619/uKWbCN397tccELuJmIwD'});  // → 전환 발사 ★
+      gtag('event', 'conversion', {'send_to': 'AW-830866619/mIO4CKu8z94cELuJmIwD'});  // → 전환 발사 ★ 회생ID 전환라벨 삽입
       localStorage.setItem(googleFiredKey, '1');                       //   → "찍었음" 기록
     }
   });
