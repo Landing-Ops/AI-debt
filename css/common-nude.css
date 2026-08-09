@@ -598,7 +598,7 @@ body.is-modal-open{ overflow:hidden; }
 /* 헤더 */
 .lead__head{ text-align:center; padding:2px 4px 0; }
 .lead__eyebrow{ font-size:13px; font-weight:600; color:var(--primary-bright); margin:0 0 6px; }
-.lead__title{ font-size:20px; font-weight:700; line-height:1.35; color:var(--primary-strong); margin:0; letter-spacing:-.01em; }
+.lead__title{ font-size:18px; font-weight:700; line-height:1.35; color:var(--primary-strong); margin:0; letter-spacing:-.01em; }
 
 /* 리드 본문 */
 .lead__body{ margin-top:16px; }
