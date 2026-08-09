@@ -115,8 +115,8 @@ module.exports = {
     // ── result.html (결과) ──
     {
       src: 'js/result-nude.js',
-      preset: 'light',
-      reason: 'fetch(/calc) 응답으로 화면 렌더 + 팝업 제어. 응답 콜백 체인 안깨지게 구조변형 회피 → light.'
+      preset: 'minimal',
+      reason: 'fetch(/calc) 응답으로 화면 렌더 + Chart.js + 팝업 제어. light(base64 문자열인코딩)에서 o[ai(...)][ai(...)] is not a function 에러로 계산 멈춤 → string-array 통째 OFF → minimal (실측 확정).'
     },
     {
       src: 'js/lead-form-nude.js',
