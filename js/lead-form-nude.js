@@ -88,6 +88,7 @@
   var otpCodeEl = null, otpActionBtn = null, otpMsg = null;
   if (verifySlot) {
     verifySlot.innerHTML =
+      '<p style="font-size:14px;color:#d33;margin-bottom:4px; text-align:left;">타인 번호 도용 방지를 위해 번호 인증을 시행하고 있습니다.</p>'    
       '<button type="button" class="lead__verify" data-otp-action>인증번호 받기</button>';
     otpActionBtn = verifySlot.querySelector('[data-otp-action]');
   }
