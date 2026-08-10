@@ -31,7 +31,7 @@
 <!--                                                                   -->
 <!--  ▣ 이 파일이 하는 일                                                -->
 <!--    유저가 폼 제출 후 이 땡큐페이지에 도착하면,                        -->
-<!--    메타·당근·구글 3개 매체에 "전환(잠재고객 유입)"을 신호로 쏨.       -->
+<!--    메타·당근·구글·카카오 4개 매체에 "전환(잠재고객 유입)"을 신호로 쏨. -->
 <!--                                                                   -->
 <!--  ▣ 공통 원칙                                                       -->
 <!--    · 매체별 <script> 블록을 완전히 분리 → 한 곳 터져도 딴 데 영향 X  -->
@@ -44,6 +44,7 @@
 <!--        메타 : lead_fired_◯◯◯                                      -->
 <!--        당근 : karrot_lead_fired_◯◯◯                               -->
 <!--        구글 : google_lead_◯◯◯                                     -->
+<!--        카카오: kakao_lead_fired_◯◯◯                               -->
 <!--      (키가 같으면 먼저 발사된 매체가 키를 만들어버려                  -->
 <!--       나머지가 "이미 찍힘"으로 오인하고 스킵하는 사고 발생)           -->
 <!--                                                                   -->
@@ -164,6 +165,38 @@ src="https://www.facebook.com/tr?id=2528518574251558&ev=PageView&noscript=1"
 </script>
 <!-- End Google tag (gtag.js) -->
 <!-- ▲▲▲ [3] 구글 끝 ▲▲▲ -->
+
+
+<!-- ▼▼▼ [4] 카카오 픽셀 ▼▼▼ -->
+<!-- ※ 발사 방식: 다른 픽셀과 동일하게 uid 1개당 전환 딱 1번.            -->
+<!--   pageView = 페이지 도착 → 매번 찍힘 (중복 OK)                     -->
+<!--   전환 = participation('Consulting') 잠재고객-상담신청              -->
+<!--          uid당 1번만 (localStorage 'kakao_lead_fired_◯◯◯')        -->
+<!--   ★이벤트 선택 이유: 개인회생은 '상담 신청'(리드) → 카카오 잠재고객  -->
+<!--     이벤트 participation, 태그값 Consulting(상담신청)이 정확히 부합. -->
+<!--     (구매/회원가입 아님. purchase·completeRegistration 쓰면 최적화   -->
+<!--      기준이 어긋남)                                                  -->
+<!--   ★광고 관리자 필수: 카카오모먼트 전환 최적화 기준도 반드시          -->
+<!--     '잠재고객-상담신청(Consulting)'으로 맞출 것. 코드·관리자          -->
+<!--     이벤트가 불일치하면 전환이 광고에 안 잡힘.                        -->
+<!-- Kakao Pixel Code -->
+<script type="text/javascript" charset="UTF-8" src="//t1.daumcdn.net/kas/static/kp.js"></script>
+<script type="text/javascript">
+  kakaoPixel('4063831204394781743').pageView();   // 페이지 도착 → 매번 찍힘 (중복 OK)
+
+  // ── 전환(잠재고객-상담신청): uid 1개당 딱 1번만 ──
+  (function () {
+    var uid = new URLSearchParams(window.location.search).get('uid');   // URL에서 uid 꺼냄
+    if (!uid) return;                                                   // uid 없으면 아무것도 안 함
+    var kakaoFiredKey = 'kakao_lead_fired_' + uid;                      // 이 uid 전용 저장 키 (카카오 전용 접두어)
+    if (!localStorage.getItem(kakaoFiredKey)) {                         // 아직 안 찍혔으면
+      kakaoPixel('4063831204394781743').participation('Consulting');   //   → 전환 1번 발사 ★ (상담신청)
+      localStorage.setItem(kakaoFiredKey, '1');                        //   → "찍었음" 기록 (다음엔 스킵)
+    }
+  })();
+</script>
+<!-- End Kakao Pixel Code -->
+<!-- ▲▲▲ [4] 카카오 끝 ▲▲▲ -->
 
 </head>
 
