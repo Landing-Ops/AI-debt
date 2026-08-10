@@ -303,18 +303,8 @@
     set('repay-3',     '− ' + won(r.repay));
     set('reduced-2',   won(r.reduced));
     set('interest-3',  won(r.interest));
-    if (window.LIVING_COST && window.LIVING_COST.source) {
-      var srcTxt = '출처 · ' + window.LIVING_COST.source;
-      var hNote = viewAccept.querySelector('[data-rz="housing-note"]');
-      if (r.housing > 0 && window.LIVING_COST.housingSource) {
-        // 지역 주거비 적용 시: 출처에 서울회생법원 기준 병기 + 면책 문구 표시
-        srcTxt += ', ' + window.LIVING_COST.housingSource;
-        if (hNote) hNote.style.display = 'block';
-      } else {
-        if (hNote) hNote.style.display = 'none';
-      }
-      set('cost-source', srcTxt);
-    }
+    /* 출처·추가주거비 안내는 result.html에 고정 문구로 둠(항상 적용되므로).
+       수정·주석처리는 HTML에서 직접. */
 
     // 블록5 (탕감률 상승 여지) — 버전 분기
     // 탕감률 90% 초과면 '더 올림'이 무의미(상한 95 근처/초과) → 상위 N% 표기.
