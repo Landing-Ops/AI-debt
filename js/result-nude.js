@@ -84,10 +84,17 @@
   runCalc(answers);
 
   function runCalc(answers) {
+    // 판정 answers에 sid·traffic을 동봉 → worker가 판정 후 session_log에 결과 기록.
+    // worker run(a)는 q_ 키만 읽으므로 _sid·_traffic이 섞여도 계산엔 무영향.
+    var payload = {};
+    for (var k in answers) if (answers.hasOwnProperty(k)) payload[k] = answers[k];
+    try { payload._sid = sessionStorage.getItem('sid') || ''; } catch (e) {}
+    try { payload._traffic = JSON.parse(sessionStorage.getItem('traffic') || '{}'); } catch (e) { payload._traffic = {}; }
+
     fetch(CALC_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(answers)
+      body: JSON.stringify(payload)
     })
     .then(function (res) {
       if (!res.ok) throw new Error('calc_http_' + res.status);
