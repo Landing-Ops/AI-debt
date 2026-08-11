@@ -131,7 +131,7 @@
 
         <div class="text-center mt-[22px]">
           <a href="./diagnosis.html" class="btn-cta-main btn-cta-main--pill inline-block px-10 py-4 text-[17px] no-underline"
-             data-evt="start_diagnosis">
+             data-evt="start_diagnosis" data-cta="hero">
             30초 무료 AI 진단 시작
           </a>
         </div>
@@ -509,7 +509,7 @@
         </div>
 
         <a href="./diagnosis.html" class="btn-cta-main btn-cta-main--block mt-[18px] block text-center py-[17px] text-[17px] no-underline mb-20"
-           data-evt="start_diagnosis">
+           data-evt="start_diagnosis" data-cta="bottom">
           30초 무료 AI 진단 시작
         </a>
       </div>
@@ -637,6 +637,20 @@
       var tgl = modal.querySelector('[data-pv="partners-toggle"]');
       var list = modal.querySelector('[data-pv="partners"]');
       if(tgl && list){ tgl.addEventListener('click', function(){ list.classList.toggle('is-open'); }); }
+    })();
+  </script>
+
+  <!-- 퍼널 핑: CTA 클릭 추적 (data-cta="hero"/"bottom" → /step) -->
+  <script>
+    (function(){
+      // window.trackStep은 traffic.js가 정의(위에서 먼저 로드됨). 없으면 조용히 스킵.
+      document.querySelectorAll('[data-cta]').forEach(function(el){
+        el.addEventListener('click', function(){
+          var which = el.getAttribute('data-cta');   // 'hero' | 'bottom'
+          if (window.trackStep) window.trackStep('cta_' + which);
+          // 링크 이동은 그대로 진행(sendBeacon이라 이탈해도 전송됨).
+        });
+      });
     })();
   </script>
   <script src="./js/review-slider.js"></script>

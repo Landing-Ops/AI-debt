@@ -51,6 +51,10 @@
     if (i >= screens.length) return;
     history.pushState({ dx: i }, '', '#' + stepKey(i));
     render(i);
+    // [퍼널 핑] 도착 화면이 진단 문항(q_*)이면 도달 기록. loading·intro는 제외.
+    // render()가 아닌 goForward()에만 붙임 → 뒤로가기(popstate) 재방문은 카운트 안 함.
+    var key = stepKey(i);
+    if (key && key.indexOf('q_') === 0 && window.trackStep) window.trackStep(key);
   }
 
   /* 뒤로 이동 (상단 ‹ 버튼용) — history.back()을 호출해
@@ -263,5 +267,9 @@
 
   /* 초기 화면 버튼 상태 동기화 */
   syncNextButton(screens[current]);
+
+  /* [퍼널 핑] 진단 페이지 진입 = diag_start (intro가 처음부터 active라 여기서 1회).
+     새로고침 재진입 중복은 worker UPSERT의 COALESCE로 첫 시각 유지되므로 무해. */
+  if (window.trackStep) window.trackStep('diag_start');
 
 })();

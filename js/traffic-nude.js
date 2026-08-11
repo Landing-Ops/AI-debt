@@ -60,6 +60,27 @@
 
   var KEY = 'traffic';   // ★ footer 계열의 'footer_media'와 분리 — 겹치지 않게
 
+  /* =====================================================================
+     [sid] 익명 세션 ID 발급 — 퍼널 추적용 (읽기 전용 꼬리표)
+     ---------------------------------------------------------------------
+     · 랜딩 진입 시 1회 발급해 sessionStorage('sid')에 저장. 세션(탭) 단위.
+     · uid(리드 제출 시 발급되는 기능 키)와 완전 별개 — sid는 판정·인증·
+       픽셀 어디에도 안 쓰이는 순수 추적용. 유실돼도 리드 저장엔 영향 없음.
+     · ★ URL 파라미터 유무와 무관하게 무조건 실행(직접 유입도 sid가 있어야
+       퍼널이 이어짐). 그래서 아래 traffic 파싱 분기보다 먼저, 여기서 처리.
+     · 이미 있으면 유지(진단 중 화면 이동·새로고침에도 같은 sid 보존).
+  ===================================================================== */
+  (function ensureSid() {
+    try {
+      var sid = sessionStorage.getItem('sid');
+      if (!sid) {
+        sid = 'sid_' + Date.now().toString(36) + '_' +
+              Math.random().toString(36).slice(2, 10);
+        sessionStorage.setItem('sid', sid);
+      }
+    } catch (e) {}
+  })();
+
   /* ---------- 화이트리스트 (미리 정한 값만 인정) ---------- */
   var MEDIA_MAP = {
     meta:'메타', facebook:'페이스북', insta:'인스타', instagram:'인스타',
@@ -135,5 +156,51 @@
       } catch (e) {}
     }
   }
+
+  /* =====================================================================
+     [퍼널 핑] window.trackStep — 단계 도달을 worker /step으로 전송
+     ---------------------------------------------------------------------
+     · sendBeacon으로 비동기 전송(페이지 이탈해도 전송 보장, 응답 안 기다림).
+     · sid는 sessionStorage에서 읽음. sid 없으면(예외) 조용히 스킵.
+     · 어느 페이지든 traffic.js가 로드돼 있으므로 window.trackStep 호출 가능
+       (index CTA·diagnosis 문항에서 이 함수만 부르면 됨).
+     · 실패해도 무시 — 추적은 부가기능, 본 기능(진단·리드)에 영향 없어야 함.
+  ===================================================================== */
+  var STEP_URL = 'https://ai-debt.softman007.workers.dev/step';
+
+  function getSid() {
+    try { return sessionStorage.getItem('sid') || ''; } catch (e) { return ''; }
+  }
+  function getTrafficObj() {
+    try { return JSON.parse(sessionStorage.getItem(KEY) || '{}'); } catch (e) { return {}; }
+  }
+
+  function trackStep(step, extra) {
+    var sid = getSid();
+    if (!sid || !step) return;
+    var payload = { sid: sid, step: step };
+    if (extra) { for (var k in extra) if (extra.hasOwnProperty(k)) payload[k] = extra[k]; }
+    try {
+      var blob = new Blob([JSON.stringify(payload)], { type: 'text/plain' });
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(STEP_URL, blob);
+      } else {
+        // sendBeacon 미지원 폴백 — keepalive fetch
+        fetch(STEP_URL, { method: 'POST', body: JSON.stringify(payload), keepalive: true }).catch(function(){});
+      }
+    } catch (e) {}
+  }
+  window.trackStep = trackStep;   // 다른 스크립트(index CTA·diagnosis)에서 호출
+
+  /* [enter 핑] 랜딩 진입 1회 — sid 행 생성 + 유입정보 저장.
+     traffic.js는 index·diagnosis·result 3곳에 로드되므로, '랜딩에서만 1회'를
+     세션 플래그로 보장(진단·결과 재로드 때 enter 중복 발사 방지). */
+  (function fireEnterOnce() {
+    try {
+      if (sessionStorage.getItem('sid_entered')) return;   // 이미 이 세션에서 enter 보냄
+      sessionStorage.setItem('sid_entered', '1');
+      trackStep('enter', { traffic: getTrafficObj() });
+    } catch (e) {}
+  })();
 
 })();
