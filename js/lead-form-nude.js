@@ -312,7 +312,9 @@
       campaign: tf.campaign, adset: tf.adset, lp: tf.lp,
       keyword: tf.keyword, device: tf.device,
       // 메타
-      requestId: requestId
+      requestId: requestId,
+      // 퍼널 추적: 이 리드의 세션 sid(session_log와 연결용). uid 로직과 무관.
+      sid: (function () { try { return sessionStorage.getItem('sid') || ''; } catch (e) { return ''; } })()
     };
   }
 
