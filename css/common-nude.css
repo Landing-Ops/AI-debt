@@ -532,9 +532,9 @@ body.is-modal-open{ overflow:hidden; }
 .regcard .donut__fill{ fill:none; stroke:url(#regGrad); stroke-width:11; stroke-linecap:round; }
 .regcard .donut__label{ font-size:14px; color:var(--neutral-500); }
 .regcard .donut__pct{ font-size:26px; font-weight:800; color:var(--primary-bright); line-height:1.05; letter-spacing:-.02em; }
-.regcard__lead{ font-size:18px; color:var(--navy-deep); font-weight:600; line-height:1.5; }
+.regcard__lead{ font-size:16px; color:var(--navy-deep); font-weight:600; line-height:1.5; }
 .regcard__lead b{ color:var(--primary-bright); }
-.regcard__note{ font-size:15px; color:var(--neutral-500); margin-top:8px; line-height:1.55; }
+.regcard__note{ font-size:14px; color:var(--neutral-500); margin-top:8px; line-height:1.55; }
 .regcard__note b{ color:var(--primary-bright); font-weight:700; }
 /* 정상화 한 줄 */
 .normal-line{ text-align:center; margin-top:18px; font-size:18px; color:var(--neutral-500); font-weight:500; }
