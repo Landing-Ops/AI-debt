@@ -235,9 +235,11 @@
      가능 뷰 값 채우기
   ===================================================================== */
   function fillAccept(r) {
-    // 블록1 (섹션1: 탕감률 히어로) — 탕감률 86~90 매핑 + 예상 탕감액만
-    set('rate-big', rateBig(r.rate));
-    set('reduced',  won(r.reduced));
+    // 블록1 (섹션1: 탕감률 히어로) — 탕감률 86~90 매핑 + 예상 탕감액
+    var bigRate = rateBig(r.rate);                       // 마케팅 표시 탕감률(86~90)
+    set('rate-big', bigRate);
+    // 예상 탕감액 = 원금 × 표시 탕감률 (블록1 탕감률과 금액을 일치시킴)
+    set('reduced',  won(Math.round(r.principal * bigRate / 100)));
 
     // 블록3 (섹션2: 사회적 증거 + 정상화) — 전국 도넛 + 지역 도넛
     (function fillSocialProof() {
