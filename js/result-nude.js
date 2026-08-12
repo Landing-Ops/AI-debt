@@ -35,6 +35,18 @@
 
   var answers = loadAnswers();
 
+  /* 퍼널 추적용 sid·유입정보를 함께 실어 /calc로 보냄 —
+     worker logCalcResult가 answers._sid로 session_log에 결과(판정·블록1·블록5 탕감률) 기록.
+     없으면 결과도달·판정·탕감률이 전부 NULL로 남음(진단 단계 핑만 찍히고 결과는 미기록). */
+  try {
+    var _sid = sessionStorage.getItem('sid');
+    if (_sid) answers._sid = _sid;
+  } catch (e) {}
+  try {
+    var _tf = sessionStorage.getItem('traffic');
+    if (_tf) answers._traffic = JSON.parse(_tf);
+  } catch (e) {}
+
   /* ---------- 2) 가드: 답변 누락 시 진단으로 ---------- */
   // 재산(q_assets)은 '0'이 유효값이므로 null/빈문자만 누락으로 판정
   var missing = KEYS.some(function (k) {
