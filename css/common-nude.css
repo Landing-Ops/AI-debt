@@ -306,7 +306,7 @@ body.is-modal-open{ overflow:hidden; }
 .cta__row:last-child{ border-bottom:none; }
 .cta__row-k{ font-size:20px; color:var(--neutral-600); }
 .cta__row-v{ font-size:20px; color:var(--primary-strong); font-weight:700; }
-.cta__row-k-v--blue{ color:var(--primary-bright); }
+.cta__row-v--blue{ color:var(--primary-bright); }
 
 /* =====================================================================
    진단 화면 (diagnosis.html) — 시작 + Q1~Q7 + 로딩
@@ -487,11 +487,11 @@ body.is-modal-open{ overflow:hidden; }
 /* 탕감률 히어로 (블록1 · 섹션1 감정 폭발) — 탕감률 초대형 + 탕감액 pill */
 .rate-hero{ text-align:center; padding:14px 0 6px; }
 .rate-hero__eyebrow{ font-size:24px; color:rgba(255,255,255,.8); font-weight:500; }
-.rate-hero__num{ font-size:80px; font-weight:800; color:var(--mint); line-height:1; letter-spacing:-.04em; margin:2px 0; text-shadow:0 4px 24px rgba(159,225,203,.25); }
+.rate-hero__num{ font-size:64px; font-weight:800; color:var(--mint); line-height:1; letter-spacing:-.04em; margin:2px 0; text-shadow:0 4px 24px rgba(159,225,203,.25); }
 .rate-hero__unit{ font-size:44px; font-weight:700; }
 .rate-hero__caption{ font-size:20px; color:#fff; font-weight:600; margin-top:4px; }
 .rate-hero__amt{ display:inline-block; margin-top:16px; padding:9px 18px; background:rgba(255,255,255,.1); border-radius:var(--radius-pill); font-size:15px; color:rgba(255,255,255,.85); }
-.rate-hero__amt b{ color:var(--mint); font-weight:700; font-size:24px; }
+.rate-hero__amt b{ color:var(--mint); font-weight:700; font-size:20px; }
 
 /* ============ 블록3 · 사회적 증거 + 정상화 (전국+지역 도넛) ============ */
 .rz__block-sub{ font-size:14px; color:var(--neutral-500); margin-top:8px; line-height:1.55; }
