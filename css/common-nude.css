@@ -510,9 +510,9 @@ body.is-modal-open{ overflow:hidden; }
 .socard .donut__label{ font-size:12px; color:rgba(255,255,255,.7); }
 .socard .donut__pct{ font-size:29px; font-weight:800; color:var(--mint); line-height:1.05; letter-spacing:-.02em; }
 .socard__text{ flex:1; }
-.socard__lead{ font-size:18px; color:#fff; font-weight:600; line-height:1.5; }
+.socard__lead{ font-size:20px; color:#fff; font-weight:600; line-height:1.5; }
 .socard__lead b{ color:var(--mint); }
-.socard__note{ font-size:16px; color:rgba(255,255,255,.72); margin-top:8px; line-height:1.55; }
+.socard__note{ font-size:18px; color:rgba(255,255,255,.72); margin-top:8px; line-height:1.55; }
 .socard__note b{ color:#fff; font-weight:700; }
 /* 줌인 연결 */
 .zoomlink{ display:flex; justify-content:center; padding:10px 0 4px; }
@@ -523,7 +523,7 @@ body.is-modal-open{ overflow:hidden; }
 .regcard__deco{ position:absolute; bottom:-34px; right:-24px; width:120px; height:120px; border-radius:50%; background:radial-gradient(circle, rgba(11,91,211,.07), transparent 70%); }
 .vbar-wrap{ position:relative; display:flex; gap:14px; }
 .vbar{ width:4px; border-radius:99px; background:var(--grad-border); flex-shrink:0; }
-.vbar-title{ display:flex; align-items:center; gap:5px; font-size:18px; font-weight:800; color:var(--navy-deep); letter-spacing:-.01em; }
+.vbar-title{ display:flex; align-items:center; gap:5px; font-size:20px; font-weight:800; color:var(--navy-deep); letter-spacing:-.01em; }
 .vbar-title svg{ width:18px; height:18px; stroke:var(--primary-bright); fill:none; stroke-width:2; flex-shrink:0; }
 .vbar-title b{ color:var(--primary-bright); }
 .vbar-sub{ font-size:12px; color:var(--neutral-500); margin-top:2px; }
@@ -532,12 +532,12 @@ body.is-modal-open{ overflow:hidden; }
 .regcard .donut__fill{ fill:none; stroke:url(#regGrad); stroke-width:11; stroke-linecap:round; }
 .regcard .donut__label{ font-size:14px; color:var(--neutral-500); }
 .regcard .donut__pct{ font-size:26px; font-weight:800; color:var(--primary-bright); line-height:1.05; letter-spacing:-.02em; }
-.regcard__lead{ font-size:18px; color:var(--navy-deep); font-weight:600; line-height:1.5; }
+.regcard__lead{ font-size:20px; color:var(--navy-deep); font-weight:600; line-height:1.5; }
 .regcard__lead b{ color:var(--primary-bright); }
-.regcard__note{ font-size:16px; color:var(--neutral-500); margin-top:8px; line-height:1.55; }
+.regcard__note{ font-size:18px; color:var(--neutral-500); margin-top:8px; line-height:1.55; }
 .regcard__note b{ color:var(--primary-bright); font-weight:700; }
 /* 정상화 한 줄 */
-.normal-line{ text-align:center; margin-top:18px; font-size:16px; color:var(--neutral-500); font-weight:500; }
+.normal-line{ text-align:center; margin-top:18px; font-size:20px; color:var(--neutral-500); font-weight:500; }
 
 /* ---------- 블록2 · 계산 근거 (그라데이션 테두리 카드) ---------- */
 .calc__row{ display:flex; justify-content:space-between; align-items:baseline; }
