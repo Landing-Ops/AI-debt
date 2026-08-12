@@ -242,7 +242,7 @@
 
       // 도넛 채우기 — stroke-dashoffset = 둘레 × (1 - 비율)
       fillDonut('donut-nat', natTop / 100, 320.4);
-      fillDonut('donut-reg', regTop / 100, 282.7);
+      fillDonut('donut-reg', regTop / 100, 320.4);
     })();
 
     // 아래는 블록5 등에서 쓰임. 블록1엔 더 이상 없음(있어도 무해).
