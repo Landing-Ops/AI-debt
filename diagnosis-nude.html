@@ -118,7 +118,7 @@
       </div>
       <div class="dx__body px-[22px]">
         <h2 class="dx__q mt-4">거주 지역을 선택해주세요</h2>
-        <p class="dx__hint">지역별 추가 주거비 기준으로 변제금이 줄어들 가능성을 확인해요</p>
+        <!-- <p class="dx__hint">지역별 추가 주거비 기준으로 변제금이 줄어들 가능성을 확인해요</p> -->
         <div class="opt-grid grid-cols-3 gap-[9px] mt-5" data-dx="options">
           <button class="opt py-3.5 px-1.5" data-value="서울">서울</button>
           <button class="opt py-3.5 px-1.5" data-value="부산">부산</button>
@@ -188,12 +188,12 @@
         </div>
         <p class="money-kor" data-dx="money-kor"></p>
 
-        <div class="notecard mt-[18px] p-[1.2px]">
+        <!-- <div class="notecard mt-[18px] p-[1.2px]">
           <div class="notecard__inner px-4 py-3.5">
             <p class="notecard__title">실수령액 기준으로 적어주세요</p>
             <p class="notecard__desc">세금이랑 보험료 떼고 통장에 진짜 들어오는 돈이요. 매달 다르면 최근 3개월 평균으로 적어주시면 돼요.</p>
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="dx__foot px-[22px] pb-[22px] pt-4">
         <button class="dx__next py-4" data-dx="next" disabled>다음으로</button>
@@ -206,15 +206,15 @@
         <button class="dx__iconbtn" data-dx="back" aria-label="뒤로"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
       </div>
       <div class="dx__body px-[22px]">
-        <h2 class="dx__q mt-4">지금 갖고 있는 재산,<br>총 빚보다 많은가요?</h2>
-        <p class="dx__hint">대략적인 느낌으로 골라주셔도 괜찮아요</p>
+        <h2 class="dx__q mt-4">지금 갖고 있는 재산,<br>빚보다 많은가요?</h2>
+        <p class="dx__hint">대략적인 골라주셔도 괜찮아요</p>
         <div class="flex flex-col gap-2.5 mt-[22px]" data-dx="options">
+          <button class="opt opt--wide py-[17px] px-4" data-value="more">빚보다 재산이<br>많아요</button>
           <button class="opt opt--wide py-[17px] px-4" data-value="less">빚보다 재산이<br>적어요</button>
           <button class="opt opt--wide py-[17px] px-4" data-value="unknown">잘 모르겠어요</button>
-          <button class="opt opt--wide py-[17px] px-4" data-value="more">빚보다 재산이<br>많아요</button>
         </div>
 
-        <div class="notecard mt-[18px] p-[1.2px]">
+        <!-- <div class="notecard mt-[18px] p-[1.2px]">
           <div class="notecard__inner px-4 py-3.5">
             <p class="notecard__title">이런 게 재산에 들어가요</p>
             <ul class="notecard__list">
@@ -224,7 +224,7 @@
               <li class="notecard__li"><span class="notecard__dot"></span>주식·차·부동산 같은 처분 가능한 자산</li>
             </ul>
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="dx__foot px-[22px] pb-[22px] pt-4">
         <button class="dx__next py-4" data-dx="next" disabled>다음으로</button>
@@ -280,7 +280,7 @@
       </div>
       <div class="dx__body px-[22px]">
         <h2 class="dx__q mt-4">지금 갚아야 할 빚,<br>총 채무를 입력해주세요</h2>
-        <p class="dx__hint"><span style="color: red;">*원금만 더해서 적어주세요</span></p>
+        <!-- <p class="dx__hint"><span style="color: red;">*원금만 더해서 적어주세요</span></p> -->
         <div class="moneyfield mt-[22px] px-4 py-3.5">
           <input class="moneyfield__input" data-dx="money" type="text" inputmode="numeric"
                  placeholder="0" aria-label="총 채무액">
@@ -307,7 +307,7 @@
         <div class="loading__steps">
           <div class="loading__step loading__step--done">
             <i class="ti ti-circle-check-filled" aria-hidden="true"></i>
-            <span>2026년 생계비 기준 확인</span>
+            <span>2026년 최신 데이터 확인</span>
           </div>
           <div class="loading__step loading__step--doing">
             <span class="loading__spinner"></span>
