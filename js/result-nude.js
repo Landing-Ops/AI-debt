@@ -333,10 +333,11 @@
      현재 탕감률 → 목표치(upliftTarget) 를 게이지로. 상한 90 트랙 스케일 */
   function fillUplift(r, sfx) {
     var UP_MAX = window.JindanCalc.UPLIFT_CAP || 95;   // 트랙 상한(서버 upliftCap=95와 동일)
-    var curPct = Math.min(pctNum(r.rate), UP_MAX);     // 현재 탕감률(%)
+    var curPct = rateBig(r.rate);                      // 현재 탕감률(%) — 블록1 히어로와 동일값(86~90)
     var target = r.upliftTarget;                       // 목표 탕감률(%)
+    if (target <= curPct) target = Math.min(curPct + 5, UP_MAX);  // 목표가 현재보다 낮으면 최소 격차 확보
 
-    set('rate-plain' + sfx, pct(r.rate));
+    set('rate-plain' + sfx, curPct + '%');
     set('uplift-max' + sfx, '최대 ' + Math.round(target) + '%');
 
     var curW = Math.round(curPct / UP_MAX * 100);
@@ -351,10 +352,10 @@
      이미 탕감률이 최상위(92~97%). '더 올림'이 아니라 '상위 몇 %'로 표현.
      게이지는 현재 탕감률을 100 트랙에 그대로(거의 꽉 참), dot도 같은 위치 */
   function fillUpliftMinimum(r) {
-    var cur = pctNum(r.rate);                          // 현재 탕감률(%)
-    var top = topPercentile(cur);                      // 상위 N%
+    var cur = rateBig(r.rate);                         // 현재 탕감률(%) — 블록1 히어로와 동일값
+    var top = topPercentile(pctNum(r.rate));           // 상위 N%(실제 탕감률 기준)
 
-    set('rate-plain-min', pct(r.rate));
+    set('rate-plain-min', cur + '%');
     set('uplift-rank-min', '상위 ' + top + '%');
 
     // 게이지: 현재 탕감률을 100 트랙에 표시(이미 꽉 참). dot도 현재 위치
@@ -368,10 +369,10 @@
   /* 블록5 — 소득/재산 factor인데 탕감률 90% 초과 (상위 N%형, income 카피) ----
      로직은 minimum과 동일(상위 N%), 키만 -inchigh. HTML 카피가 소득기준용. */
   function fillUpliftIncomeHigh(r) {
-    var cur = pctNum(r.rate);
-    var top = topPercentile(cur);
+    var cur = rateBig(r.rate);                         // 현재 탕감률(%) — 블록1 히어로와 동일값
+    var top = topPercentile(pctNum(r.rate));
 
-    set('rate-plain-inchigh', pct(r.rate));
+    set('rate-plain-inchigh', cur + '%');
     set('uplift-rank-inchigh', '상위 ' + top + '%');
 
     var w = Math.min(Math.round(cur), 100);
