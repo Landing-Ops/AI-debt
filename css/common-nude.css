@@ -431,7 +431,7 @@ body.is-modal-open{ overflow:hidden; }
 .rz__block{ }
 .rz__block--white{ background:#fff; }
 .rz__block--tint{ background:var(--section-alt-bg); background-image:var(--grad-tint); }
-.rz__block-title{ margin:0; font-size:24px; font-weight:500; color:var(--primary-strong); line-height:1.4; }
+.rz__block-title{ margin:0; font-size:22px; font-weight:700; color:var(--primary-strong); line-height:1.4; }
 .rz__source{ margin:14px 4px 0; font-size:13px; line-height:1.6; color:var(--neutral-400); }
 
 /* ---------- 블록1 · 판정 + 금액 (네이비 그라데이션 카드) ---------- */
@@ -510,9 +510,9 @@ body.is-modal-open{ overflow:hidden; }
 .socard .donut__label{ font-size:12px; color:rgba(255,255,255,.7); }
 .socard .donut__pct{ font-size:29px; font-weight:800; color:var(--mint); line-height:1.05; letter-spacing:-.02em; }
 .socard__text{ flex:1; }
-.socard__lead{ font-size:15px; color:#fff; font-weight:600; line-height:1.5; }
+.socard__lead{ font-size:18px; color:#fff; font-weight:600; line-height:1.5; }
 .socard__lead b{ color:var(--mint); }
-.socard__note{ font-size:13px; color:rgba(255,255,255,.72); margin-top:8px; line-height:1.55; }
+.socard__note{ font-size:15px; color:rgba(255,255,255,.72); margin-top:8px; line-height:1.55; }
 .socard__note b{ color:#fff; font-weight:700; }
 /* 줌인 연결 */
 .zoomlink{ display:flex; justify-content:center; padding:10px 0 4px; }
@@ -530,14 +530,14 @@ body.is-modal-open{ overflow:hidden; }
 .regcard .donut{ width:104px; height:104px; }
 .regcard .donut__track{ fill:none; stroke:#e5ebf3; stroke-width:11; }
 .regcard .donut__fill{ fill:none; stroke:url(#regGrad); stroke-width:11; stroke-linecap:round; }
-.regcard .donut__label{ font-size:11px; color:var(--neutral-500); }
+.regcard .donut__label{ font-size:14px; color:var(--neutral-500); }
 .regcard .donut__pct{ font-size:26px; font-weight:800; color:var(--primary-bright); line-height:1.05; letter-spacing:-.02em; }
-.regcard__lead{ font-size:15px; color:var(--navy-deep); font-weight:600; line-height:1.5; }
+.regcard__lead{ font-size:18px; color:var(--navy-deep); font-weight:600; line-height:1.5; }
 .regcard__lead b{ color:var(--primary-bright); }
-.regcard__note{ font-size:13px; color:var(--neutral-500); margin-top:8px; line-height:1.55; }
+.regcard__note{ font-size:15px; color:var(--neutral-500); margin-top:8px; line-height:1.55; }
 .regcard__note b{ color:var(--primary-bright); font-weight:700; }
 /* 정상화 한 줄 */
-.normal-line{ text-align:center; margin-top:18px; font-size:14px; color:var(--neutral-500); font-weight:500; }
+.normal-line{ text-align:center; margin-top:18px; font-size:18px; color:var(--neutral-500); font-weight:500; }
 
 /* ---------- 블록2 · 계산 근거 (그라데이션 테두리 카드) ---------- */
 .calc__row{ display:flex; justify-content:space-between; align-items:baseline; }
