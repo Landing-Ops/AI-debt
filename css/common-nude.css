@@ -507,7 +507,7 @@ body.is-modal-open{ overflow:hidden; }
 .socard .donut{ width:118px; height:118px; }
 .socard .donut__track{ fill:none; stroke:rgba(255,255,255,.14); stroke-width:11; }
 .socard .donut__fill{ fill:none; stroke:var(--mint); stroke-width:11; stroke-linecap:round; }
-.socard .donut__label{ font-size:12px; color:rgba(255,255,255,.7); }
+.socard .donut__label{ font-size:14px; color:rgba(255,255,255,.7); }
 .socard .donut__pct{ font-size:29px; font-weight:800; color:var(--mint); line-height:1.05; letter-spacing:-.02em; }
 .socard__text{ flex:1; }
 .socard__lead{ font-size:20px; color:#fff; font-weight:600; line-height:1.5; }
@@ -527,11 +527,11 @@ body.is-modal-open{ overflow:hidden; }
 .vbar-title svg{ width:18px; height:18px; stroke:var(--primary-bright); fill:none; stroke-width:2; flex-shrink:0; }
 .vbar-title b{ color:var(--primary-bright); }
 .vbar-sub{ font-size:12px; color:var(--neutral-500); margin-top:2px; }
-.regcard .donut{ width:104px; height:104px; }
+.regcard .donut{ width:118px; height:118px; }
 .regcard .donut__track{ fill:none; stroke:#e5ebf3; stroke-width:11; }
 .regcard .donut__fill{ fill:none; stroke:url(#regGrad); stroke-width:11; stroke-linecap:round; }
 .regcard .donut__label{ font-size:14px; color:var(--neutral-500); }
-.regcard .donut__pct{ font-size:26px; font-weight:800; color:var(--primary-bright); line-height:1.05; letter-spacing:-.02em; }
+.regcard .donut__pct{ font-size:29px; font-weight:800; color:var(--primary-bright); line-height:1.05; letter-spacing:-.02em; }
 .regcard__lead{ font-size:20px; color:var(--navy-deep); font-weight:600; line-height:1.5; }
 .regcard__lead b{ color:var(--primary-bright); }
 .regcard__note{ font-size:18px; color:var(--neutral-500); margin-top:8px; line-height:1.55; }
