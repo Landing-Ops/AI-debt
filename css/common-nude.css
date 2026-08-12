@@ -523,8 +523,8 @@ body.is-modal-open{ overflow:hidden; }
 .regcard__deco{ position:absolute; bottom:-34px; right:-24px; width:120px; height:120px; border-radius:50%; background:radial-gradient(circle, rgba(11,91,211,.07), transparent 70%); }
 .vbar-wrap{ position:relative; display:flex; gap:14px; }
 .vbar{ width:4px; border-radius:99px; background:var(--grad-border); flex-shrink:0; }
-.vbar-title{ display:flex; align-items:center; gap:5px; font-size:16px; font-weight:800; color:var(--navy-deep); letter-spacing:-.01em; }
-.vbar-title svg{ width:16px; height:16px; stroke:var(--primary-bright); fill:none; stroke-width:2; flex-shrink:0; }
+.vbar-title{ display:flex; align-items:center; gap:5px; font-size:18px; font-weight:800; color:var(--navy-deep); letter-spacing:-.01em; }
+.vbar-title svg{ width:18px; height:18px; stroke:var(--primary-bright); fill:none; stroke-width:2; flex-shrink:0; }
 .vbar-title b{ color:var(--primary-bright); }
 .vbar-sub{ font-size:12px; color:var(--neutral-500); margin-top:2px; }
 .regcard .donut{ width:104px; height:104px; }
