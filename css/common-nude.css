@@ -304,9 +304,9 @@ body.is-modal-open{ overflow:hidden; }
 .cta__overlay-head{ margin:0; text-align:center; font-size:18px; color:var(--neutral-600); font-weight:500; }
 .cta__row{ display:flex; justify-content:space-between; align-items:baseline; border-bottom:0.5px solid var(--neutral-100); }
 .cta__row:last-child{ border-bottom:none; }
-.cta__row-k{ font-size:14px; color:var(--neutral-600); }
-.cta__row-v{ font-size:20px; color:var(--primary-strong); font-weight:700; }
-.cta__row-v--blue{ color:var(--primary-bright); }
+.cta__row-k{ font-size:24px; color:var(--neutral-600); }
+.cta__row-v{ font-size:24px; color:var(--primary-strong); font-weight:700; }
+.cta__row-k-v--blue{ color:var(--primary-bright); }
 
 /* =====================================================================
    진단 화면 (diagnosis.html) — 시작 + Q1~Q7 + 로딩
