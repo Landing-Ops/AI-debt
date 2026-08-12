@@ -537,7 +537,7 @@ body.is-modal-open{ overflow:hidden; }
 .regcard__note{ font-size:18px; color:var(--neutral-500); margin-top:8px; line-height:1.55; }
 .regcard__note b{ color:var(--primary-bright); font-weight:700; }
 /* 정상화 한 줄 */
-.normal-line{ text-align:center; margin-top:18px; font-size:20px; color:var(--neutral-500); font-weight:500; }
+.normal-line{ text-align:center; margin-top:34px; font-size:20px; color:var(--neutral-500); font-weight:500; }
 
 /* ---------- 블록2 · 계산 근거 (그라데이션 테두리 카드) ---------- */
 .calc__row{ display:flex; justify-content:space-between; align-items:baseline; }
