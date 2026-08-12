@@ -671,6 +671,9 @@ body.is-modal-open{ overflow:hidden; }
 .lead__checks b{ font-weight:700; color:var(--primary-bright); }
 
 .lead__promise{ text-align:center; font-size:15px; line-height:1.6; color:var(--text-secondary,#5f6b7a); margin:16px 0 0; }
+.lead__promise-sub{ display:inline-block; margin-top:8px; font-size:13px; color:var(--primary-bright); font-weight:500; }
+.lead__checks-title{ margin:20px 2px 10px; font-size:15px; font-weight:700; color:var(--navy-deep); }
+.lead__checks-title b{ color:var(--primary-bright); }
 .lead__promise b{ color:var(--primary-strong); font-weight:700; }
 
 /* 폼 */
