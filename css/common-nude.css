@@ -510,9 +510,9 @@ body.is-modal-open{ overflow:hidden; }
 .socard .donut__label{ font-size:12px; color:rgba(255,255,255,.7); }
 .socard .donut__pct{ font-size:29px; font-weight:800; color:var(--mint); line-height:1.05; letter-spacing:-.02em; }
 .socard__text{ flex:1; }
-.socard__lead{ font-size:18px; color:#fff; font-weight:600; line-height:1.5; }
+.socard__lead{ font-size:16px; color:#fff; font-weight:600; line-height:1.5; }
 .socard__lead b{ color:var(--mint); }
-.socard__note{ font-size:15px; color:rgba(255,255,255,.72); margin-top:8px; line-height:1.55; }
+.socard__note{ font-size:14px; color:rgba(255,255,255,.72); margin-top:8px; line-height:1.55; }
 .socard__note b{ color:#fff; font-weight:700; }
 /* 줌인 연결 */
 .zoomlink{ display:flex; justify-content:center; padding:10px 0 4px; }
