@@ -516,7 +516,7 @@ body.is-modal-open{ overflow:hidden; }
 .socard__note b{ color:#fff; font-weight:700; }
 /* 줌인 연결 */
 .zoomlink{ display:flex; justify-content:center; padding:10px 0 4px; }
-.zoomlink i{ font-size:74px; color:var(--primary-bright); font-style:normal; line-height:1; opacity:.85; }
+.zoomlink i{ font-size:54px; color:var(--primary-bright); font-style:normal; line-height:1; opacity:.85; }
 /* 지역 도넛 (그라데이션 테두리 + 세로바) */
 .regcard{ position:relative; margin-top:12px; border-radius:18px; background:var(--grad-border); padding:1.5px; box-shadow:0 8px 22px rgba(11,91,211,.1); }
 .regcard__inner{ position:relative; border-radius:16.5px; background:#fff; padding:22px 20px; overflow:hidden; }
