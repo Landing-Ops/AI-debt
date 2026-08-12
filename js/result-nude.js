@@ -22,33 +22,6 @@
   var KEYS = ['q_region','q_marital','q_dependents','q_income',
               'q_assets','q_secured','q_immunity','q_debt'];
 
-  /* ---------- 탕감률 분포 (블록3 히스토그램 + 블록5 상위% 공용) ----------
-     서울회생법원 통계 기반 근사. 실제 정확값 확보 시 이 배열만 교체 */
-  var DIST_LABELS = ['0-20%','20-40%','40-60%','60-70%','70-80%','80-90%','90%+'];
-  var DIST_DATA   = [4, 9, 22, 31, 24, 9, 1];
-  var DIST_TOTAL  = DIST_DATA.reduce(function (s, v) { return s + v; }, 0);
-
-  // 탕감률(%) → 구간 인덱스
-  function bucketIndex(p) {
-    if (p < 20) return 0;
-    if (p < 40) return 1;
-    if (p < 60) return 2;
-    if (p < 70) return 3;
-    if (p < 80) return 4;
-    if (p < 90) return 5;
-    return 6;
-  }
-
-  // 탕감률(%) → 상위 N% (내 구간 이상이 전체에서 차지하는 비율)
-  // 예: 90%+ 구간(빈도 1)이면 상위 1/100 → "상위 1%"
-  function topPercentile(p) {
-    var idx = bucketIndex(p);
-    var atOrAbove = 0;
-    for (var i = idx; i < DIST_DATA.length; i++) atOrAbove += DIST_DATA[i];
-    var pct = Math.round(atOrAbove / DIST_TOTAL * 100);
-    return Math.max(1, pct);   // 최소 1% (0% 표기 방지)
-  }
-
   /* ---------- 1) 답변 로드 ---------- */
   function loadAnswers() {
     var a = {};
@@ -313,21 +286,20 @@
     }
 
     if (r.factor === 'minimum') {
-      // 최저변제 — 항상 상위 N%
+      // 최저변제 — 이미 높은 탕감률, 게이지형 통일 (카피만 minimum 버전)
       hideAll();
       minVer.style.display = 'block';
-      fillUpliftMinimum(r);
+      fillUplift(r, '-min');
     } else if (ratePct > 90) {
-      // 소득인데 탕감률 90% 초과 — 소득기준 상위 N% 박스
+      // 소득인데 탕감률 90% 초과 — 게이지형 통일 (카피만 income-high 버전)
       hideAll();
       if (incHiVer) incHiVer.style.display = 'block';
-      fillUpliftIncomeHigh(r);
+      fillUplift(r, '-inchigh');
     } else {
-      // 90% 이하 — 상승형 (소득기준)
+      // 90% 이하 — 소득기준 상승형
       hideAll();
       incomeVer.style.display = 'block';
       fillUplift(r, '');
-      // 소득 기본 CTA 라인 유지(HTML 기본값)
     }
   }
 
@@ -348,40 +320,6 @@
     var dot = viewAccept.querySelector('[data-fill="uplift-dot' + sfx + '"]');
     if (bar) bar.style.width = curW + '%';
     if (dot) dot.style.left  = tgtW + '%';
-  }
-
-  /* 블록5 게이지·수치 채우기 — 최저변제액 버전 (상위 N%형) ----------------
-     이미 탕감률이 최상위(92~97%). '더 올림'이 아니라 '상위 몇 %'로 표현.
-     게이지는 현재 탕감률을 100 트랙에 그대로(거의 꽉 참), dot도 같은 위치 */
-  function fillUpliftMinimum(r) {
-    var cur = rateBig(r.rate);                         // 현재 탕감률(%) — 블록1 히어로와 동일값
-    var top = topPercentile(pctNum(r.rate));           // 상위 N%(실제 탕감률 기준)
-
-    set('rate-plain-min', cur + '%');
-    set('uplift-rank-min', '상위 ' + top + '%');
-
-    // 게이지: 현재 탕감률을 100 트랙에 표시(이미 꽉 참). dot도 현재 위치
-    var w = Math.min(Math.round(cur), 100);
-    var bar = viewAccept.querySelector('[data-fill="uplift-bar-min"]');
-    var dot = viewAccept.querySelector('[data-fill="uplift-dot-min"]');
-    if (bar) bar.style.width = w + '%';
-    if (dot) dot.style.left  = w + '%';
-  }
-
-  /* 블록5 — 소득/재산 factor인데 탕감률 90% 초과 (상위 N%형, income 카피) ----
-     로직은 minimum과 동일(상위 N%), 키만 -inchigh. HTML 카피가 소득기준용. */
-  function fillUpliftIncomeHigh(r) {
-    var cur = rateBig(r.rate);                         // 현재 탕감률(%) — 블록1 히어로와 동일값
-    var top = topPercentile(pctNum(r.rate));
-
-    set('rate-plain-inchigh', cur + '%');
-    set('uplift-rank-inchigh', '상위 ' + top + '%');
-
-    var w = Math.min(Math.round(cur), 100);
-    var bar = viewAccept.querySelector('[data-fill="uplift-bar-inchigh"]');
-    var dot = viewAccept.querySelector('[data-fill="uplift-dot-inchigh"]');
-    if (bar) bar.style.width = w + '%';
-    if (dot) dot.style.left  = w + '%';
   }
 
   function pctNum(rate) { return Math.round(rate * 1000) / 10; }
