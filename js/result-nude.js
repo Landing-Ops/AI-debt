@@ -137,7 +137,6 @@
 
     fillAccept(r);
     bindAccept();
-    renderChart(r);
     hideResultLoading();
   }
 
@@ -295,20 +294,18 @@
       setLong('months',  false);
     }
 
-    // 블록5 (탕감률 상승 여지) — 버전 분기
+    // 블록5 (탕감률 상승 여지) — 버전 분기 (factor: income/minimum, asset은 재산제거로 삭제)
     // 탕감률 90% 초과면 '더 올림'이 무의미(상한 95 근처/초과) → 상위 N% 표기.
     //   - factor=income & 90%초과 → 소득기준 상위N% 박스(income-high)
     //   - factor=minimum → 최저변제 상위N% 박스(minimum)
-    // 90% 이하면 상승형(income/asset).
+    // 90% 이하면 상승형(income).
     var ratePct = pctNum(r.rate);
     var incomeVer = viewAccept.querySelector('[data-rz="uplift-income"]');
-    var assetVer  = viewAccept.querySelector('[data-rz="uplift-asset"]');
     var minVer    = viewAccept.querySelector('[data-rz="uplift-minimum"]');
     var incHiVer  = viewAccept.querySelector('[data-rz="uplift-income-high"]');
 
     function hideAll() {
       incomeVer.style.display = 'none';
-      assetVer.style.display  = 'none';
       minVer.style.display    = 'none';
       if (incHiVer) incHiVer.style.display = 'none';
     }
@@ -318,21 +315,17 @@
       hideAll();
       minVer.style.display = 'block';
       fillUpliftMinimum(r);
-      set('uplift-cta-line', '상담을 통해 정확한 탕감률을 확인할 수 있어요');
     } else if (ratePct > 90) {
-      // 소득/재산인데 탕감률 90% 초과 — 소득기준 상위 N% 박스
+      // 소득인데 탕감률 90% 초과 — 소득기준 상위 N% 박스
       hideAll();
       if (incHiVer) incHiVer.style.display = 'block';
       fillUpliftIncomeHigh(r);
-      set('uplift-cta-line', '상담을 통해 정확한 탕감률을 확인할 수 있어요');
     } else {
-      // 90% 이하 — 상승형
+      // 90% 이하 — 상승형 (소득기준)
       hideAll();
-      incomeVer.style.display = (r.factor === 'income') ? 'block' : 'none';
-      assetVer.style.display  = (r.factor === 'asset')  ? 'block' : 'none';
-      var sfx = (r.factor === 'asset') ? '-asset' : '';
-      fillUplift(r, sfx);
-      // 소득/재산은 기본 CTA 라인 유지(HTML 기본값)
+      incomeVer.style.display = 'block';
+      fillUplift(r, '');
+      // 소득 기본 CTA 라인 유지(HTML 기본값)
     }
   }
 
@@ -389,55 +382,6 @@
   }
 
   function pctNum(rate) { return Math.round(rate * 1000) / 10; }
-
-  /* =====================================================================
-     히스토그램 (블록3) — 내 탕감률이 속한 구간 강조
-  ===================================================================== */
-  function renderChart(r) {
-    var canvas = viewAccept.querySelector('[data-rz="chart"]');
-    if (!canvas || typeof Chart === 'undefined') return;
-
-    var labels = DIST_LABELS;
-    var data   = DIST_DATA;
-
-    // 내 탕감률(%) → 구간 인덱스
-    var p = r.rate * 100;
-    var myIndex = bucketIndex(p);
-
-    var bg = labels.map(function (l, i) {
-      return i === myIndex ? '#0b5bd3' : '#dbe9fb';
-    });
-
-    var myLabel = '내 위치 ' + Math.round(p) + '%';
-
-    new Chart(canvas, {
-      type: 'bar',
-      data: { labels: labels, datasets: [{ data: data, backgroundColor: bg, borderRadius: 4, barPercentage: 0.75 }] },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        layout: { padding: { top: 18 } },
-        plugins: { legend: { display: false }, tooltip: { enabled: false } },
-        scales: {
-          x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#9aa7b6' } },
-          y: { display: false }
-        }
-      },
-      plugins: [{
-        id: 'myMarker',
-        afterDraw: function (chart) {
-          var bar = chart.getDatasetMeta(0).data[myIndex];
-          if (!bar) return;
-          var c = chart.ctx;
-          c.save();
-          c.font = '600 10px sans-serif';
-          c.fillStyle = '#0b5bd3';
-          c.textAlign = 'center';
-          c.fillText(myLabel, bar.x, bar.y - 8);
-          c.restore();
-        }
-      }]
-    });
-  }
 
   /* =====================================================================
      버튼 바인딩
