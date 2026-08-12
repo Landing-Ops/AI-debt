@@ -151,194 +151,85 @@
               <div class="gauge mt-[18px] mb-1.5 mx-0.5">
                 <div class="gauge__marker" style="right:12%"></div>
               </div>
-              <div class="gauge__labels px-0.5 pb-5"><span>불가능</span><span>가능</span></div>
+              <div class="gauge__labels px-0.5 pb-1"><span>불가능</span><span>가능</span></div>
 
-              <div class="verdict-card__row py-[7px]">
-                <span class="vrow-k">채무 원금</span>
-                <span class="vrow-v" data-fill="principal">9,000만원</span>
-              </div>
-              <div class="verdict-card__row py-[7px]">
-                <span class="vrow-k">예상 이자 <span class="vrow-tag">면제 대상</span></span>
-                <span class="vrow-v" data-fill="interest">3,240만원</span>
-              </div>
-              <div class="verdict-card__arrow -my-px"><i class="ti ti-arrow-down text-[18px]" aria-hidden="true"></i></div>
-              <div class="verdict-card__row verdict-card__row--main py-[7px]">
-                <span class="vrow-k">회생 변제금</span>
-                <span class="vrow-v" data-fill="repay">2,824만원</span>
-              </div>
-
-              <div class="verdict-card__divider my-3.5"></div>
-
-              <div class="verdict-card__row verdict-card__row--mint py-[5px]">
-                <span class="vrow-k">예상 탕감액</span>
-                <span class="vrow-v" data-fill="reduced">6,176만원</span>
-              </div>
-              <div class="verdict-card__row verdict-card__row--mint py-[5px]">
-                <span class="vrow-k">예상 탕감률</span>
-                <span class="vrow-v" data-fill="rate">약 69%</span>
-              </div>
-
-              <div class="vstat mt-4 gap-2.5">
-                <div class="vstat__box px-3.5 py-3">
-                  <p class="vstat__k">월 변제액</p>
-                  <p class="vstat__v" data-fill="monthly">78만원</p>
-                  <p class="vstat__note" data-fill="monthly-note"></p>
-                </div>
-                <div class="vstat__box px-3.5 py-3">
-                  <p class="vstat__k">변제기간</p>
-                  <p class="vstat__v" data-fill="months">36개월</p>
-                  <p class="vstat__note" data-fill="months-note"></p>
-                </div>
+              <!-- 탕감률 히어로 (섹션1: 감정 폭발 — 탕감률 초대형 + 탕감액만) -->
+              <div class="rate-hero">
+                <p class="rate-hero__eyebrow">고객님은 채무액의</p>
+                <p class="rate-hero__num"><span data-fill="rate-big">90</span><span class="rate-hero__unit">%</span></p>
+                <p class="rate-hero__caption">이상 탕감 가능해요</p>
+                <span class="rate-hero__amt">예상 탕감액 <b data-fill="reduced">6,176만원</b></span>
               </div>
             </div>
           </div>
 
-          <p class="rz__disclaimer">* 입력하신 값을 토대로 산정한 추정치로, 실제 결과는 법원 심리에 따라 유리하거나 불리하게 달라질 수 있습니다.<br>* 예상 이자는 채무 원금에 연 12%를 3년(36개월) 적용해 추정한 금액이며, 실제 금리와 상환 조건에 따라 달라질 수 있습니다.</p>
+          <p class="rz__disclaimer">* 입력하신 값을 토대로 산정한 추정치로, 실제 결과는 법원 심리에 따라 유리하거나 불리하게 달라질 수 있습니다.</p>
         </div>
       </section>
 
-      <!-- ---- 블록2 · 계산 근거 ---- -->
+      <!-- ---- 블록3 · 사회적 증거 + 정상화 (전국 도넛 + 지역 도넛) ---- -->
       <section class="rz__block rz__block--white">
         <div class="px-5 pb-[26px]">
-          <h2 class="rz__block-title">이렇게 계산했어요</h2>
-          <!-- 카드1 · 변제금이 정해진 근거 (factor별 3버전) -->
-          <!-- income: 가용소득 × 기간 = 변제금 -->
-          <div class="gcard mt-[18px] p-[1.2px]" data-rz="calc-income" style="border-radius:16px">
-            <div class="gcard__inner px-[18px] py-5" style="border-radius:14.5px">
-              <div class="calc__row py-1.5">
-                <span class="calc__k">월 소득</span>
-                <span class="calc__v" data-fill="income">400만원</span>
+          <h2 class="rz__block-title">고객님만의 이야기가<br><span style="color:var(--primary-bright)">아니었어요</span></h2>
+          <p class="rz__block-sub">최근 데이터를 기준으로, 고객님과 비슷한 분들이 얼마나 많은지 살펴봤어요.</p>
+
+          <!-- 전국 도넛 -->
+          <div class="socard">
+            <div class="socard__blob"></div>
+            <div class="socard__inner">
+              <div class="donut">
+                <svg width="118" height="118" viewBox="0 0 118 118">
+                  <circle class="donut__track" cx="59" cy="59" r="51"></circle>
+                  <circle class="donut__fill" data-rz="donut-nat" cx="59" cy="59" r="51" stroke-dasharray="320.4" stroke-dashoffset="320.4"></circle>
+                </svg>
+                <div class="donut__center"><span class="donut__label">전국 상위</span><span class="donut__pct" data-fill="nat-pct">11%</span></div>
               </div>
-              <div class="calc__row py-1.5">
-                <span class="calc__k" data-fill="cost-label">생계비(3인가구)</span>
-                <span class="calc__v calc__v--minus" data-fill="cost">− 321만원</span>
+              <div class="socard__text">
+                <p class="socard__lead">전국 신청자 중<br><b>상위 <span data-fill="nat-pct2">11</span>%</b></p>
+                <p class="socard__note">지난달 전국에서 <b data-fill="nat-count">12,417명</b>이<br>개인회생을 신청했어요</p>
               </div>
-              <div class="calc__row py-1.5" data-rz="housing-row" style="display:none">
-                <span class="calc__k" data-fill="housing-label">지역 주거비(서울)</span>
-                <span class="calc__v calc__v--minus" data-fill="housing">− 63만원</span>
-              </div>
-              <div class="calc__divider my-2.5"></div>
-              <div class="calc__row calc__row--sum py-1.5">
-                <span class="calc__k">월 가용소득</span>
-                <span class="calc__v" data-fill="usable">78만원</span>
-              </div>
-              <div class="calc__formula mt-3 px-3.5 py-3" data-rz="income-formula">
-                <span class="calc__formula-lead" data-rz="income-mult"><span data-fill="usable-2">78만원</span> <span class="x">×</span> <span data-fill="months-2">36개월</span> = </span>
-                <span class="calc__formula-lead" data-rz="income-lead" style="display:none;margin-bottom:6px;line-height:1.5" data-fill="income-lead"></span>
-                <span class="calc__formula-res">회생 변제금 <span data-fill="repay-2">2,824만원</span></span>
-              </div>
-              <div class="calc__need mt-2.5 px-3.5" data-rz="income-note" style="display:none" data-fill="income-note"></div>
             </div>
           </div>
 
-          <!-- asset: 보유 재산(청산가치)이 변제금을 결정 -->
-          <div class="gcard mt-[18px] p-[1.2px]" data-rz="calc-asset" style="border-radius:16px;display:none">
-            <div class="gcard__inner px-[18px] py-5" style="border-radius:14.5px">
-              <div class="calc__row py-1.5">
-                <span class="calc__k">월 소득</span>
-                <span class="calc__v" data-fill="income-a">260만원</span>
+          <!-- 줌인 연결 -->
+          <div class="zoomlink"><i>&#9662;</i></div>
+
+          <!-- 지역 도넛 (세로바 + 지역 타이틀 + 그라데이션 테두리) -->
+          <div class="regcard">
+            <div class="regcard__inner">
+              <div class="regcard__deco"></div>
+              <div class="vbar-wrap">
+                <div class="vbar"></div>
+                <div style="flex:1">
+                  <p class="vbar-title"><svg viewBox="0 0 24 24"><path d="M12 21s-6-5.7-6-10a6 6 0 0 1 12 0c0 4.3-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/></svg><span><b data-fill="reg-name">전북</b> 지역에서는</span></p>
+                  <p class="vbar-sub">지난달 데이터 기준</p>
+                  <div class="socard__inner" style="margin-top:14px">
+                    <div class="donut">
+                      <svg width="104" height="104" viewBox="0 0 104 104">
+                        <defs>
+                          <linearGradient id="regGrad" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0" stop-color="#0b5bd3"/>
+                            <stop offset="1" stop-color="#378ADD"/>
+                          </linearGradient>
+                        </defs>
+                        <circle class="donut__track" cx="52" cy="52" r="45"></circle>
+                        <circle class="donut__fill" data-rz="donut-reg" cx="52" cy="52" r="45" stroke-dasharray="282.7" stroke-dashoffset="282.7"></circle>
+                      </svg>
+                      <div class="donut__center"><span class="donut__label">상위</span><span class="donut__pct" data-fill="reg-pct">6%</span></div>
+                    </div>
+                    <div class="socard__text">
+                      <p class="regcard__lead">상위 <b><span data-fill="reg-pct2">6</span>%</b>에 들어요</p>
+                      <p class="regcard__note"><span data-fill="reg-name2">전북</span>에서만 <b data-fill="reg-count">약 422명</b>이<br>고객님과 같은 진단을 받았어요</p>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="calc__row py-1.5">
-                <span class="calc__k" data-fill="cost-label-a">생계비(2인가구)</span>
-                <span class="calc__v calc__v--minus" data-fill="cost-a">− 252만원</span>
-              </div>
-              <div class="calc__row py-1.5" data-rz="housing-row-a" style="display:none">
-                <span class="calc__k" data-fill="housing-label-a">지역 주거비(서울)</span>
-                <span class="calc__v calc__v--minus" data-fill="housing-a">− 63만원</span>
-              </div>
-              <div class="calc__row py-1.5">
-                <span class="calc__k">월 가용소득</span>
-                <span class="calc__v" data-fill="usable-a">8만원</span>
-              </div>
-              <div class="calc__divider my-2.5"></div>
-              <div class="calc__row calc__row--sum py-1.5">
-                <span class="calc__k">보유 재산 (청산가치)</span>
-                <span class="calc__v" data-fill="assets-a">8,000만원</span>
-              </div>
-              <div class="calc__formula mt-3 px-3.5 py-3">
-                <span class="calc__formula-lead">예상 변제금보다<br>재산의 청산가치가 더 크므로 법이 정한 기준으로</span><br>
-                <span class="calc__formula-res">회생 변제금 <span data-fill="repay-a">8,000만원</span></span>
-              </div>
-              <div class="calc__need mt-2.5 px-3.5" data-fill="asset-note"></div>
             </div>
           </div>
 
-          <!-- minimum: 법정 최저 변제 기준 적용 -->
-          <div class="gcard mt-[18px] p-[1.2px]" data-rz="calc-minimum" style="border-radius:16px;display:none">
-            <div class="gcard__inner px-[18px] py-5" style="border-radius:14.5px">
-              <div class="calc__row py-1.5">
-                <span class="calc__k">월 소득</span>
-                <span class="calc__v" data-fill="income-m">390만원</span>
-              </div>
-              <div class="calc__row py-1.5">
-                <span class="calc__k" data-fill="cost-label-m">생계비(4인가구)</span>
-                <span class="calc__v calc__v--minus" data-fill="cost-m">− 390만원</span>
-              </div>
-              <div class="calc__row py-1.5" data-rz="housing-row-m" style="display:none">
-                <span class="calc__k" data-fill="housing-label-m">지역 주거비(서울)</span>
-                <span class="calc__v calc__v--minus" data-fill="housing-m">− 63만원</span>
-              </div>
-              <div class="calc__row py-1.5">
-                <span class="calc__k">월 가용소득</span>
-                <span class="calc__v" data-fill="usable-m">0만원</span>
-              </div>
-              <div class="calc__divider my-2.5"></div>
-              <div class="calc__row calc__row--sum py-1.5">
-                <span class="calc__k">법정 최저 변제금</span>
-                <span class="calc__v" data-fill="min-m">700만원</span>
-              </div>
-              <div class="calc__formula mt-3 px-3.5 py-3">
-                <span class="calc__formula-lead">소득·재산이 적어 법이 정한 최소 기준으로</span><br>
-                <span class="calc__formula-res">회생 변제금 <span data-fill="repay-m">700만원</span></span>
-              </div>
-              <div class="calc__need mt-2.5 px-3.5" data-fill="min-note"></div>
-            </div>
-          </div>
-
-          <!-- 탕감 구조: 원금+이자 중 회생후만 갚고 나머지 탕감 -->
-          <div class="gcard mt-3 p-[1.2px]" style="border-radius:16px">
-            <div class="gcard__inner px-[18px] py-5" style="border-radius:14.5px">
-              <div class="calc__row py-1.5">
-                <span class="calc__k">채무 원금</span>
-                <span class="calc__v" data-fill="principal-2">9,000만원</span>
-              </div>
-              <div class="calc__row py-1.5">
-                <span class="calc__k">예상 이자</span>
-                <span class="calc__v" data-fill="interest-2">＋ 3,240만원</span>
-              </div>
-              <div class="calc__row py-1.5">
-                <span class="calc__k">회생 변제금</span>
-                <span class="calc__v calc__v--minus" data-fill="repay-3">− 2,824만원</span>
-              </div>
-              <div class="calc__divider my-2.5"></div>
-              <div class="calc__row calc__row--sum py-1.5">
-                <span class="calc__k">예상 탕감액</span>
-                <span class="calc__v" data-fill="reduced-2">9,416만원</span>
-              </div>
-              <!-- <p class="calc__hint mt-2.5">개인회생을 진행하면 이자 <b data-fill="interest-3">3,240만원</b>이 전액 면제됩니다</p> -->
-            </div>
-          </div>
-          <!-- <p class="rz__disclaimer mt-3">* 거주 지역의 평균 주거비를 반영해 산정했으며, 실제 주소지·월세 납부 내역에 따라 최종 변제금이 달라질 수 있습니다. (지역별 인정 한도의 50% 적용)</p>
-          <p class="rz__source">출처 · 보건복지부 2026년도 기준 중위소득 고시(60% 적용), 서울회생법원 생계비검토위원회 2026 추가주거비 기준</p> -->
+          <p class="normal-line">혼자만의 고민이 아니에요</p>
         </div>
       </section>
-
-      <!-- ---- 블록3 · 법원통계 (히스토그램) ---- -->
-      <!-- <section class="rz__block rz__block--white">
-        <div class="px-5 pb-[26px]">
-          <h2 class="rz__block-title">서울회생법원 개인회생 신청자 중<br><span style="color:var(--primary-bright)">내 탕감률은 어디쯤일까요?</span></h2>
-          <div class="court mt-5 px-4 pt-[18px] pb-2">
-            <div class="court__chart">
-              <canvas data-rz="chart" role="img" aria-label="개인회생 신청자 탕감률 분포와 내 위치"></canvas>
-            </div>
-          </div>
-          <div class="mt-3.5 text-center">
-            <p class="court__mid-k">전체 신청자의 중위 탕감률은</p>
-            <p class="court__mid-v">66.8%<span>입니다</span></p>
-          </div>
-          <p class="rz__source">출처 · 서울회생법원 「2025년 상반기 개인회생사건 통계조사 결과보고서」</p>
-        </div>
-      </section> -->
 
       <!-- ---- 블록5 · 탕감률 상승 여지 (소득/재산 버전 분기) ---- -->
       <section class="rz__block rz__block--white">

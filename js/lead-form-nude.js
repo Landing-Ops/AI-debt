@@ -56,12 +56,20 @@
       if (a[k] != null && a[k] !== '') return a[k];
       try { return sessionStorage.getItem(k) || ''; } catch (e) { return ''; }
     }
+    // 재산 3택(less/more/unknown)을 사람이 읽는 라벨로 변환.
+    // worker leads 저장·partner-form 제휴사 전송에 그대로 쓰임(광고주가 읽음).
+    var ASSET_LABEL = {
+      less:    '빚보다 재산이 적음',
+      more:    '빚보다 재산이 많음',
+      unknown: '잘 모름'
+    };
+    var assetRaw = pick('q_assets');
     return {
       region:     pick('q_region'),
       marital:    pick('q_marital'),
       dependents: pick('q_dependents'),
       income:     pick('q_income'),
-      assets:     pick('q_assets'),
+      assets:     ASSET_LABEL[assetRaw] || assetRaw,
       secured:    pick('q_secured'),
       immunity:   pick('q_immunity'),
       debt:       pick('q_debt')

@@ -201,18 +201,18 @@
     </section>
 
     <!-- ============ Q4 · 보유재산 ============ -->
-    <section class="dx__screen" data-step="q_assets" data-answer-type="money" data-allow-zero>
+    <section class="dx__screen" data-step="q_assets" data-answer-type="select">
       <div class="dx__top px-[18px] pt-4 pb-1">
         <button class="dx__iconbtn" data-dx="back" aria-label="뒤로"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
       </div>
       <div class="dx__body px-[22px]">
-        <h2 class="dx__q mt-4">지금 갖고 있는 재산은<br>대략 얼마쯤 될까요?</h2>
-        <div class="moneyfield mt-[22px] px-4 py-3.5">
-          <input class="moneyfield__input" data-dx="money" type="text" inputmode="numeric"
-                 placeholder="0" aria-label="보유 재산">
-          <span class="moneyfield__unit">원</span>
+        <h2 class="dx__q mt-4">지금 갖고 있는 재산,<br>총 빚보다 많은가요?</h2>
+        <p class="dx__hint">대략적인 느낌으로 골라주셔도 괜찮아요</p>
+        <div class="flex flex-col gap-2.5 mt-[22px]" data-dx="options">
+          <button class="opt opt--wide py-[17px] px-4" data-value="less">빚보다 재산이<br>적어요</button>
+          <button class="opt opt--wide py-[17px] px-4" data-value="unknown">잘 모르겠어요</button>
+          <button class="opt opt--wide py-[17px] px-4" data-value="more">빚보다 재산이<br>많아요</button>
         </div>
-        <p class="money-kor" data-dx="money-kor"></p>
 
         <div class="notecard mt-[18px] p-[1.2px]">
           <div class="notecard__inner px-4 py-3.5">

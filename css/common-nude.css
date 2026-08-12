@@ -484,6 +484,61 @@ body.is-modal-open{ overflow:hidden; }
 
 .rz__disclaimer{ margin:14px 4px 0; font-size:13px; line-height:1.6; color:var(--neutral-400); }
 
+/* 탕감률 히어로 (블록1 · 섹션1 감정 폭발) — 탕감률 초대형 + 탕감액 pill */
+.rate-hero{ text-align:center; padding:14px 0 6px; }
+.rate-hero__eyebrow{ font-size:16px; color:rgba(255,255,255,.8); font-weight:500; }
+.rate-hero__num{ font-size:96px; font-weight:800; color:var(--mint); line-height:1; letter-spacing:-.04em; margin:2px 0; text-shadow:0 4px 24px rgba(159,225,203,.25); }
+.rate-hero__unit{ font-size:44px; font-weight:700; }
+.rate-hero__caption{ font-size:17px; color:#fff; font-weight:600; margin-top:4px; }
+.rate-hero__amt{ display:inline-block; margin-top:16px; padding:9px 18px; background:rgba(255,255,255,.1); border-radius:var(--radius-pill); font-size:15px; color:rgba(255,255,255,.85); }
+.rate-hero__amt b{ color:var(--mint); font-weight:700; font-size:17px; }
+
+/* ============ 블록3 · 사회적 증거 + 정상화 (전국+지역 도넛) ============ */
+.rz__block-sub{ font-size:14px; color:var(--neutral-500); margin-top:8px; line-height:1.55; }
+/* 공통 도넛 */
+.donut{ position:relative; flex-shrink:0; }
+.donut svg{ transform:rotate(-90deg); }
+.donut__center{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.donut__fill{ transition:stroke-dashoffset 1s ease; }
+/* 전국 도넛 (네이비 카드) */
+.socard{ margin-top:20px; padding:24px 20px; border-radius:18px; background:var(--navy); background-image:var(--grad-navy); position:relative; overflow:hidden; }
+.socard__blob{ position:absolute; top:-40px; right:-30px; width:140px; height:140px; border-radius:50%; background:rgba(133,183,235,.13); }
+.socard__inner{ position:relative; display:flex; align-items:center; gap:20px; }
+.socard .donut{ width:118px; height:118px; }
+.socard .donut__track{ fill:none; stroke:rgba(255,255,255,.14); stroke-width:11; }
+.socard .donut__fill{ fill:none; stroke:var(--mint); stroke-width:11; stroke-linecap:round; }
+.socard .donut__label{ font-size:12px; color:rgba(255,255,255,.7); }
+.socard .donut__pct{ font-size:29px; font-weight:800; color:var(--mint); line-height:1.05; letter-spacing:-.02em; }
+.socard__text{ flex:1; }
+.socard__lead{ font-size:15px; color:#fff; font-weight:600; line-height:1.5; }
+.socard__lead b{ color:var(--mint); }
+.socard__note{ font-size:13px; color:rgba(255,255,255,.72); margin-top:8px; line-height:1.55; }
+.socard__note b{ color:#fff; font-weight:700; }
+/* 줌인 연결 */
+.zoomlink{ display:flex; justify-content:center; padding:10px 0 4px; }
+.zoomlink i{ font-size:34px; color:var(--primary-bright); font-style:normal; line-height:1; opacity:.85; }
+/* 지역 도넛 (그라데이션 테두리 + 세로바) */
+.regcard{ position:relative; margin-top:12px; border-radius:18px; background:var(--grad-border); padding:1.5px; box-shadow:0 8px 22px rgba(11,91,211,.1); }
+.regcard__inner{ position:relative; border-radius:16.5px; background:#fff; padding:22px 20px; overflow:hidden; }
+.regcard__deco{ position:absolute; bottom:-34px; right:-24px; width:120px; height:120px; border-radius:50%; background:radial-gradient(circle, rgba(11,91,211,.07), transparent 70%); }
+.vbar-wrap{ position:relative; display:flex; gap:14px; }
+.vbar{ width:4px; border-radius:99px; background:var(--grad-border); flex-shrink:0; }
+.vbar-title{ display:flex; align-items:center; gap:5px; font-size:16px; font-weight:800; color:var(--navy-deep); letter-spacing:-.01em; }
+.vbar-title svg{ width:16px; height:16px; stroke:var(--primary-bright); fill:none; stroke-width:2; flex-shrink:0; }
+.vbar-title b{ color:var(--primary-bright); }
+.vbar-sub{ font-size:12px; color:var(--neutral-500); margin-top:2px; }
+.regcard .donut{ width:104px; height:104px; }
+.regcard .donut__track{ fill:none; stroke:#e5ebf3; stroke-width:11; }
+.regcard .donut__fill{ fill:none; stroke:url(#regGrad); stroke-width:11; stroke-linecap:round; }
+.regcard .donut__label{ font-size:11px; color:var(--neutral-500); }
+.regcard .donut__pct{ font-size:26px; font-weight:800; color:var(--primary-bright); line-height:1.05; letter-spacing:-.02em; }
+.regcard__lead{ font-size:15px; color:var(--navy-deep); font-weight:600; line-height:1.5; }
+.regcard__lead b{ color:var(--primary-bright); }
+.regcard__note{ font-size:13px; color:var(--neutral-500); margin-top:8px; line-height:1.55; }
+.regcard__note b{ color:var(--primary-bright); font-weight:700; }
+/* 정상화 한 줄 */
+.normal-line{ text-align:center; margin-top:18px; font-size:14px; color:var(--neutral-500); font-weight:500; }
+
 /* ---------- 블록2 · 계산 근거 (그라데이션 테두리 카드) ---------- */
 .calc__row{ display:flex; justify-content:space-between; align-items:baseline; }
 .calc__k{ font-size:16px; color:var(--neutral-600); }

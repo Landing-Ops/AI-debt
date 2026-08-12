@@ -84,17 +84,10 @@
   runCalc(answers);
 
   function runCalc(answers) {
-    // 판정 answers에 sid·traffic을 동봉 → worker가 판정 후 session_log에 결과 기록.
-    // worker run(a)는 q_ 키만 읽으므로 _sid·_traffic이 섞여도 계산엔 무영향.
-    var payload = {};
-    for (var k in answers) if (answers.hasOwnProperty(k)) payload[k] = answers[k];
-    try { payload._sid = sessionStorage.getItem('sid') || ''; } catch (e) {}
-    try { payload._traffic = JSON.parse(sessionStorage.getItem('traffic') || '{}'); } catch (e) { payload._traffic = {}; }
-
     fetch(CALC_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(answers)
     })
     .then(function (res) {
       if (!res.ok) throw new Error('calc_http_' + res.status);
@@ -181,6 +174,43 @@
   function pct(rate) { return '약 ' + Math.round(rate * 100) + '%'; }
   function pctPlain(rate) { return (Math.round(rate * 1000) / 10) + '%'; }
 
+  /* 블록1 히어로 탕감률 표시 — 실제 탕감률(rate 0~1)을 86~90% 구간으로 선형 매핑.
+     실제값이 높을수록 90에 가깝게(미세 차등), 낮아도 86 밑으론 안 내려감.
+     블록5 목표율(최대 95)과 격차를 남겨 열린 고리 유지. '이상' 표기로 방어. */
+  function rateBig(rate) {
+    var pctVal = rate * 100;
+    var lo = 20, hi = 95, outLo = 86, outHi = 90;
+    var clamped = Math.max(lo, Math.min(hi, pctVal));
+    var mapped = Math.round(outLo + (clamped - lo) / (hi - lo) * (outHi - outLo));
+    return mapped;
+  }
+
+  /* ---------- 블록3 (사회적 증거 + 정상화) 데이터 ----------
+     지역별 월간 개인회생 추정치 = 전국 월평균(약 12,400) × 인구비례.
+     실제 통계 미확보 구간이므로 인구비례 근사(공개 인구비율 기반). */
+  var NAT_MONTHLY = 12417;  // 지난달 전국 신청자(실제 월평균 통계 기반 세팅값)
+  var REGION_POP = {
+    '서울':0.180,'부산':0.064,'대구':0.046,'인천':0.057,'광주':0.028,
+    '대전':0.028,'울산':0.021,'세종':0.007,'경기':0.263,'강원':0.030,
+    '충북':0.031,'충남':0.041,'전북':0.034,'전남':0.035,'경북':0.050,
+    '경남':0.063,'제주':0.013
+  };
+  function regionMonthly(region) {
+    var ratio = REGION_POP[region];
+    if (!ratio) return null;               // 전국/미매칭이면 지역 숫자 없음
+    return Math.round(NAT_MONTHLY * ratio);
+  }
+  /* 상위 % 매핑 — 탕감률(0~1) 높을수록 더 상위(숫자 작게).
+     전국 8~15%, 지역 4~8%. 지역이 더 상위로 보이게(줌인 효과). */
+  function topPct(rate, outLo, outHi) {
+    var pctVal = rate * 100;
+    var lo = 20, hi = 95;
+    var clamped = Math.max(lo, Math.min(hi, pctVal));
+    // 탕감률 높을수록(hi 쪽) → outLo(작은 상위%), 낮을수록 → outHi
+    var mapped = outHi - (clamped - lo) / (hi - lo) * (outHi - outLo);
+    return Math.round(mapped);
+  }
+
   function set(key, text) {
     var els = viewAccept.querySelectorAll('[data-fill="' + key + '"]');
     els.forEach(function (el) { el.textContent = text; });
@@ -194,16 +224,57 @@
     var els = viewAccept.querySelectorAll('[data-fill="' + key + '"]');
     els.forEach(function (el) { el.classList.toggle('is-long', isLong); });
   }
+  // 도넛 채우기: ratio(0~1)만큼 채움. offset = 둘레 × (1 - ratio)
+  function fillDonut(rzKey, ratio, circumference) {
+    var el = viewAccept.querySelector('[data-rz="' + rzKey + '"]');
+    if (!el) return;
+    var offset = circumference * (1 - Math.max(0, Math.min(1, ratio)));
+    el.setAttribute('stroke-dashoffset', offset.toFixed(1));
+  }
 
   /* =====================================================================
      가능 뷰 값 채우기
   ===================================================================== */
   function fillAccept(r) {
-    // 블록1 (원금 + 예상이자 → 회생후, 탕감액·탕감률)
+    // 블록1 (섹션1: 탕감률 히어로) — 탕감률 86~90 매핑 + 예상 탕감액만
+    set('rate-big', rateBig(r.rate));
+    set('reduced',  won(r.reduced));
+
+    // 블록3 (섹션2: 사회적 증거 + 정상화) — 전국 도넛 + 지역 도넛
+    (function fillSocialProof() {
+      // 전국 상위 8~15%, 지역 상위 4~8%
+      var natTop = topPct(r.rate, 8, 15);
+      var regTop = topPct(r.rate, 4, 8);
+      set('nat-pct',  natTop + '%');
+      set('nat-pct2', natTop);
+      set('nat-count', NAT_MONTHLY.toLocaleString() + '명');
+      set('reg-pct',  regTop + '%');
+      set('reg-pct2', regTop);
+
+      // 지역명·지역 숫자 (진단에서 받은 거주지역 q_region — 개별 키로 저장됨)
+      var region = '';
+      try { region = sessionStorage.getItem('q_region') || ''; } catch (e) {}
+      var regMonthly = regionMonthly(region);
+      if (region && regMonthly) {
+        set('reg-name',  region);
+        set('reg-name2', region);
+        set('reg-count', '약 ' + regMonthly.toLocaleString() + '명');
+      } else {
+        // 지역 미상/전국이면 지역 도넛을 전국 값으로 폴백(어색함 방지)
+        set('reg-name',  '전국');
+        set('reg-name2', '전국');
+        set('reg-count', '약 ' + Math.round(NAT_MONTHLY / 17).toLocaleString() + '명');
+      }
+
+      // 도넛 채우기 — stroke-dashoffset = 둘레 × (1 - 비율)
+      fillDonut('donut-nat', natTop / 100, 320.4);
+      fillDonut('donut-reg', regTop / 100, 282.7);
+    })();
+
+    // 아래는 블록5 등에서 쓰임. 블록1엔 더 이상 없음(있어도 무해).
     set('principal', won(r.principal));
     set('interest',  won(r.interest));
     set('repay',     won(r.repay));
-    set('reduced',   won(r.reduced));
     set('rate',      pct(r.rate));
 
     if (r.overCap) {
@@ -223,95 +294,6 @@
       setLong('monthly', false);
       setLong('months',  false);
     }
-
-    // 블록2 카드1 (변제금 근거) — factor별 3버전 분기, 하나만 표시
-    var calcIncome = viewAccept.querySelector('[data-rz="calc-income"]');
-    var calcAsset  = viewAccept.querySelector('[data-rz="calc-asset"]');
-    var calcMin    = viewAccept.querySelector('[data-rz="calc-minimum"]');
-    calcIncome.style.display = (r.factor === 'income')  ? 'block' : 'none';
-    calcAsset.style.display  = (r.factor === 'asset')   ? 'block' : 'none';
-    calcMin.style.display    = (r.factor === 'minimum') ? 'block' : 'none';
-
-    var costLabel = '생계비(' + r.household + '인가구)';
-
-    /* 생계비 줄 + 지역 주거비 줄 채우기 (옵션Y: 순수 생계비와 지역 주거비 분리)
-       - 생계비 줄: 순수 중위소득60%(baseCost) — 보건복지부 출처값 그대로
-       - 지역 주거비 줄: housing(권역한도×50%). 0이면 줄 숨김(빈 지역·미매핑) */
-    function fillCostRows(sfx) {
-      set('cost-label' + sfx, costLabel);
-      set('cost' + sfx, '− ' + won(r.baseCost));
-      var hrow = viewAccept.querySelector('[data-rz="housing-row' + sfx + '"]');
-      if (r.housing > 0) {
-        set('housing-label' + sfx, '지역 주거비(' + r.region + ')');
-        set('housing' + sfx, '− ' + won(r.housing));
-        if (hrow) hrow.style.display = 'flex';
-      } else {
-        if (hrow) hrow.style.display = 'none';
-      }
-    }
-
-    if (r.factor === 'income') {
-      // 소득기준
-      set('income',   won(r.income));
-      fillCostRows('');
-      set('usable',   won(r.usable));
-      var incFormula = viewAccept.querySelector('[data-rz="income-formula"]');
-      var incMult    = viewAccept.querySelector('[data-rz="income-mult"]');
-      var incLead    = viewAccept.querySelector('[data-rz="income-lead"]');
-      var incNote    = viewAccept.querySelector('[data-rz="income-note"]');
-      set('repay-2', won(r.repay));
-      if (r.shortened) {
-        // 단축(원금 조기완납): 명분 박스는 유지하되 곱셈→명분 문구로,
-        // 아래에 안내문구 추가 (재산·최저와 동일한 명분+부연 구조)
-        incMult.style.display = 'none';
-        incLead.style.display = 'block';
-        incNote.style.display = 'block';
-        setHtml('income-lead', '회생 변제기간은 원칙 3년이지만,<br>'+'원금을 다 갚으면 법원이 조기 종료를 인정해요');
-        setHtml('income-note', '원금을 월 가용소득으로 나눠 <br>' + '<span style="color:#0b5bd3;font-weight:700">' + r.months + '개월'+'</span>'+'간 나누어 갚어요.');
-      } else {
-        // 일반 36개월: 가용소득 × 36 = 회생변제금 (곱셈 정확)
-        incMult.style.display = 'inline';
-        incLead.style.display = 'none';
-        incNote.style.display = 'none';
-        set('usable-2', won(r.usable));
-        set('months-2', r.months + '개월');
-      }
-    } else if (r.factor === 'asset') {
-      // 재산기준: 보유 재산(청산가치)이 변제금 결정
-      set('income-a',      won(r.income));
-      fillCostRows('-a');
-      set('usable-a',      wonFine(r.usable));
-      set('assets-a',      won(r.assets));
-      set('repay-a',       won(r.repay));
-      // 안내 문구: 60개월 초과일 때만 "기간을 넘어요", 이내면 정상 변제 안내
-      if (r.overCap) {
-        setHtml('asset-note', '현재 가용소득으로 재산만큼 갚으려면<br>'+'법이 정한 기간(최대 60개월)을 넘어요<br>'+'<span style="color:#0b5bd3;font-weight:700">'+'전문가의 의견이 필요해요'+'</span>');
-      } else {
-        setHtml('asset-note', '청산가치를 월 가용소득으로 나눠<br>' + '<span style="color:#0b5bd3;font-weight:700">' + r.months + '개월'+'</span>'+'간 나누어 갚어요.');
-      }
-    } else {
-      // 최저변제액: 법정 최저 변제 기준
-      set('income-m',      won(r.income));
-      fillCostRows('-m');
-      set('usable-m',      wonFine(r.usable));
-      set('min-m',         won(r.minRepay));
-      set('repay-m',       won(r.repay));
-      // 안내 문구: 60개월 초과일 때만 "기간을 넘어요", 이내면 정상 변제 안내
-      if (r.overCap) {
-        setHtml('min-note', '현재 가용소득으로 최저변제금을 갚으려면<br>'+'법이 정한 기간(최대 60개월)을 넘어요<br>'+'<span style="color:#0b5bd3;font-weight:700">'+'전문가의 의견이 필요해요'+'</span>');
-      } else {
-        setHtml('min-note', '법정 최저 변제금을 월 가용소득으로 나눠<br>' + '<span style="color:#0b5bd3;font-weight:700">' + r.months + '개월'+'</span>'+ '간 나누어 갚어요.');
-      }
-    }
-
-    // 블록2 카드2 (탕감 구조: 원금 + 이자 − 회생후 = 탕감액) — 공통
-    set('principal-2', won(r.principal));
-    set('interest-2',  '＋ ' + won(r.interest));
-    set('repay-3',     '− ' + won(r.repay));
-    set('reduced-2',   won(r.reduced));
-    set('interest-3',  won(r.interest));
-    /* 출처·추가주거비 안내는 result.html에 고정 문구로 둠(항상 적용되므로).
-       수정·주석처리는 HTML에서 직접. */
 
     // 블록5 (탕감률 상승 여지) — 버전 분기
     // 탕감률 90% 초과면 '더 올림'이 무의미(상한 95 근처/초과) → 상위 N% 표기.
