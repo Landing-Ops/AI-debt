@@ -111,6 +111,15 @@
   //
   // ★현재 첫 전송 테스트: 문의사항 줄만 활성, 나머지는 // 로 꺼둠(배관 확인용).
   //   실제 운영 시 → 아래 줄들의 // 를 지워서 전체 전송.
+  // 재산(q_assets)은 diagnosis에서 영문 코드(more/less/unknown)로 저장됨
+  // (worker 계약 유지용). 제휴사엔 사람이 읽을 한글 라벨로 변환해 전달.
+  function assetLabel(v) {
+    if (v === 'more')    return '빚보다 재산이 많음';
+    if (v === 'less')    return '빚보다 재산이 적음';
+    if (v === 'unknown') return '잘 모름';
+    return v || '';
+  }
+
   function buildItem2() {
     var dg = getDiagnosis();
     var parts = [];
@@ -120,7 +129,7 @@
     if (dg.dependents)   parts.push('부양가족-' + dg.dependents);
     if (dg.income)       parts.push('월소득-' + dg.income);
     if (dg.debt)         parts.push('총채무-' + dg.debt);
-    if (dg.assets)       parts.push('재산-' + dg.assets);
+    if (dg.assets)       parts.push('재산대비 채무비중-' + assetLabel(dg.assets));
     if (dg.secured)      parts.push('담보·체납여부-' + dg.secured);
     if (dg.immunity)     parts.push('5년이내 면책이력-' + dg.immunity);
     if (val(calltimeEl)) parts.push('통화가능시간-' + val(calltimeEl));
