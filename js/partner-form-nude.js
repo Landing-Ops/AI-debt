@@ -129,7 +129,7 @@
     if (dg.dependents)   parts.push('부양가족-' + dg.dependents);
     if (dg.income)       parts.push('월소득-' + dg.income);
     if (dg.debt)         parts.push('총채무-' + dg.debt);
-    if (dg.assets)       parts.push('재산대비 채무비중-' + assetLabel(dg.assets));
+    if (dg.assets)       parts.push('재산&채무 비중-' + assetLabel(dg.assets));
     if (dg.secured)      parts.push('담보·체납여부-' + dg.secured);
     if (dg.immunity)     parts.push('5년이내 면책이력-' + dg.immunity);
     if (val(calltimeEl)) parts.push('통화가능시간-' + val(calltimeEl));
