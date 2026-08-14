@@ -1060,8 +1060,8 @@ body.lead-open{ overflow:hidden; }
 ===================================================================== */
 .fmb{ padding:24px 22px 8px; }
 .fmb__head{
-  margin:0 0 14px; font-size:17px; font-weight:700;
-  color:var(--primary-strong,#0e3b64);
+  margin:0 0 14px; font-size:20px; font-weight:700;
+  color:var(#0b5bd3);
 }
 .fmb__list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:12px; }
 .fmb__list li{
