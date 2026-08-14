@@ -85,8 +85,8 @@
   var MEDIA_MAP = {
     meta:'메타', facebook:'페이스북', insta:'인스타', instagram:'인스타',
     google:'구글', youtube:'유튜브', tiktok:'틱톡',
-    carrot:'당근', kakao:'카카오',kakaobiz:'카카오-비즈',kakaodipl:'카카오-디플', naversa:'네이버SA', naverda:'네이버DA',
-    direct:'테스트 유입'
+    carrot:'당근', kakao:'카카오', naversa:'네이버SA', naverda:'네이버DA',
+    direct:'직접유입'
   };
   var REGION_MAP = {
     all:'전국', seoul:'서울', busan:'부산', daegu:'대구', incheon:'인천',

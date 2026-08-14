@@ -24,8 +24,8 @@
   var screens = Array.prototype.slice.call(root.querySelectorAll('.dx__screen'));
   if (!screens.length) return;
 
-  var LOADING_MS = 2000;
-  var RESULT_URL = './result.html';
+  var LOADING_MS = 600;
+  var RESULT_URL = './form-page.html';
 
   /* ---------- 현재 화면 인덱스 ---------- */
   var current = 0;
