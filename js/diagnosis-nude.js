@@ -256,13 +256,51 @@
   });
 
   /* =====================================================================
-     로딩 화면 (terminal): 2초 연출 후 결과페이지 이동
+     로딩 화면 (terminal): /calc 판정 후 분기
+       - verdict='reject' (신청불가 5사유) → reject.html
+       - 그 외(가능)                        → form-page.html
+       - 네트워크·서버 오류                  → form-page.html (사용자 막지 않음)
+     로딩 연출(LOADING_MS)과 판정을 병렬로 두고, 둘 다 끝난 뒤 이동.
   ===================================================================== */
+  var CALC_URL   = 'https://ai-debt.softman007.workers.dev/calc';
+  var REJECT_URL = './reject.html';
+  var CALC_KEYS  = ['q_region','q_marital','q_dependents','q_income',
+                    'q_assets','q_secured','q_immunity','q_debt'];
+
+  function collectAnswers() {
+    var answers = {};
+    for (var i = 0; i < CALC_KEYS.length; i++) {
+      var v = load(CALC_KEYS[i]);
+      if (v !== null) answers[CALC_KEYS[i]] = v;
+    }
+    // session_log 연결용 sid·traffic 동봉 (result.js와 동일 계약)
+    var _sid = load('sid');
+    if (_sid) answers._sid = _sid;
+    try {
+      var _tf = load('traffic');
+      if (_tf) answers._traffic = JSON.parse(_tf);
+    } catch (e) {}
+    return answers;
+  }
+
   function runTerminal(screen) {
-    setTimeout(function () {
-      // 로딩은 히스토리에서 대체(replace) — 뒤로가기로 로딩에 다시 안 걸리게
-      window.location.replace(RESULT_URL);
-    }, LOADING_MS);
+    var minWait = new Promise(function (res) { setTimeout(res, LOADING_MS); });
+
+    var verdictP = fetch(CALC_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(collectAnswers())
+    })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (r) { return (r && r.verdict) ? r.verdict : null; })
+    .catch(function () { return null; });   // 오류 시 null → 가능 흐름으로
+
+    // 로딩 최소 노출 + 판정 완료, 둘 다 끝나면 이동
+    Promise.all([minWait, verdictP]).then(function (arr) {
+      var verdict = arr[1];
+      var target = (verdict === 'reject') ? REJECT_URL : RESULT_URL;
+      window.location.replace(target);
+    });
   }
 
   /* 초기 화면 버튼 상태 동기화 */
