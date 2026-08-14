@@ -129,6 +129,13 @@ module.exports = {
       reason: 'iframe form.submit() 미러링. 구조변형은 물론 문자열 인코딩도 전송 깨뜨릴 수 있어 최저강도 → minimal.'
     },
 
+    // ── form-page.html (입력폼 페이지) ──
+    {
+      src: 'js/form-page-nude.js',
+      preset: 'minimal',
+      reason: '오버레이 순차 연출(setTimeout·classList)+게이지 애니메이션+후기 렌더. DOM 조작·타이머라 문자열인코딩 위험 회피 위해 minimal(프로젝트 방침 통일). ★이 항목 없으면 js/form-page.js가 빌드 안 돼 오버레이 멈춤.'
+    },
+
     // ── thanks.html (땡큐) ──
     {
       src: 'js/thanks-uid-resolver-nude.js',
