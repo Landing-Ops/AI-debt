@@ -72,17 +72,26 @@
     renderReviews();
   }
 
-  /* ---------- 후기 8개 (정밀 진단으로 탕감율 올린 서사 — 임시 데이터) ----------
-     ★실제 후기 원본 확보 후 이 배열만 교체. delta=상승폭 뱃지. */
+  /* ---------- 후기 8개 (정밀 진단으로 탕감율 올린 서사) ----------
+     원본 사연 기반 재가공: 브랜드명 제거 + '기본 진단→정밀 진단 후 탕감율 상승' 구조.
+     job=직업칩, pay=매달 갚는 금액, before=기본 예상, after=정밀 후 실제. */
   var REVIEWS = [
-    { who: '김OO', meta: '40대 · 서울',   before: 72, after: 91, quote: '처음엔 70%대로 봤는데, 정밀 진단으로 항목을 더 반영하니 훨씬 높게 나왔어요.' },
-    { who: '이OO', meta: '30대 · 경기',   before: 68, after: 89, quote: '기본 계산만 보고 반신반의했는데, 자세히 볼수록 탕감율이 올라가더라고요.' },
-    { who: '박OO', meta: '50대 · 부산',   before: 80, after: 95, quote: '제 상황에 맞는 감면 제도까지 반영되니 생각보다 많이 줄었습니다.' },
-    { who: '정OO', meta: '40대 · 인천',   before: 65, after: 88, quote: '혼자 알아볼 땐 몰랐던 부분까지 반영돼서 결과가 달라졌어요.' },
-    { who: '최OO', meta: '30대 · 대구',   before: 74, after: 92, quote: '정확한 제 탕감율을 확인하고 나서야 마음이 놓였습니다.' },
-    { who: '강OO', meta: '40대 · 광주',   before: 70, after: 90, quote: '기본값이랑 실제 인정 탕감율 차이가 이렇게 큰 줄 몰랐어요.' },
-    { who: '윤OO', meta: '50대 · 대전',   before: 78, after: 94, quote: '남은 정밀 항목까지 반영하니 제 상황에 딱 맞는 결과가 나왔어요.' },
-    { who: '임OO', meta: '30대 · 울산',   before: 66, after: 87, quote: '자세히 들여다볼수록 탕감율이 올라간다는 게 사실이었네요.' }
+    { who: '김XX님', meta: '서울', job: '직장인', pay: '월 11만원', before: 78, after: 91,
+      quote: '허리디스크로 몇 달 일을 못 하며 빚이 4천3백만원까지 늘었어요. 기본 진단만 봤을 땐 이 정도인가 했는데, 정밀 항목까지 반영하니 탕감율이 훨씬 올라가 지금은 매달 11만원 정도만 갚고 있습니다.' },
+    { who: '박XX님', meta: '부산', job: '일용직', pay: '월 30만원', before: 80, after: 95,
+      quote: '막노동·대리운전을 병행하며 애 둘을 혼자 키우다 빚이 2억을 넘겼습니다. 처음 예상보다 정밀 진단에서 제 사정이 더 반영돼, 지금은 한 달 30만원 정도만 갚으며 살고 있어요.' },
+    { who: '이XX님', meta: '대구', job: '프리랜서', pay: '월 21만원', before: 74, after: 87,
+      quote: '남편 사고로 수입이 끊기며 빚이 5천8백만원까지 늘었어요. 기본 계산으론 반신반의했는데, 정밀하게 들여다보니 탕감율이 더 나와 매달 21만원씩 갚으며 다시 시작하고 있습니다.' },
+    { who: '정XX님', meta: '경기 수원', job: '자영업', pay: '월 34만원', before: 79, after: 92,
+      quote: '작은 김밥집이 도로공사로 빚이 1억 7천만원까지 늘었습니다. 재산을 다 뺏길까 겁났는데, 정밀 진단으로 제 상황에 맞는 감면까지 반영돼 살던 집을 지키며 한 달 34만원씩 갚고 있어요.' },
+    { who: '최XX님', meta: '인천', job: '사업자', pay: '월 54만원', before: 82, after: 95,
+      quote: '공장이 부도나며 빚이 4억 2천만원까지 늘고 아버지 병간호까지 겹쳤습니다. 혼자 계산할 땐 막막했는데, 정밀 항목까지 반영하니 원금 95%를 덜어 매달 54만원 정도만 갚습니다.' },
+    { who: '한XX님', meta: '광주', job: '주식·코인', pay: '월 164만원', before: 74, after: 86,
+      quote: '투자 실패로 빚이 4억 2천만원까지 불었어요. 기본 예상보다 정밀 진단에서 더 정확한 탕감율이 나와, 지금은 매월 164만원씩 갚으며 원금 86%를 덜었습니다.' },
+    { who: '윤XX님', meta: '제주', job: '기타', pay: '월 43만원', before: 70, after: 82,
+      quote: '빚이 8천4백만원까지 늘어 매일 조마조마했습니다. 정밀 진단으로 제 형편이 자세히 반영되며 예상보다 탕감율이 올라가, 지금은 43만원씩 갚으며 원금 82%를 덜었어요.' },
+    { who: '장XX님', meta: '경기 안산', job: '사기피해', pay: '월 63만원', before: 81, after: 94,
+      quote: '리딩방 사기로 빚이 3억 9천만원까지 늘어 억울했습니다. 정밀 진단에서 제게 맞는 항목까지 반영돼 원금 94%를 덜었고, 지금은 63만원 정도만 갚으며 제자리를 찾고 있어요.' }
   ];
 
   function renderReviews() {
@@ -92,11 +101,12 @@
       return '' +
         '<div class="fmrev">' +
           '<div class="fmrev__top">' +
-            '<span class="fmrev__who">' + r.who + ' <span>' + r.meta + '</span></span>' +
+            '<span class="fmrev__who"><span class="fmrev__job">' + r.job + '</span>' + r.who + ' · ' + r.meta + '</span>' +
             '<span class="fmrev__delta"><i class="ti ti-trending-up" aria-hidden="true"></i>' +
-              r.before + '% → ' + r.after + '%</span>' +
+              r.before + '% → <b>' + r.after + '%</b></span>' +
           '</div>' +
           '<p class="fmrev__quote">' + r.quote + '</p>' +
+          '<div class="fmrev__foot"><span class="fmrev__pay-l">현재 상환</span><span class="fmrev__pay-v">' + r.pay + '</span></div>' +
         '</div>';
     }).join('');
     list.innerHTML = html;
