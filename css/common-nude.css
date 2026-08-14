@@ -987,14 +987,14 @@ body.lead-open{ overflow:hidden; }
 }
 .fmg__badge .ti{ font-size:18px; }
 /* 반영 완료된 진단 항목 (체크 태그 — 채워진 느낌) */
-.fmg__tags{ display:flex; flex-wrap:wrap; gap:7px; margin-bottom:16px; }
+.fmg__tags{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; }
 .fmg__tag{
-  display:inline-flex; align-items:center; gap:4px;
-  padding:6px 11px; border-radius:var(--radius-pill,999px);
-  background:rgba(159,225,203,.16); border:1px solid rgba(159,225,203,.32);
-  font-size:13px; font-weight:600; color:#eafff7;
+  display:inline-flex; align-items:center; gap:5px;
+  padding:9px 14px; border-radius:var(--radius-pill,999px);
+  background:rgba(159,225,203,.18); border:1.5px solid rgba(159,225,203,.4);
+  font-size:14.5px; font-weight:700; color:#eafff7;
 }
-.fmg__tag .ti{ font-size:14px; color:var(--mint,#9FE1CB); }
+.fmg__tag .ti{ font-size:16px; color:var(--mint,#9FE1CB); }
 
 .fmg__bar{
   position:relative;
@@ -1014,23 +1014,30 @@ body.lead-open{ overflow:hidden; }
   font-size:15px; font-weight:700; color:#fff;
   text-shadow:0 1px 3px rgba(4,44,83,.4);
 }
-/* 잠긴 정밀 항목 (자물쇠 — 채움 욕구 자극) */
-.fmg__locked{ margin-top:16px; }
+/* 잠긴 정밀 항목 (자물쇠 — 채움 욕구 자극, 완료 항목보다 강조) */
+.fmg__locked{ margin-top:18px; }
 .fmg__locked-head{
-  display:flex; align-items:center; gap:6px;
-  margin:0 0 10px; font-size:14px; color:rgba(255,255,255,.82);
+  display:flex; align-items:center; gap:7px;
+  margin:0 0 12px; font-size:15.5px; font-weight:600; color:#fff;
 }
-.fmg__locked-head .ti{ font-size:16px; color:#ffd66b; }
-.fmg__locked-head b{ color:#ffd66b; font-weight:700; }
-.fmg__locked-tags{ display:flex; flex-wrap:wrap; gap:7px; }
+.fmg__locked-head .ti{ font-size:19px; color:#ffd66b; }
+.fmg__locked-head b{ color:#ffd66b; font-weight:800; }
+.fmg__locked-tags{ display:flex; flex-wrap:wrap; gap:9px; }
 .fmg__ltag{
-  display:inline-flex; align-items:center; gap:4px;
-  padding:6px 11px; border-radius:var(--radius-pill,999px);
-  background:rgba(255,255,255,.06);
-  border:1px dashed rgba(255,255,255,.32);
-  font-size:13px; font-weight:500; color:rgba(255,255,255,.62);
+  display:inline-flex; align-items:center; gap:6px;
+  padding:11px 16px; border-radius:var(--radius-md,10px);
+  background:rgba(255,214,107,.10);
+  border:1.5px dashed rgba(255,214,107,.55);
+  font-size:15px; font-weight:700; color:#ffe6a3;
+  animation:ltag-pulse 2s ease-in-out infinite;
 }
-.fmg__ltag .ti{ font-size:13px; color:rgba(255,214,107,.85); }
+.fmg__ltag .ti{ font-size:17px; color:#ffd66b; }
+.fmg__ltag:nth-child(2){ animation-delay:.3s; }
+.fmg__ltag:nth-child(3){ animation-delay:.6s; }
+@keyframes ltag-pulse{
+  0%,100%{ border-color:rgba(255,214,107,.35); background:rgba(255,214,107,.07); }
+  50%{ border-color:rgba(255,214,107,.75); background:rgba(255,214,107,.15); }
+}
 
 /* =====================================================================
    2) 명분
