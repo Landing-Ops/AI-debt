@@ -980,13 +980,21 @@ body.lead-open{ overflow:hidden; }
   background:var(--grad-navy,linear-gradient(150deg,#185FA5,#0e3b64 62%,#042C53));
   color:#fff;
 }
-.fmg__head{ margin-bottom:20px; }
+.fmg__head{ margin-bottom:14px; }
 .fmg__badge{
   display:inline-flex; align-items:center; gap:6px;
   font-size:15px; font-weight:600; color:var(--mint,#9FE1CB);
 }
 .fmg__badge .ti{ font-size:18px; }
-.fmg__sub{ margin:8px 0 0; font-size:15px; color:rgba(255,255,255,.72); font-weight:400; }
+/* 반영 완료된 진단 항목 (체크 태그 — 채워진 느낌) */
+.fmg__tags{ display:flex; flex-wrap:wrap; gap:7px; margin-bottom:16px; }
+.fmg__tag{
+  display:inline-flex; align-items:center; gap:4px;
+  padding:6px 11px; border-radius:var(--radius-pill,999px);
+  background:rgba(159,225,203,.16); border:1px solid rgba(159,225,203,.32);
+  font-size:13px; font-weight:600; color:#eafff7;
+}
+.fmg__tag .ti{ font-size:14px; color:var(--mint,#9FE1CB); }
 
 .fmg__bar{
   position:relative;
@@ -1006,13 +1014,23 @@ body.lead-open{ overflow:hidden; }
   font-size:15px; font-weight:700; color:#fff;
   text-shadow:0 1px 3px rgba(4,44,83,.4);
 }
-.fmg__remain{
+/* 잠긴 정밀 항목 (자물쇠 — 채움 욕구 자극) */
+.fmg__locked{ margin-top:16px; }
+.fmg__locked-head{
   display:flex; align-items:center; gap:6px;
-  margin:14px 0 0; font-size:14px;
-  color:rgba(255,255,255,.78);
+  margin:0 0 10px; font-size:14px; color:rgba(255,255,255,.82);
 }
-.fmg__remain .ti{ font-size:16px; color:var(--mint,#9FE1CB); }
-.fmg__remain b{ color:#fff; font-weight:700; }
+.fmg__locked-head .ti{ font-size:16px; color:#ffd66b; }
+.fmg__locked-head b{ color:#ffd66b; font-weight:700; }
+.fmg__locked-tags{ display:flex; flex-wrap:wrap; gap:7px; }
+.fmg__ltag{
+  display:inline-flex; align-items:center; gap:4px;
+  padding:6px 11px; border-radius:var(--radius-pill,999px);
+  background:rgba(255,255,255,.06);
+  border:1px dashed rgba(255,255,255,.32);
+  font-size:13px; font-weight:500; color:rgba(255,255,255,.62);
+}
+.fmg__ltag .ti{ font-size:13px; color:rgba(255,214,107,.85); }
 
 /* =====================================================================
    2) 명분

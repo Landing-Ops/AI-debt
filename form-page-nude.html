@@ -56,7 +56,17 @@
   <section class="fmg">
     <div class="fmg__head">
       <span class="fmg__badge"><i class="ti ti-circle-check-filled" aria-hidden="true"></i> AI 기본 분석 완료</span>
-      <p class="fmg__sub">소득 · 채무 · 지역 반영됨</p>
+    </div>
+
+    <!-- 반영 완료된 진단 항목 (체크 태그) -->
+    <div class="fmg__tags">
+      <span class="fmg__tag"><i class="ti ti-check" aria-hidden="true"></i>거주지역</span>
+      <span class="fmg__tag"><i class="ti ti-check" aria-hidden="true"></i>부양가족</span>
+      <span class="fmg__tag"><i class="ti ti-check" aria-hidden="true"></i>월소득</span>
+      <span class="fmg__tag"><i class="ti ti-check" aria-hidden="true"></i>총채무</span>
+      <span class="fmg__tag"><i class="ti ti-check" aria-hidden="true"></i>재산</span>
+      <span class="fmg__tag"><i class="ti ti-check" aria-hidden="true"></i>담보·체납</span>
+      <span class="fmg__tag"><i class="ti ti-check" aria-hidden="true"></i>면책이력</span>
     </div>
 
     <div class="fmg__bar">
@@ -64,10 +74,15 @@
       <span class="fmg__pct" data-fm="gauge-pct">0%</span>
     </div>
 
-    <p class="fmg__remain">
-      <i class="ti ti-lock" aria-hidden="true"></i>
-      남은 <b>30%</b> · 정밀 항목 미반영
-    </p>
+    <!-- 잠긴 정밀 항목 (자물쇠 — 채움 욕구 자극) -->
+    <div class="fmg__locked">
+      <p class="fmg__locked-head"><i class="ti ti-lock" aria-hidden="true"></i> 남은 정밀 항목 <b>미반영</b></p>
+      <div class="fmg__locked-tags">
+        <span class="fmg__ltag"><i class="ti ti-lock" aria-hidden="true"></i>생활 형편</span>
+        <span class="fmg__ltag"><i class="ti ti-lock" aria-hidden="true"></i>채무 사정</span>
+        <span class="fmg__ltag"><i class="ti ti-lock" aria-hidden="true"></i>추가 감면 제도</span>
+      </div>
+    </div>
   </section>
 
   <!-- ── 2) 명분 ── -->
