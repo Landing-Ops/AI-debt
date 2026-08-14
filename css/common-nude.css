@@ -1186,7 +1186,7 @@ body.lead-open{ overflow:hidden; }
    후기 슬라이드 (ts) — 정밀 진단 전→후 탕감율 상승. 브랜드 컬러 신규.
 ===================================================================== */
 .fmv{ padding:34px 0 10px; }
-.fmv__head{ padding:0 22px; }
+.fmv__head{ padding:0 22px; margin-bottom:22px; }
 .fmv__title{ margin:0; font-size:20px; font-weight:700; text-align:center; color:var(--neutral-900); letter-spacing:-.01em; }
 .fmv__title b{ color:var(--primary-bright,#0b5bd3); }
 .fmv__sub{ margin:8px 0 20px; font-size:13px; text-align:center; color:var(--neutral-400); }
