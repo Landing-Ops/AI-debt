@@ -1046,12 +1046,12 @@ body.lead-open{ overflow:hidden; }
 ===================================================================== */
 .fmr{ padding:34px 22px 6px; }
 .fmr__title{
-  margin:0; font-size:23px; line-height:1.5; font-weight:700;
+  margin:0; font-size:24px; line-height:1.5; font-weight:700;
   color:var(--neutral-900); letter-spacing:-.02em;
 }
 .fmr__title em{ font-style:normal; color:var(--primary-bright,#0b5bd3); }
 .fmr__body{
-  margin:18px 0 0; font-size:16px; line-height:1.75; font-weight:400;
+  margin:18px 0 0; font-size:18px; line-height:1.75; font-weight:400;
   color:var(--neutral-600);
 }
 
@@ -1061,7 +1061,7 @@ body.lead-open{ overflow:hidden; }
 .fmb{ padding:24px 22px 8px; }
 .fmb__head{
   margin:0 0 14px; font-size:20px; font-weight:700;
-  color:var(#0b5bd3);
+  color:#0b5bd3;
 }
 .fmb__list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:12px; }
 .fmb__list li{
@@ -1069,7 +1069,7 @@ body.lead-open{ overflow:hidden; }
   padding:14px 16px;
   background:var(--bg-tint,#eef4fc);
   border-radius:var(--radius-lg,13px);
-  font-size:15px; line-height:1.5; color:var(--neutral-700);
+  font-size:16px; line-height:1.5; color:var(--neutral-700);
 }
 .fmb__list .ti{
   flex-shrink:0; margin-top:1px;
@@ -1207,11 +1207,11 @@ body.lead-open{ overflow:hidden; }
   display:inline-flex; align-items:center; gap:6px;
   padding:7px 13px; border-radius:var(--radius-pill,999px);
   background:var(--grad-navy-135,linear-gradient(135deg,#185FA5,#0e3b64 60%,#042C53));
-  color:#fff; font-size:14px; font-weight:700;
+  color:#fff; font-size:18px; font-weight:700;
 }
 .ts__name em{ font-style:normal; font-weight:500; font-size:12.5px; color:var(--mint,#9FE1CB); }
 .ts__debt{ margin-top:5px; font-size:13px; color:var(--neutral-500); font-weight:500; }
-.ts__quote{ margin:12px 0 0; font-size:13.5px; line-height:1.72; color:var(--neutral-700); }
+.ts__quote{ margin:12px 0 0; font-size:15px; line-height:1.72; color:var(--neutral-700); }
 .ts__pay{
   display:flex; align-items:center; justify-content:space-between;
   margin-top:14px; padding-top:12px; border-top:1px solid var(--border-subtle,#eef1f6);
