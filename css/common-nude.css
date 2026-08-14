@@ -1222,24 +1222,22 @@ body.lead-open{ overflow:hidden; }
 /* 오른쪽: 사진 + 그래프 */
 .ts__chartWrap{ width:100%; }
 
-/* 그래프 상단 헤드 — 탕감율 + 상승폭(바로 옆) */
+/* 그래프 상단 헤드 — 정밀 진단 후 상승한 탕감율 +OO%p */
 .ts__chartHead{
   display:flex; align-items:center; gap:8px;
   margin-bottom:12px; padding:0 2px;
 }
-.ts__chartHead span{ font-size:12.5px; color:var(--neutral-500); font-weight:500; }
-.ts__chartHead b{ font-size:17px; color:var(--primary-strong,#0e3b64); font-weight:800; }
-.ts__chartHead em{
-  font-style:normal;
-  padding:4px 10px; border-radius:var(--radius-pill,999px);
-  background:rgba(29,158,117,.12); color:var(--green,#1D9E75);
-  font-size:13px; font-weight:800;
+.ts__chartHead span{ font-size:13.5px; color:var(--neutral-600); font-weight:600; }
+.ts__chartHead b{
+  font-size:16px; font-weight:800; color:var(--green,#1D9E75);
+  padding:4px 11px; border-radius:var(--radius-pill,999px);
+  background:rgba(29,158,117,.12);
 }
 
-/* 막대 그래프 (정밀 전 → 후) — 폭 크게, 값 한가운데 */
+/* 막대 그래프 (정밀 전 → 후) — 폭 크게, 값 막대 밑 */
 .ts__miniChart{
   display:flex; align-items:flex-end; justify-content:center; gap:34px;
-  height:172px; padding:20px 24px 0;
+  height:200px; padding:20px 24px 0;
   border-radius:var(--radius-lg,13px);
   background:linear-gradient(180deg,#f5f9ff,#eef4fc);
   border:1px solid var(--border-subtle,#eef1f6);
@@ -1256,17 +1254,15 @@ body.lead-open{ overflow:hidden; }
 }
 .ts__bar--before::before{ background:linear-gradient(180deg,#d3dbe6,#c2ccd9); }
 .ts__bar--after::before{ background:linear-gradient(180deg,var(--green,#1D9E75),var(--sky,#378ADD)); box-shadow:0 4px 14px rgba(55,138,221,.3); }
-/* 탕감율 값 — 막대 한가운데 */
-.ts__barval{
-  position:absolute; bottom:calc(var(--bar-h,0px) / 2);
-  transform:translateY(50%);
-  font-size:19px; font-weight:800; font-style:normal;
-  transition:bottom .9s cubic-bezier(.22,.61,.36,1);
-  z-index:1;
+/* 값·라벨 — 막대 밑 */
+.ts__barfoot{
+  display:flex; flex-direction:column; align-items:center; gap:2px;
+  margin-top:9px;
 }
-.ts__bar--before .ts__barval{ color:var(--neutral-600,#66768a); }
-.ts__bar--after .ts__barval{ color:#fff; text-shadow:0 1px 4px rgba(4,44,83,.35); }
-.ts__bar span{ margin-top:8px; font-size:12px; color:var(--neutral-500); font-weight:600; white-space:nowrap; }
+.ts__barfoot em{ font-style:normal; font-size:12px; color:var(--neutral-500); font-weight:600; white-space:nowrap; }
+.ts__barfoot b{ font-size:18px; font-weight:800; }
+.ts__bar--before .ts__barfoot b{ color:var(--neutral-600,#66768a); }
+.ts__bar--after .ts__barfoot b{ color:var(--green,#1D9E75); }
 
 /* 좌우 버튼 */
 .ts__nav{

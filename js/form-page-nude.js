@@ -109,10 +109,10 @@
               '<blockquote class="ts__quote">' + r.quote + '</blockquote>' +
             '</div>' +
             '<div class="ts__chartWrap">' +
-              '<div class="ts__chartHead"><span>정밀 진단 후</span><b>탕감율 ' + r.after + '%</b><em>+' + (r.after - r.before) + '%p</em></div>' +
+              '<div class="ts__chartHead"><span>정밀 진단 후 상승한 탕감율</span><b>+' + (r.after - r.before) + '%p</b></div>' +
               '<div class="ts__miniChart" aria-hidden="true" data-before="' + (r.before/100) + '" data-after="' + (r.after/100) + '">' +
-                '<div class="ts__bar ts__bar--before"><em class="ts__barval">' + r.before + '%</em><span>정밀 전</span></div>' +
-                '<div class="ts__bar ts__bar--after"><em class="ts__barval">' + r.after + '%</em><span>정밀 후</span></div>' +
+                '<div class="ts__bar ts__bar--before"><span class="ts__barfoot"><em>정밀 진단 전</em><b>' + r.before + '%</b></span></div>' +
+                '<div class="ts__bar ts__bar--after"><span class="ts__barfoot"><em>정밀 진단 후</em><b>' + r.after + '%</b></span></div>' +
               '</div>' +
             '</div>' +
           '</div>' +
@@ -148,11 +148,16 @@
       var useH = usableHeight(chart);
       var bR = parseFloat(chart.dataset.before)||0.8, aR = parseFloat(chart.dataset.after)||0.9;
       var bBar = chart.querySelector('.ts__bar--before'), aBar = chart.querySelector('.ts__bar--after');
+      // after(가장 높은 막대)를 차트의 CAP 비율로 고정 → 어떤 값이든 박스 안에 여유.
+      // before는 그 비율에 맞춰 상대적으로(before/after) 축소 → 높이 차이는 유지.
+      var CAP = 0.82;
+      var aH = useH * CAP;
+      var bH = aH * (bR / aR);
       if(bBar) bBar.style.setProperty('--bar-h','0px');
       if(aBar) aBar.style.setProperty('--bar-h','0px');
       requestAnimationFrame(function(){ requestAnimationFrame(function(){
-        if(bBar) bBar.style.setProperty('--bar-h', Math.round(useH*bR)+'px');
-        if(aBar) aBar.style.setProperty('--bar-h', Math.round(useH*aR)+'px');
+        if(bBar) bBar.style.setProperty('--bar-h', Math.round(bH)+'px');
+        if(aBar) aBar.style.setProperty('--bar-h', Math.round(aH)+'px');
       }); });
     }
     function resetBars(slide){ slide.querySelectorAll('.ts__bar').forEach(function(b){ b.style.setProperty('--bar-h','0px'); }); }
