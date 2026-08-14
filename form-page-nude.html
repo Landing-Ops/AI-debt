@@ -79,15 +79,15 @@
       <p class="fmg__locked-head"><i class="ti ti-lock" aria-hidden="true"></i> 남은 정밀 항목 <b>미반영</b></p>
       <div class="fmg__grid">
         <div class="fmg__cell">
-          <i class="ti ti-lock fmg__cell-lock" aria-hidden="true"></i>
+          <img class="fmg__cell-lock" src="./img/lock-3d.png" width="80" height="80" alt="" />
           <span class="fmg__cell-t">생활 여건</span>
         </div>
         <div class="fmg__cell">
-          <i class="ti ti-lock fmg__cell-lock" aria-hidden="true"></i>
+          <img class="fmg__cell-lock" src="./img/lock-3d.png" width="80" height="80" alt="" />
           <span class="fmg__cell-t">채무 사정</span>
         </div>
         <div class="fmg__cell">
-          <i class="ti ti-lock fmg__cell-lock" aria-hidden="true"></i>
+          <img class="fmg__cell-lock" src="./img/lock-3d.png" width="80" height="80" alt="" />
           <span class="fmg__cell-t">추가 감면 제도</span>
         </div>
       </div>
@@ -112,8 +112,8 @@
     <p class="fmb__head">지금 바로 확인할 수 있어요</p>
     <ul class="fmb__list">
       <li><i class="ti ti-check" aria-hidden="true"></i><span>정밀 항목까지 반영한 <b>법원 기준 최대 탕감율</b></span></li>
-      <li><i class="ti ti-check" aria-hidden="true"></i><span>AI 정밀 분석 + <b>1:1 맞춤 감면안</b></span></li>
-      <li><i class="ti ti-check" aria-hidden="true"></i><span>2026년 최신 데이터 기준 <b>내 채무가 줄어드는 실제 금액</b></span></li>
+      <li><i class="ti ti-check" aria-hidden="true"></i><span>2026 최신 데이터 기준 <b>AI 정밀 분석 + 1:1 맞춤 감면안</b></span></li>
+      <li><i class="ti ti-check" aria-hidden="true"></i><span>내 채무가 줄어드는 <b>실제 예상 금액</b></span></li>
       <li><i class="ti ti-check" aria-hidden="true"></i><span>외부 비공개 — 나와 비슷한 상황에서 <b>높은 탕감률 받은 실제 케이스</b></span></li>
     </ul>
   </section>
@@ -129,13 +129,14 @@
 
       <div class="fml__field">
         <label class="fml__label">연락처</label>
+        <p class="fml__hint-auth">최대 탕감율을 위한 추가 감면제도를 확인하기 위해 본인 인증을 진행해요</p>
         <div class="fml__phone-row">
           <input class="fml__input" type="tel" data-rz="lead-phone" placeholder="010-0000-0000" inputmode="numeric" autocomplete="off" maxlength="13">
-          <!-- 인증번호 받기 버튼은 OTP JS(lead-form.js)가 여기 삽입 -->
+          <!-- 인증번호 받기 버튼은 lead-form.js가 여기 삽입 -->
+          <div class="lead__verify-slot" data-rz="lead-verify-slot"></div>
         </div>
-        <!-- 인증번호 입력칸은 OTP JS가 삽입 (발송 후 표시) -->
-        <div class="fml__otp-slot" data-rz="lead-otp-slot"></div>
-        <p class="fml__hint-auth">최대 탕감율을 위한 추가 감면제도를 확인하기 위해 본인 인증을 진행해요</p>
+        <!-- 인증번호 입력칸은 lead-form.js가 삽입 (발송 후 표시) -->
+        <div class="lead__otp-slot" data-rz="lead-otp-slot"></div>
       </div>
 
       <div class="fml__field">

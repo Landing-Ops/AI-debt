@@ -1034,7 +1034,7 @@ body.lead-open{ overflow:hidden; }
 }
 .fmg__cell:nth-child(2){ animation-delay:.35s; }
 .fmg__cell:nth-child(3){ animation-delay:.7s; }
-.fmg__cell-lock{ font-size:30px; color:#ffd66b; line-height:1; }
+.fmg__cell-lock{ width:80px; height:80px; object-fit:contain; }
 .fmg__cell-t{ font-size:14px; font-weight:700; color:#ffe6a3; text-align:center; line-height:1.3; }
 @keyframes cell-pulse{
   0%,100%{ border-color:rgba(255,214,107,.32); background:rgba(255,214,107,.06); }
@@ -1084,7 +1084,7 @@ body.lead-open{ overflow:hidden; }
 .fml__form{
   display:flex; flex-direction:column; gap:18px;
   padding:22px 20px;
-  border:1.5px solid var(--border-default,#e6ecf5);
+  border:2px solid var(--border-strong,#cbd5e1);
   border-radius:var(--radius-2xl,20px);
   background:#fff;
   box-shadow:var(--shadow-card,0 6px 18px rgba(12,68,124,.08));
