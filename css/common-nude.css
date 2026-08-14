@@ -1228,7 +1228,7 @@ body.lead-open{ overflow:hidden; }
   margin-bottom:12px; padding:0 2px;
 }
 .ts__chartHead span{ font-size:13.5px; color:var(--neutral-600); font-weight:500; }
-.ts__chartHead span strong{ color:var(--primary-bright,#0b5bd3); font-weight:800; }
+.ts__chartHead span strong{ color:var(--primary-strong,#0e3b64); font-weight:800; font-size:16px; }
 .ts__chartHead b{
   font-size:16px; font-weight:800; color:var(--green,#1D9E75);
   padding:4px 11px; border-radius:var(--radius-pill,999px);
