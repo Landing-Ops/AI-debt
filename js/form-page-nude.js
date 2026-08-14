@@ -105,15 +105,14 @@
         '<li class="ts__slide" id="fmv-slide-' + (i+1) + '">' +
           '<div class="ts__grid">' +
             '<div class="ts__copy">' +
-              '<div class="ts__headline"><strong>신청자 ' + r.who + ' (' + r.region + ')</strong></div>' +
-              '<div class="ts__debt">채무 ' + r.debt + '</div>' +
+              '<div class="ts__headline"><span class="ts__name">' + r.who + ' <em>' + r.region + '</em></span></div>' +
               '<blockquote class="ts__quote">' + r.quote + '</blockquote>' +
             '</div>' +
             '<div class="ts__chartWrap">' +
+              '<div class="ts__chartHead"><span>정밀 진단 후</span><b>탕감율 ' + r.after + '%</b><em>+' + (r.after - r.before) + '%p</em></div>' +
               '<div class="ts__miniChart" aria-hidden="true" data-before="' + (r.before/100) + '" data-after="' + (r.after/100) + '">' +
                 '<div class="ts__bar ts__bar--before"><em class="ts__barlabel">' + r.before + '%</em><span>정밀 전</span></div>' +
-                '<div class="ts__bar ts__bar--after"><em class="ts__barlabel">' + r.after + '%</em><span>정밀 후</span>' +
-                  '<em class="ts__badge"><strong>탕감율</strong><b>' + r.after + '%</b></em></div>' +
+                '<div class="ts__bar ts__bar--after"><em class="ts__barlabel">' + r.after + '%</em><span>정밀 후</span></div>' +
               '</div>' +
             '</div>' +
           '</div>' +
