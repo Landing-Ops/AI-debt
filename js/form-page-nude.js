@@ -108,16 +108,12 @@
               '<div class="ts__headline"><strong>신청자 ' + r.who + ' (' + r.region + ')</strong></div>' +
               '<div class="ts__debt">채무 ' + r.debt + '</div>' +
               '<blockquote class="ts__quote">' + r.quote + '</blockquote>' +
-              '<div class="ts__pay"><span>현재 상환</span><b>' + r.pay + '</b></div>' +
             '</div>' +
-            '<div class="ts__right">' +
-              '<div class="ts__photoWrap"><img src="' + r.img + '" class="ts__photo" alt="" onerror="this.style.display=\'none\'"></div>' +
-              '<div class="ts__chartWrap">' +
-                '<div class="ts__miniChart" aria-hidden="true" data-before="' + (r.before/100) + '" data-after="' + (r.after/100) + '">' +
-                  '<div class="ts__bar ts__bar--before"><em class="ts__barlabel">' + r.before + '%</em><span>정밀 전</span></div>' +
-                  '<div class="ts__bar ts__bar--after"><em class="ts__barlabel">' + r.after + '%</em><span>정밀 후</span>' +
-                    '<em class="ts__badge"><strong>탕감율</strong><b>' + r.after + '%</b></em></div>' +
-                '</div>' +
+            '<div class="ts__chartWrap">' +
+              '<div class="ts__miniChart" aria-hidden="true" data-before="' + (r.before/100) + '" data-after="' + (r.after/100) + '">' +
+                '<div class="ts__bar ts__bar--before"><em class="ts__barlabel">' + r.before + '%</em><span>정밀 전</span></div>' +
+                '<div class="ts__bar ts__bar--after"><em class="ts__barlabel">' + r.after + '%</em><span>정밀 후</span>' +
+                  '<em class="ts__badge"><strong>탕감율</strong><b>' + r.after + '%</b></em></div>' +
               '</div>' +
             '</div>' +
           '</div>' +

@@ -1213,20 +1213,17 @@ body.lead-open{ overflow:hidden; }
 .ts__pay b{ font-size:16px; color:var(--primary-strong,#0e3b64); font-weight:800; }
 
 /* 오른쪽: 사진 + 그래프 */
-.ts__right{ display:flex; gap:14px; align-items:stretch; }
-.ts__photoWrap{ flex:0 0 96px; border-radius:var(--radius-lg,13px); overflow:hidden; background:var(--bg-tint,#eef4fc); }
-.ts__photo{ width:96px; height:100%; object-fit:cover; display:block; min-height:120px; }
-.ts__chartWrap{ flex:1; }
+.ts__chartWrap{ width:100%; }
 
-/* 막대 그래프 (정밀 전 → 후) */
+/* 막대 그래프 (정밀 전 → 후) — 상단에 라벨·뱃지 공간 확보(튀어나옴 방지) */
 .ts__miniChart{
-  display:flex; align-items:flex-end; justify-content:center; gap:22px;
-  height:130px; padding:8px 4px 0;
+  display:flex; align-items:flex-end; justify-content:center; gap:40px;
+  height:180px; padding:54px 20px 0;
   border-radius:var(--radius-lg,13px); background:var(--bg-tint,#eef4fc);
-  position:relative;
+  position:relative; box-sizing:border-box; overflow:hidden;
 }
 .ts__bar{
-  position:relative; width:46px;
+  position:relative; width:64px;
   display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
 }
 .ts__bar::before{
@@ -1237,20 +1234,21 @@ body.lead-open{ overflow:hidden; }
 .ts__bar--before::before{ background:var(--neutral-300,#cbd5e1); }
 .ts__bar--after::before{ background:linear-gradient(180deg,var(--green,#1D9E75),var(--sky,#378ADD)); }
 .ts__barlabel{
-  position:absolute; top:0; transform:translateY(-118%);
-  font-size:13px; font-weight:800; font-style:normal; color:var(--neutral-700);
+  position:absolute; bottom:calc(var(--bar-h,0px) + 4px);
+  font-size:14px; font-weight:800; font-style:normal; color:var(--neutral-600);
+  transition:bottom .9s cubic-bezier(.22,.61,.36,1);
 }
 .ts__bar--after .ts__barlabel{ color:var(--green,#1D9E75); }
-.ts__bar span{ margin-top:6px; font-size:11px; color:var(--neutral-500); font-weight:600; white-space:nowrap; }
+.ts__bar span{ margin-top:7px; font-size:12px; color:var(--neutral-500); font-weight:600; white-space:nowrap; }
 .ts__badge{
-  position:absolute; top:-2px; right:-2px;
+  position:absolute; top:12px; left:50%; transform:translateX(-50%);
   display:flex; flex-direction:column; align-items:center;
-  padding:5px 9px; border-radius:var(--radius-md,10px);
+  padding:6px 12px; border-radius:var(--radius-md,10px);
   background:var(--primary-bright,#0b5bd3); color:#fff; font-style:normal;
-  box-shadow:var(--shadow-cta,0 8px 18px rgba(11,91,211,.28));
+  box-shadow:var(--shadow-cta,0 8px 18px rgba(11,91,211,.28)); white-space:nowrap;
 }
-.ts__badge strong{ font-size:9px; font-weight:600; opacity:.85; }
-.ts__badge b{ font-size:15px; font-weight:800; line-height:1.1; }
+.ts__badge strong{ font-size:9.5px; font-weight:600; opacity:.9; }
+.ts__badge b{ font-size:15px; font-weight:800; line-height:1.15; }
 
 /* 좌우 버튼 */
 .ts__nav{
