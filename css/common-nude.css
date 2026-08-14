@@ -1199,7 +1199,7 @@ body.lead-open{ overflow:hidden; }
 .ts__grid{
   display:flex; flex-direction:column; gap:16px;
   padding:20px 18px;
-  border:1px solid var(--border-subtle,#eef1f6); border-radius:var(--radius-xl,16px);
+  border:2px solid var(--border-subtle,#eef1f6); border-radius:var(--radius-xl,16px);
   background:#fff; box-shadow:var(--shadow-card,0 6px 18px rgba(12,68,124,.08));
 }
 .ts__headline{ margin-bottom:2px; }
