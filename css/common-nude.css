@@ -983,7 +983,7 @@ body.lead-open{ overflow:hidden; }
 .fmg__head{ margin-bottom:14px; }
 .fmg__badge{
   display:inline-flex; align-items:center; gap:6px;
-  font-size:15px; font-weight:600; color:var(--mint,#9FE1CB);
+  font-size:20px; font-weight:600; color:var(--mint,#9FE1CB);
 }
 .fmg__badge .ti{ font-size:18px; }
 /* 반영 완료된 진단 항목 (가벼운 체크 태그 — 잠긴 카드와 위계 대비) */
@@ -992,7 +992,7 @@ body.lead-open{ overflow:hidden; }
   display:inline-flex; align-items:center; gap:5px;
   padding:7px 12px; border-radius:var(--radius-pill,999px);
   background:rgba(159,225,203,.12); border:1px solid rgba(159,225,203,.28);
-  font-size:13.5px; font-weight:600; color:rgba(234,255,247,.9);
+  font-size:15px; font-weight:600; color:rgba(234,255,247,.9);
 }
 .fmg__tag .ti{ font-size:15px; color:var(--mint,#9FE1CB); }
 
@@ -1018,9 +1018,9 @@ body.lead-open{ overflow:hidden; }
 .fmg__locked{ margin-top:18px; }
 .fmg__locked-head{
   display:flex; align-items:center; gap:7px;
-  margin:0 0 12px; font-size:15.5px; font-weight:600; color:#fff;
+  margin:0 0 12px; font-size:20px; font-weight:600; color:#fff;
 }
-.fmg__locked-head .ti{ font-size:19px; color:#ffd66b; }
+.fmg__locked-head .ti{ font-size:24px; color:#ffd66b; }
 .fmg__locked-head b{ color:#ffd66b; font-weight:800; }
 
 .fmg__grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:9px; }
@@ -1035,7 +1035,7 @@ body.lead-open{ overflow:hidden; }
 .fmg__cell:nth-child(2){ animation-delay:.35s; }
 .fmg__cell:nth-child(3){ animation-delay:.7s; }
 .fmg__cell-lock{ width:80px; height:80px; object-fit:contain; }
-.fmg__cell-t{ font-size:14px; font-weight:700; color:#ffe6a3; text-align:center; line-height:1.3; }
+.fmg__cell-t{ font-size:16px; font-weight:700; color:#ffe6a3; text-align:center; line-height:1.3; }
 @keyframes cell-pulse{
   0%,100%{ border-color:rgba(255,214,107,.32); background:rgba(255,214,107,.06); }
   50%{ border-color:rgba(255,214,107,.7); background:rgba(255,214,107,.13); }
