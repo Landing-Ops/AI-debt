@@ -105,4 +105,19 @@
   /* ---------- 시작 ---------- */
   overlay.removeAttribute('hidden');
   setTimeout(advance, STEP_MS);
+
+  /* ---------- 개인정보 약관 팝업 여닫기 (result.js에서 이식) ---------- */
+  var terms   = document.querySelector('[data-rz="lead-terms"]');
+  var privacy = document.querySelector('[data-rz="privacy-modal"]');
+  if (terms && privacy) {
+    terms.addEventListener('click', function (e) {
+      e.preventDefault();
+      privacy.hidden = false;
+      var pbody = privacy.querySelector('.privacy__body');
+      if (pbody) pbody.scrollTop = 0;
+    });
+    privacy.querySelectorAll('[data-rz="privacy-close"]').forEach(function (el) {
+      el.addEventListener('click', function () { privacy.hidden = true; });
+    });
+  }
 })();
