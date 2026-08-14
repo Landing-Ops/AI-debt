@@ -1222,12 +1222,13 @@ body.lead-open{ overflow:hidden; }
 /* 오른쪽: 사진 + 그래프 */
 .ts__chartWrap{ width:100%; }
 
-/* 그래프 상단 헤드 — 정밀 진단 후 상승한 탕감율 +OO%p */
+/* 그래프 상단 헤드 — 정밀 진단 후 탕감률 상승폭 +OO%p */
 .ts__chartHead{
   display:flex; align-items:center; gap:8px;
   margin-bottom:12px; padding:0 2px;
 }
-.ts__chartHead span{ font-size:13.5px; color:var(--neutral-600); font-weight:600; }
+.ts__chartHead span{ font-size:13.5px; color:var(--neutral-600); font-weight:500; }
+.ts__chartHead span strong{ color:var(--primary-bright,#0b5bd3); font-weight:800; }
 .ts__chartHead b{
   font-size:16px; font-weight:800; color:var(--green,#1D9E75);
   padding:4px 11px; border-radius:var(--radius-pill,999px);
@@ -1237,7 +1238,7 @@ body.lead-open{ overflow:hidden; }
 /* 막대 그래프 (정밀 전 → 후) — 폭 크게, 값 막대 밑 */
 .ts__miniChart{
   display:flex; align-items:flex-end; justify-content:center; gap:34px;
-  height:200px; padding:20px 24px 0;
+  height:210px; padding:44px 24px 0;
   border-radius:var(--radius-lg,13px);
   background:linear-gradient(180deg,#f5f9ff,#eef4fc);
   border:1px solid var(--border-subtle,#eef1f6);

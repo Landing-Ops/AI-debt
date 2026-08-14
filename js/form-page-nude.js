@@ -109,7 +109,7 @@
               '<blockquote class="ts__quote">' + r.quote + '</blockquote>' +
             '</div>' +
             '<div class="ts__chartWrap">' +
-              '<div class="ts__chartHead"><span>정밀 진단 후 상승한 탕감율</span><b>+' + (r.after - r.before) + '%p</b></div>' +
+              '<div class="ts__chartHead"><span>정밀 진단 후 <strong>탕감률 상승폭</strong></span><b>+' + (r.after - r.before) + '%p</b></div>' +
               '<div class="ts__miniChart" aria-hidden="true" data-before="' + (r.before/100) + '" data-after="' + (r.after/100) + '">' +
                 '<div class="ts__bar ts__bar--before"><span class="ts__barfoot"><em>정밀 진단 전</em><b>' + r.before + '%</b></span></div>' +
                 '<div class="ts__bar ts__bar--after"><span class="ts__barfoot"><em>정밀 진단 후</em><b>' + r.after + '%</b></span></div>' +
@@ -150,7 +150,7 @@
       var bBar = chart.querySelector('.ts__bar--before'), aBar = chart.querySelector('.ts__bar--after');
       // after(가장 높은 막대)를 차트의 CAP 비율로 고정 → 어떤 값이든 박스 안에 여유.
       // before는 그 비율에 맞춰 상대적으로(before/after) 축소 → 높이 차이는 유지.
-      var CAP = 0.82;
+      var CAP = 0.70;
       var aH = useH * CAP;
       var bH = aH * (bR / aR);
       if(bBar) bBar.style.setProperty('--bar-h','0px');
