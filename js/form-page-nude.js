@@ -10,38 +10,32 @@
 
   var root    = document.querySelector('[data-fm="root"]');
   var overlay = document.querySelector('[data-fm="overlay"]');
-  var stepEl  = document.querySelector('[data-fm="ov-step"]');
-  if (!root || !overlay || !stepEl) return;
+  var steps   = Array.prototype.slice.call(document.querySelectorAll('[data-fm="ov-step"]'));
+  if (!root || !overlay || !steps.length) return;
 
-  /* ---------- 오버레이 3단계 문구 ---------- */
-  var STEPS = [
-    '2026년 최신 개인회생 기준으로 분석 중...',
-    '입력하신 소득·채무·지역을 반영하고 있어요...',
-    '기본 탕감율 산출 완료. 정밀 항목을 확인하세요...'
-  ];
-  var STEP_MS = 2000;    // 각 단계 노출 시간
+  var STEP_MS = 1500;    // 각 단계 진행 시간
   var GAUGE_TARGET = 70; // 게이지 목표(%)
 
   /* 진단 답변이 아예 없으면(직접 진입) 진단으로 돌려보냄 — 선택적 가드 */
-  // (라우팅 정책 확정 후 활성화)
   // try { if (!sessionStorage.getItem('q_debt')) location.replace('./diagnosis.html'); } catch(e){}
 
+  /* ---------- 오버레이: 체크리스트 3단계 순차 (doing → done) ---------- */
   var idx = 0;
-  function showStep(i) {
-    stepEl.classList.add('ov__step--swap');
-    setTimeout(function () {
-      stepEl.textContent = STEPS[i];
-      stepEl.classList.remove('ov__step--swap');
-    }, 180);
-  }
-
-  function nextStep() {
+  function advance() {
+    // 현재 단계를 done 처리
+    if (steps[idx]) {
+      steps[idx].classList.remove('loading__step--doing');
+      steps[idx].classList.add('loading__step--done');
+    }
     idx++;
-    if (idx < STEPS.length) {
-      showStep(idx);
-      setTimeout(nextStep, STEP_MS);
+    if (idx < steps.length) {
+      // 다음 단계 doing
+      steps[idx].classList.remove('loading__step--wait');
+      steps[idx].classList.add('loading__step--doing');
+      setTimeout(advance, STEP_MS);
     } else {
-      setTimeout(endOverlay, STEP_MS);
+      // 전부 완료 → 잠깐 뒤 오버레이 종료
+      setTimeout(endOverlay, 600);
     }
   }
 
@@ -109,7 +103,6 @@
   }
 
   /* ---------- 시작 ---------- */
-  // 첫 단계는 이미 HTML에 박혀 있음 → STEP_MS 후 2번째로
   overlay.removeAttribute('hidden');
-  setTimeout(nextStep, STEP_MS);
+  setTimeout(advance, STEP_MS);
 })();

@@ -18,12 +18,32 @@
      끝나면 fade-out → 본문 노출. form.js가 제어.
 ===================================================================== -->
 <div class="ov" data-fm="overlay" aria-hidden="true">
-  <div class="ov__inner">
-    <div class="ov__spinner" aria-hidden="true">
-      <svg viewBox="0 0 50 50"><circle class="ov__spin-track" cx="25" cy="25" r="20"></circle><circle class="ov__spin-arc" cx="25" cy="25" r="20"></circle></svg>
+  <div class="ov__box">
+    <div class="loading__ring">
+      <svg width="230" height="230" viewBox="0 0 230 230" aria-hidden="true">
+        <circle class="loading__ring-track" cx="115" cy="115" r="107"/>
+        <circle class="loading__ring-arc" cx="115" cy="115" r="107"/>
+      </svg>
+      <img class="loading__ring-img" src="./img/diagnosis-Overray.png" alt="" />
     </div>
-    <p class="ov__step" data-fm="ov-step">2026년 최신 개인회생 기준으로 분석 중...</p>
-    <div class="ov__dots"><span></span><span></span><span></span></div>
+    <h2 class="loading__title" data-fm="ov-title">2026년 최신 데이터로<br>정밀 분석하고 있어요</h2>
+    <div class="loading__steps" data-fm="ov-steps">
+      <div class="loading__step loading__step--doing" data-fm="ov-step" data-i="0">
+        <span class="loading__spinner"></span>
+        <i class="ti ti-circle-check-filled" aria-hidden="true"></i>
+        <span class="loading__step-t">2026년 최신 개인회생 기준으로 분석 중</span>
+      </div>
+      <div class="loading__step loading__step--wait" data-fm="ov-step" data-i="1">
+        <span class="loading__spinner"></span>
+        <i class="ti ti-circle-check-filled" aria-hidden="true"></i>
+        <span class="loading__step-t">소득·채무·지역을 반영하는 중</span>
+      </div>
+      <div class="loading__step loading__step--wait" data-fm="ov-step" data-i="2">
+        <span class="loading__spinner"></span>
+        <i class="ti ti-circle-check-filled" aria-hidden="true"></i>
+        <span class="loading__step-t">기본 탕감율 산출 중</span>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -138,7 +158,7 @@
 <!-- 제출 로딩 오버레이 (lead-form.js가 #submit-loading-overlay 참조) -->
 <div id="submit-loading-overlay" class="submit-ov" hidden>
   <div class="submit-ov__inner">
-    <div class="ov__spinner"><svg viewBox="0 0 50 50"><circle class="ov__spin-track" cx="25" cy="25" r="20"></circle><circle class="ov__spin-arc" cx="25" cy="25" r="20"></circle></svg></div>
+    <span class="loading__spinner submit-ov__spin"></span>
     <p>정밀 진단 정보를 저장하고 있어요...</p>
   </div>
 </div>
