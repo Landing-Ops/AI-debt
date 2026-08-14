@@ -1182,41 +1182,97 @@ body.lead-open{ overflow:hidden; }
 /* =====================================================================
    5) 후기
 ===================================================================== */
-.fmv{ padding:34px 22px 10px; }
-.fmv__title{
-  margin:0; font-size:19px; font-weight:700; text-align:center;
-  color:var(--neutral-900); letter-spacing:-.01em;
-}
+/* =====================================================================
+   후기 슬라이드 (ts) — 정밀 진단 전→후 탕감율 상승. 브랜드 컬러 신규.
+===================================================================== */
+.fmv{ padding:34px 0 10px; }
+.fmv__head{ padding:0 22px; }
+.fmv__title{ margin:0; font-size:20px; font-weight:700; text-align:center; color:var(--neutral-900); letter-spacing:-.01em; }
+.fmv__title b{ color:var(--primary-bright,#0b5bd3); }
 .fmv__sub{ margin:8px 0 20px; font-size:13px; text-align:center; color:var(--neutral-400); }
-.fmv__list{ display:flex; flex-direction:column; gap:12px; }
 
-.fmrev{
-  padding:18px 18px 14px;
-  border:1px solid var(--border-subtle,#eef1f6);
-  border-radius:var(--radius-lg,13px);
+.ts{ position:relative; padding:0 22px; }
+.ts__viewport{ overflow:hidden; border-radius:var(--radius-xl,16px); }
+.ts__track{ display:flex; margin:0; padding:0; list-style:none; transition:transform .6s cubic-bezier(.22,.61,.36,1); }
+.ts__slide{ flex:0 0 100%; min-width:100%; box-sizing:border-box; }
+
+.ts__grid{
+  display:flex; flex-direction:column; gap:16px;
+  padding:20px 18px;
+  border:1px solid var(--border-subtle,#eef1f6); border-radius:var(--radius-xl,16px);
   background:#fff; box-shadow:var(--shadow-card,0 6px 18px rgba(12,68,124,.08));
 }
-.fmrev__top{ display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:11px; }
-.fmrev__who{ display:flex; align-items:center; gap:6px; font-size:13px; color:var(--neutral-600); font-weight:600; flex-wrap:wrap; }
-.fmrev__job{
-  display:inline-block; padding:3px 8px; border-radius:var(--radius-pill,999px);
-  background:var(--primary-bg,#eaf2ff); color:var(--primary-bright,#0b5bd3);
-  font-size:11.5px; font-weight:700;
-}
-.fmrev__delta{
-  display:inline-flex; align-items:center; gap:4px; flex-shrink:0;
-  font-size:13px; font-weight:600; color:var(--green,#1D9E75);
-  background:rgba(29,158,117,.10); padding:5px 10px; border-radius:var(--radius-pill,999px);
-}
-.fmrev__delta b{ font-weight:800; font-size:14px; }
-.fmrev__delta .ti{ font-size:15px; }
-.fmrev__quote{ margin:0; font-size:13.5px; line-height:1.7; color:var(--neutral-700); }
-.fmrev__foot{
+.ts__headline strong{ font-size:15px; font-weight:700; color:var(--neutral-900); }
+.ts__debt{ margin-top:5px; font-size:13px; color:var(--neutral-500); font-weight:500; }
+.ts__quote{ margin:12px 0 0; font-size:13.5px; line-height:1.72; color:var(--neutral-700); }
+.ts__pay{
   display:flex; align-items:center; justify-content:space-between;
-  margin-top:13px; padding-top:11px; border-top:1px solid var(--border-subtle,#eef1f6);
+  margin-top:14px; padding-top:12px; border-top:1px solid var(--border-subtle,#eef1f6);
 }
-.fmrev__pay-l{ font-size:12.5px; color:var(--neutral-500); font-weight:500; }
-.fmrev__pay-v{ font-size:15px; color:var(--primary-strong,#0e3b64); font-weight:800; }
+.ts__pay span{ font-size:12.5px; color:var(--neutral-500); font-weight:500; }
+.ts__pay b{ font-size:16px; color:var(--primary-strong,#0e3b64); font-weight:800; }
+
+/* 오른쪽: 사진 + 그래프 */
+.ts__right{ display:flex; gap:14px; align-items:stretch; }
+.ts__photoWrap{ flex:0 0 96px; border-radius:var(--radius-lg,13px); overflow:hidden; background:var(--bg-tint,#eef4fc); }
+.ts__photo{ width:96px; height:100%; object-fit:cover; display:block; min-height:120px; }
+.ts__chartWrap{ flex:1; }
+
+/* 막대 그래프 (정밀 전 → 후) */
+.ts__miniChart{
+  display:flex; align-items:flex-end; justify-content:center; gap:22px;
+  height:130px; padding:8px 4px 0;
+  border-radius:var(--radius-lg,13px); background:var(--bg-tint,#eef4fc);
+  position:relative;
+}
+.ts__bar{
+  position:relative; width:46px;
+  display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+}
+.ts__bar::before{
+  content:''; width:100%; height:var(--bar-h,0px);
+  border-radius:8px 8px 0 0;
+  transition:height .9s cubic-bezier(.22,.61,.36,1);
+}
+.ts__bar--before::before{ background:var(--neutral-300,#cbd5e1); }
+.ts__bar--after::before{ background:linear-gradient(180deg,var(--green,#1D9E75),var(--sky,#378ADD)); }
+.ts__barlabel{
+  position:absolute; top:0; transform:translateY(-118%);
+  font-size:13px; font-weight:800; font-style:normal; color:var(--neutral-700);
+}
+.ts__bar--after .ts__barlabel{ color:var(--green,#1D9E75); }
+.ts__bar span{ margin-top:6px; font-size:11px; color:var(--neutral-500); font-weight:600; white-space:nowrap; }
+.ts__badge{
+  position:absolute; top:-2px; right:-2px;
+  display:flex; flex-direction:column; align-items:center;
+  padding:5px 9px; border-radius:var(--radius-md,10px);
+  background:var(--primary-bright,#0b5bd3); color:#fff; font-style:normal;
+  box-shadow:var(--shadow-cta,0 8px 18px rgba(11,91,211,.28));
+}
+.ts__badge strong{ font-size:9px; font-weight:600; opacity:.85; }
+.ts__badge b{ font-size:15px; font-weight:800; line-height:1.1; }
+
+/* 좌우 버튼 */
+.ts__nav{
+  position:absolute; top:calc(50% - 10px); transform:translateY(-50%); z-index:3;
+  width:38px; height:38px; border:none; border-radius:50%;
+  background:#fff; color:var(--primary-strong,#0e3b64);
+  box-shadow:var(--shadow-md,0 6px 20px rgba(12,68,124,.16)); cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+}
+.ts__nav--prev{ left:8px; }
+.ts__nav--next{ right:8px; }
+.ts__nav:active{ transform:translateY(-50%) scale(.94); }
+
+/* dots */
+.ts__dots{ display:flex; justify-content:center; gap:7px; margin-top:16px; }
+.ts__dot{
+  width:7px; height:7px; padding:0; border:none; border-radius:50%;
+  background:var(--neutral-300,#cbd5e1); cursor:pointer; transition:all .2s ease;
+}
+.ts__dot[aria-selected="true"]{ width:20px; border-radius:4px; background:var(--primary-bright,#0b5bd3); }
+.sr-only{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+
 
 /* =====================================================================
    Footer + 제출 오버레이

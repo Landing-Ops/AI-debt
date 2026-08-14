@@ -170,12 +170,27 @@
   </section>
 
   <!-- ── 5) 후기 8개 (정밀 진단으로 탕감율 올린 서사 — 원본 재가공 예정, 현재 자리) ── -->
-  <section class="fmv">
-    <h2 class="fmv__title">정밀 진단으로 더 높은 탕감율을 받은 분들</h2>
-    <p class="fmv__sub">외부 비공개 · 실제 후기</p>
-    <div class="fmv__list" data-fm="revs-list">
-      <!-- form.js가 후기 데이터로 렌더 (자리) -->
+  <section class="fmv section testimonials" aria-label="정밀 진단 후기">
+    <div class="fmv__head">
+      <h2 class="fmv__title">정밀 진단으로 <b>탕감율이 더 오른</b> 분들</h2>
+      <p class="fmv__sub">외부 비공개 · 실제 후기</p>
     </div>
+
+    <div class="ts" role="region" aria-roledescription="carousel" aria-label="후기 슬라이드">
+      <button class="ts__nav ts__nav--prev" aria-label="이전 후기">
+        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="ts__viewport">
+        <ul class="ts__track" data-fm="revs-track">
+          <!-- form-page.js가 슬라이드 렌더 -->
+        </ul>
+      </div>
+      <button class="ts__nav ts__nav--next" aria-label="다음 후기">
+        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <div class="ts__dots" data-fm="revs-dots" role="tablist" aria-label="후기 페이지"></div>
   </section>
 
   <footer class="fm__foot">
