@@ -985,7 +985,7 @@ body.lead-open{ overflow:hidden; }
   display:inline-flex; align-items:center; gap:6px;
   font-size:20px; font-weight:600; color:var(--mint,#9FE1CB);
 }
-.fmg__badge .ti{ font-size:18px; }
+.fmg__badge .ti{ font-size:24px; }
 /* 반영 완료된 진단 항목 (가벼운 체크 태그 — 잠긴 카드와 위계 대비) */
 .fmg__tags{ display:flex; flex-wrap:wrap; gap:7px; margin-bottom:18px; }
 .fmg__tag{
