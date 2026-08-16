@@ -115,140 +115,140 @@
   //   otpMsg.style.color = color || '';
   // }
 
-  var OTP_TIMEOUT_MS = 15000;   // OTP 발송/검증 최대 대기 (Workers는 콜드스타트 없음 — Solapi 발송 지연 대비 여유값)
+  // var OTP_TIMEOUT_MS = 15000;   // OTP 발송/검증 최대 대기 (Workers는 콜드스타트 없음 — Solapi 발송 지연 대비 여유값)
 
-  function callOtpApi(payload) {
-    // AbortController로 타임아웃 — 응답이 안 오면 무한 대기 대신 .catch로 떨어뜨림
-    var controller = (typeof AbortController !== 'undefined') ? new AbortController() : null;
-    var timer = controller ? setTimeout(function () { controller.abort(); }, OTP_TIMEOUT_MS) : null;
-    var opts = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },   // Workers는 CORS 열려있어 json 정석 사용(GAS땐 우회로 text/plain)
-      body: JSON.stringify(payload)
-    };
-    if (controller) opts.signal = controller.signal;
-    return fetch(OTP_API_URL, opts)
-      .then(function (r) { if (timer) clearTimeout(timer); return r.json(); })
-      .catch(function (e) { if (timer) clearTimeout(timer); throw e; });
-  }
+  // function callOtpApi(payload) {
+  //   // AbortController로 타임아웃 — 응답이 안 오면 무한 대기 대신 .catch로 떨어뜨림
+  //   var controller = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+  //   var timer = controller ? setTimeout(function () { controller.abort(); }, OTP_TIMEOUT_MS) : null;
+  //   var opts = {
+  //     method: 'POST',
+  //     headers: { 'Content-Type': 'application/json' },   // Workers는 CORS 열려있어 json 정석 사용(GAS땐 우회로 text/plain)
+  //     body: JSON.stringify(payload)
+  //   };
+  //   if (controller) opts.signal = controller.signal;
+  //   return fetch(OTP_API_URL, opts)
+  //     .then(function (r) { if (timer) clearTimeout(timer); return r.json(); })
+  //     .catch(function (e) { if (timer) clearTimeout(timer); throw e; });
+  // }
 
-  /* 전화번호 11자리 추출 (하이픈 제거) */
-  function getValidPhoneDigits() {
-    var d = ((phoneEl && phoneEl.value) || '').replace(/\D/g, '');
-    return /^010\d{8}$/.test(d) ? d : '';
-  }
-  function getCode() {
-    return ((otpCodeEl && otpCodeEl.value) || '').replace(/\D/g, '');
-  }
+  // /* 전화번호 11자리 추출 (하이픈 제거) */
+  // function getValidPhoneDigits() {
+  //   var d = ((phoneEl && phoneEl.value) || '').replace(/\D/g, '');
+  //   return /^010\d{8}$/.test(d) ? d : '';
+  // }
+  // function getCode() {
+  //   return ((otpCodeEl && otpCodeEl.value) || '').replace(/\D/g, '');
+  // }
 
-  function refreshOtpButton() {
-    if (!otpActionBtn) return;
-    if (isPhoneVerified) {
-      otpActionBtn.textContent = '인증 완료';
-      otpActionBtn.className = 'lead__verify is-done';
-      otpActionBtn.disabled = true;
-      return;
-    }
-    otpActionBtn.disabled = false;
-    if (codeSent && getCode().length === 6) {
-      otpActionBtn.textContent = '인증번호 확인';
-      otpActionBtn.className = 'lead__verify is-verify';   // 6자리 입력완료 → 확인 대기(색 변화)
-    } else {
-      otpActionBtn.textContent = codeSent ? '인증번호 재발송' : '인증번호 받기';
-      otpActionBtn.className = 'lead__verify';
-    }
-  }
+  // function refreshOtpButton() {
+  //   if (!otpActionBtn) return;
+  //   if (isPhoneVerified) {
+  //     otpActionBtn.textContent = '인증 완료';
+  //     otpActionBtn.className = 'lead__verify is-done';
+  //     otpActionBtn.disabled = true;
+  //     return;
+  //   }
+  //   otpActionBtn.disabled = false;
+  //   if (codeSent && getCode().length === 6) {
+  //     otpActionBtn.textContent = '인증번호 확인';
+  //     otpActionBtn.className = 'lead__verify is-verify';   // 6자리 입력완료 → 확인 대기(색 변화)
+  //   } else {
+  //     otpActionBtn.textContent = codeSent ? '인증번호 재발송' : '인증번호 받기';
+  //     otpActionBtn.className = 'lead__verify';
+  //   }
+  // }
 
-  function doSend() {
-    var phone = getValidPhoneDigits();
-    if (!phone) { alert('휴대폰 번호를 정확히 입력해주세요.'); return; }
-    otpActionBtn.disabled = true;
-    setOtpMsg('인증번호 발송 중...', '');
-    callOtpApi({ action: 'send', phone: phone })
-      .then(function (res) {
-        if (res.ok) {
-          codeSent = true;
-          if (otpSlot) otpSlot.style.display = '';   // 인증번호 입력칸 표시
-          setOtpMsg('인증번호를 발송했습니다. (3분 이내 입력)', '#1a7f37');
-          alert('핸드폰 문자로 [인증번호]가 전송되었습니다.\n6자리를 입력하고 [인증번호 확인]을 눌러주세요.');
-          if (otpCodeEl) otpCodeEl.focus();
-        } else {
-          alert(res.message || '발송에 실패했습니다. 다시 시도해주세요.');
-          setOtpMsg(res.message || '발송에 실패했습니다.', '#d33');
-        }
-      })
-      .catch(function () {
-        alert('네트워크 오류로 발송에 실패했습니다. 다시 시도해주세요.');
-        setOtpMsg('네트워크 오류로 발송에 실패했습니다.', '#d33');
-      })
-      .then(function () { refreshOtpButton(); });
-  }
+  // function doSend() {
+  //   var phone = getValidPhoneDigits();
+  //   if (!phone) { alert('휴대폰 번호를 정확히 입력해주세요.'); return; }
+  //   otpActionBtn.disabled = true;
+  //   setOtpMsg('인증번호 발송 중...', '');
+  //   callOtpApi({ action: 'send', phone: phone })
+  //     .then(function (res) {
+  //       if (res.ok) {
+  //         codeSent = true;
+  //         if (otpSlot) otpSlot.style.display = '';   // 인증번호 입력칸 표시
+  //         setOtpMsg('인증번호를 발송했습니다. (3분 이내 입력)', '#1a7f37');
+  //         alert('핸드폰 문자로 [인증번호]가 전송되었습니다.\n6자리를 입력하고 [인증번호 확인]을 눌러주세요.');
+  //         if (otpCodeEl) otpCodeEl.focus();
+  //       } else {
+  //         alert(res.message || '발송에 실패했습니다. 다시 시도해주세요.');
+  //         setOtpMsg(res.message || '발송에 실패했습니다.', '#d33');
+  //       }
+  //     })
+  //     .catch(function () {
+  //       alert('네트워크 오류로 발송에 실패했습니다. 다시 시도해주세요.');
+  //       setOtpMsg('네트워크 오류로 발송에 실패했습니다.', '#d33');
+  //     })
+  //     .then(function () { refreshOtpButton(); });
+  // }
 
-  function doVerify() {
-    var phone = getValidPhoneDigits();
-    var code = getCode();
-    if (code.length !== 6) { alert('인증번호 6자리를 입력해주세요.'); return; }
-    otpActionBtn.disabled = true;
-    setOtpMsg('확인 중...', '');
-    callOtpApi({ action: 'verify', phone: phone, code: code })
-      .then(function (res) {
-        if (res.ok) {
-          isPhoneVerified = true;
-          if (otpCodeEl) otpCodeEl.disabled = true;
-          if (phoneEl) {                              // 인증 후 번호 잠금
-            phoneEl.readOnly = true;
-            phoneEl.classList.add('is-locked');
-          }
-          setOtpMsg('', '');
-          alert('인증이 완료되었습니다.');
-          refreshOtpButton();
-          updateSubmit();
-        } else {
-          alert(res.message || '인증에 실패했습니다.');
-          setOtpMsg(res.message || '인증에 실패했습니다.', '#d33');
-          refreshOtpButton();
-        }
-      })
-      .catch(function () {
-        setOtpMsg('확인에 실패했습니다. 다시 시도해주세요.', '#d33');
-        alert('네트워크 오류로 확인에 실패했습니다. 다시 시도해주세요.');
-        refreshOtpButton();
-      });
-  }
+  // function doVerify() {
+  //   var phone = getValidPhoneDigits();
+  //   var code = getCode();
+  //   if (code.length !== 6) { alert('인증번호 6자리를 입력해주세요.'); return; }
+  //   otpActionBtn.disabled = true;
+  //   setOtpMsg('확인 중...', '');
+  //   callOtpApi({ action: 'verify', phone: phone, code: code })
+  //     .then(function (res) {
+  //       if (res.ok) {
+  //         isPhoneVerified = true;
+  //         if (otpCodeEl) otpCodeEl.disabled = true;
+  //         if (phoneEl) {                              // 인증 후 번호 잠금
+  //           phoneEl.readOnly = true;
+  //           phoneEl.classList.add('is-locked');
+  //         }
+  //         setOtpMsg('', '');
+  //         alert('인증이 완료되었습니다.');
+  //         refreshOtpButton();
+  //         updateSubmit();
+  //       } else {
+  //         alert(res.message || '인증에 실패했습니다.');
+  //         setOtpMsg(res.message || '인증에 실패했습니다.', '#d33');
+  //         refreshOtpButton();
+  //       }
+  //     })
+  //     .catch(function () {
+  //       setOtpMsg('확인에 실패했습니다. 다시 시도해주세요.', '#d33');
+  //       alert('네트워크 오류로 확인에 실패했습니다. 다시 시도해주세요.');
+  //       refreshOtpButton();
+  //     });
+  // }
 
-  if (otpActionBtn) {
-    otpActionBtn.addEventListener('click', function () {
-      if (isPhoneVerified) return;
-      if (codeSent && getCode().length === 6) doVerify();
-      else doSend();
-    });
-  }
-  if (otpCodeEl) {
-    otpCodeEl.addEventListener('input', function () {
-      otpCodeEl.value = otpCodeEl.value.replace(/\D/g, '').slice(0, 6);
-      refreshOtpButton();
-    });
-  }
-  // 전화번호 바뀌면 인증 초기화 + 하이픈 자동
-  if (phoneEl) {
-    phoneEl.addEventListener('input', function () {
-      // 하이픈 자동 (010-0000-0000)
-      var v = phoneEl.value.replace(/\D/g, '').slice(0, 11);
-      if (v.length > 7)      v = v.slice(0,3) + '-' + v.slice(3,7) + '-' + v.slice(7);
-      else if (v.length > 3) v = v.slice(0,3) + '-' + v.slice(3);
-      phoneEl.value = v;
-      // 인증 초기화
-      if (!isPhoneVerified && !codeSent) return;
-      isPhoneVerified = false;
-      codeSent = false;
-      phoneEl.classList.remove('is-locked');
-      if (otpCodeEl) { otpCodeEl.disabled = false; otpCodeEl.value = ''; }
-      setOtpMsg('번호가 변경되어 다시 인증이 필요합니다.', '#d33');
-      refreshOtpButton();
-      updateSubmit();
-    });
-  }
-  refreshOtpButton();
+  // if (otpActionBtn) {
+  //   otpActionBtn.addEventListener('click', function () {
+  //     if (isPhoneVerified) return;
+  //     if (codeSent && getCode().length === 6) doVerify();
+  //     else doSend();
+  //   });
+  // }
+  // if (otpCodeEl) {
+  //   otpCodeEl.addEventListener('input', function () {
+  //     otpCodeEl.value = otpCodeEl.value.replace(/\D/g, '').slice(0, 6);
+  //     refreshOtpButton();
+  //   });
+  // }
+  // // 전화번호 바뀌면 인증 초기화 + 하이픈 자동
+  // if (phoneEl) {
+  //   phoneEl.addEventListener('input', function () {
+  //     // 하이픈 자동 (010-0000-0000)
+  //     var v = phoneEl.value.replace(/\D/g, '').slice(0, 11);
+  //     if (v.length > 7)      v = v.slice(0,3) + '-' + v.slice(3,7) + '-' + v.slice(7);
+  //     else if (v.length > 3) v = v.slice(0,3) + '-' + v.slice(3);
+  //     phoneEl.value = v;
+  //     // 인증 초기화
+  //     if (!isPhoneVerified && !codeSent) return;
+  //     isPhoneVerified = false;
+  //     codeSent = false;
+  //     phoneEl.classList.remove('is-locked');
+  //     if (otpCodeEl) { otpCodeEl.disabled = false; otpCodeEl.value = ''; }
+  //     setOtpMsg('번호가 변경되어 다시 인증이 필요합니다.', '#d33');
+  //     refreshOtpButton();
+  //     updateSubmit();
+  //   });
+  // }
+  // refreshOtpButton();
 
   /* ============ 제출 버튼 활성/검증 ============ */
   function validate() {
