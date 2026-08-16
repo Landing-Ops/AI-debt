@@ -90,30 +90,30 @@
   var isPhoneVerified = false;
   var codeSent = false;
 
-  /* ============ OTP UI 삽입 ============
+  /* ============ OTP UI 삽입 [OFF]============
      · 인증번호 받기 버튼 → 연락처 우측(verify-slot)
      · 인증번호 입력칸 → 연락처 아래(otp-slot, 발송 후 표시) */
-  var otpCodeEl = null, otpActionBtn = null, otpMsg = null;
-  if (verifySlot) {
-    verifySlot.innerHTML =
-      '<button type="button" class="lead__verify" data-otp-action>인증번호 받기</button>';
-    otpActionBtn = verifySlot.querySelector('[data-otp-action]');
-  }
-  if (otpSlot) {
-    otpSlot.innerHTML =
-      '<input class="lead__input" data-otp-code type="text" maxlength="6" inputmode="numeric" ' +
-        'pattern="[0-9]*" autocomplete="off" placeholder="인증번호 6자리" />' +
-      '<p class="lead__otp-msg" data-otp-msg></p>';
-    otpCodeEl = otpSlot.querySelector('[data-otp-code]');
-    otpMsg    = otpSlot.querySelector('[data-otp-msg]');
-    otpSlot.style.display = 'none';   // 발송 전 숨김 → doSend 성공 시 표시
-  }
+  // var otpCodeEl = null, otpActionBtn = null, otpMsg = null;
+  // if (verifySlot) {
+  //   verifySlot.innerHTML =
+  //     '<button type="button" class="lead__verify" data-otp-action>인증번호 받기</button>';
+  //   otpActionBtn = verifySlot.querySelector('[data-otp-action]');
+  // }
+  // if (otpSlot) {
+  //   otpSlot.innerHTML =
+  //     '<input class="lead__input" data-otp-code type="text" maxlength="6" inputmode="numeric" ' +
+  //       'pattern="[0-9]*" autocomplete="off" placeholder="인증번호 6자리" />' +
+  //     '<p class="lead__otp-msg" data-otp-msg></p>';
+  //   otpCodeEl = otpSlot.querySelector('[data-otp-code]');
+  //   otpMsg    = otpSlot.querySelector('[data-otp-msg]');
+  //   otpSlot.style.display = 'none';   // 발송 전 숨김 → doSend 성공 시 표시
+  // }
 
-  function setOtpMsg(text, color) {
-    if (!otpMsg) return;
-    otpMsg.textContent = text || '';
-    otpMsg.style.color = color || '';
-  }
+  // function setOtpMsg(text, color) {
+  //   if (!otpMsg) return;
+  //   otpMsg.textContent = text || '';
+  //   otpMsg.style.color = color || '';
+  // }
 
   var OTP_TIMEOUT_MS = 15000;   // OTP 발송/검증 최대 대기 (Workers는 콜드스타트 없음 — Solapi 발송 지연 대비 여유값)
 
@@ -263,12 +263,12 @@
     /* ===== [번호인증 OTP 임시 OFF 경계 · 시작] =====================================
        번호인증 없이 연락처만으로 제출 테스트할 때 아래 한 줄을 주석처리.
        실제 운영 복귀 시 반드시 주석 해제할 것! (인증 안 한 리드가 들어옴) */
-    if (!isPhoneVerified)           return { ok: false, msg: '휴대폰 인증을 완료해주세요.' };
+    // if (!isPhoneVerified)           return { ok: false, msg: '휴대폰 인증을 완료해주세요.' };
     /* ===== [번호인증 OTP 임시 OFF 경계 · 끝] ===================================== */
 
     if (!calltime)                  return { ok: false, msg: '통화 가능 시간을 선택해주세요.' };
     if (!agreed)                    return { ok: false, msg: '개인정보 수집 및 이용에 동의해주세요.' };
-    return { ok: true, msg: '내 탕감률 정확히 확인하기' };
+    return { ok: true, msg: '최대 예상 탕감률 정확히 확인하기' };
   }
   function updateSubmit() {
     if (!submitBtn) return;

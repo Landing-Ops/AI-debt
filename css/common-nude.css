@@ -149,7 +149,7 @@ body.is-modal-open{ overflow:hidden; }
 /* =====================================================================
    블록2 · 서비스 소개 (.service) — 3스텝 그라데이션 테두리 카드
 ===================================================================== */
-.service .service__eyebrow{ margin:0; font-size:20px; color:var(--primary); font-weight:700; }
+.service .service__eyebrow{ margin:0; font-size:24px; color:var(--primary); font-weight:700; }
 .service .service__title{ margin:0; font-size:30px; color:var(--primary-strong); font-weight:800; line-height:1.35; }
 
 /* 시그니처 그라데이션 테두리 카드 (블록2·3 공용 골격) */
