@@ -81,7 +81,7 @@
   var nameEl     = $('lead-name');
   var phoneEl    = $('lead-phone');
   var verifySlot = $('lead-verify-slot');
-  var otpSlot    = $('lead-otp-slot');
+  // var otpSlot    = $('lead-otp-slot');
   var calltimeEl = $('lead-calltime');
   var messageEl  = $('lead-message');
   var agreeEl    = $('lead-agree');
